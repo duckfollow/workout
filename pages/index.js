@@ -54,7 +54,8 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="/">Workout</a>
+          Welcome to <a href="https://workout.duckfollow.co"
+          rel="noopener noreferrer">Workout</a>
         </h1>
 
         <p className={styles.description}>
