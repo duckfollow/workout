@@ -227,7 +227,7 @@ function Order({ data, data_order }) {
                             </div>
                         </div>
                         <div className={styles.view_button_receipt}>
-                            <Button variant="outlined" color="primary" onClick={clickShare}>เพิ่ม ออเดอร์</Button> {' '} <Button variant="contained" color="success" onClick={handleClickOpen}>ชำระเงิน</Button>
+                            <Button variant="outlined" color="primary" onClick={clickShare}>เพิ่ม ออเดอร์</Button> &nbsp; <Button variant="contained" color="success" onClick={handleClickOpen}>ชำระเงิน</Button>
                         </div>
                     </div>
                 </div>
