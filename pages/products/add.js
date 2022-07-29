@@ -102,7 +102,7 @@ function AddProduct() {
             }
             <input className={styles.inputText} type="text" placeholder="ชื่อ" value={name} onChange={handleName} />
             <input className={styles.inputText} type="number" placeholder="ราคา" value={price} onChange={handlePrice} />
-            <FormControl sx={{ m: 1, width: 500 }}>
+            <FormControl sx={{ m: 1}} className={styles.inputText}>
                 <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
