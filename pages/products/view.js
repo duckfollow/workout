@@ -1,0 +1,292 @@
+import Head from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
+import styles from '../../styles/Profile.module.css'
+import axios from 'axios'
+
+import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import NoSsr from "@mui/material/NoSsr";
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+function View({ data }) {
+    const [dataProduct, setDataProduct] = useState(data.data ? data.data : [])
+    const [value, setValue] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [idDelete, setIdDelete] = useState();
+
+    const handleClickOpen = (id) => {
+        setIdDelete(id)
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const readProduct = () => {
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
+            store: 'user001'
+        }).then(res => {
+            setDataProduct(res.data.data)
+        }
+        )
+    }
+
+    const deleteProduct = () => {
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/delete`, {
+            productId: idDelete
+        }).then(res => {
+            setOpen(false);
+            readProduct()
+        })
+    }
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+    function TabPanel(props) {
+        const { children, value, index, ...other } = props;
+
+        return (
+            <div
+                role="tabpanel"
+                hidden={value !== index}
+                id={`simple-tabpanel-${index}`}
+                aria-labelledby={`simple-tab-${index}`}
+                {...other}
+            >
+                {value === index && (
+                    <Box sx={{ p: 3 }}>
+                        <Typography>{children}</Typography>
+                    </Box>
+                )}
+            </div>
+        );
+    }
+
+    TabPanel.propTypes = {
+        children: PropTypes.node,
+        index: PropTypes.number.isRequired,
+        value: PropTypes.number.isRequired,
+    };
+
+    function a11yProps(index) {
+        return {
+            id: `simple-tab-${index}`,
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+
+    const productFillter = (type) => {
+        let data = dataProduct.filter(item => item.type === type)
+        return data
+    }
+
+    return (
+        <div>
+            <NoSsr>
+                <Box sx={{ width: '100%' }}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                            <Tab label="อาหาร" {...a11yProps(0)} />
+                            <Tab label="ของหวาน" {...a11yProps(1)} />
+                            <Tab label="เครื่องดื่ม" {...a11yProps(2)} />
+                        </Tabs>
+                    </Box>
+                    <Link href={`/products/add`} passHref>
+                        <div className={styles.card_product} style={
+                            {
+                                fontSize: '20px',
+                                fontWeight: 'bold',
+                            }
+                        }>
+                            <Image src={'/plus.png'} alt={''} width={40} height={40} />
+                            <span>&nbsp;เพิ่มสินค้า</span>
+                        </div>
+                    </Link>
+                    <TabPanel value={value} index={0}>
+                        <div className={styles.grid_product}>
+                            {
+                                productFillter(1).map((item, index) => {
+                                    return (
+                                        <div className={styles.card} key={item.productId}>
+                                            <div className={styles.view_table}>
+                                                <div className={styles.text}>
+                                                    <span
+                                                        style={
+                                                            {
+                                                                fontSize: '20px',
+                                                            }
+                                                        }>{item.name}</span>
+                                                    <span
+                                                        style={{
+                                                            fontSize: '20px',
+                                                        }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
+                                                    <span
+                                                        style={
+                                                            {
+                                                                fontSize: '12px',
+                                                            }
+                                                        }>
+                                                        (id: {item.productId})
+                                                    </span>
+                                                </div>
+                                                <div className={styles.table}>
+                                                    <Image src={item.image} alt={''} width={100} height={100} />
+                                                    <div>
+                                                        <Button variant="outlined" color="primary" onClick={() => {
+
+                                                        }}>แก้ไข</Button> {' '}
+                                                        <Button variant="outlined" color="error" onClick={() => {
+                                                            handleClickOpen(item.productId)
+                                                        }}>ลบ</Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                    <div className={styles.grid_product}>
+                            {
+                                productFillter(2).map((item, index) => {
+                                    return (
+                                        <div className={styles.card} key={item.productId}>
+                                            <div className={styles.view_table}>
+                                                <div className={styles.text}>
+                                                    <span
+                                                        style={
+                                                            {
+                                                                fontSize: '20px',
+                                                            }
+                                                        }>{item.name}</span>
+                                                    <span
+                                                        style={{
+                                                            fontSize: '20px',
+                                                        }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
+                                                    <span
+                                                        style={
+                                                            {
+                                                                fontSize: '12px',
+                                                            }
+                                                        }>
+                                                        (id: {item.productId})
+                                                    </span>
+                                                </div>
+                                                <div className={styles.table}>
+                                                    <Image src={item.image} alt={''} width={100} height={100} />
+                                                    <div>
+                                                        <Button variant="outlined" color="primary" onClick={() => {
+
+                                                        }}>แก้ไข</Button> {' '}
+                                                        <Button variant="outlined" color="error" onClick={() => {
+                                                            handleClickOpen(item.productId)
+                                                        }}>ลบ</Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                    <div className={styles.grid_product}>
+                            {
+                                productFillter(3).map((item, index) => {
+                                    return (
+                                        <div className={styles.card} key={item.productId}>
+                                            <div className={styles.view_table}>
+                                                <div className={styles.text}>
+                                                    <span
+                                                        style={
+                                                            {
+                                                                fontSize: '20px',
+                                                            }
+                                                        }>{item.name}</span>
+                                                    <span
+                                                        style={{
+                                                            fontSize: '20px',
+                                                        }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
+                                                    <span
+                                                        style={
+                                                            {
+                                                                fontSize: '12px',
+                                                            }
+                                                        }>
+                                                        (id: {item.productId})
+                                                    </span>
+                                                </div>
+                                                <div className={styles.table}>
+                                                    <Image src={item.image} alt={''} width={100} height={100} />
+                                                    <div>
+                                                        <Button variant="outlined" color="primary" onClick={() => {
+
+                                                        }}>แก้ไข</Button> {' '}
+                                                        <Button variant="outlined" color="error" onClick={() => {
+                                                            handleClickOpen(item.productId)
+                                                        }}>ลบ</Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </TabPanel>
+                </Box>
+
+                <Dialog
+                    open={open}
+                    keepMounted
+                    onClose={handleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle>{`คุณต้องการลบรายการนี้ใช่หรือไม่?`}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            คุณจะไม่สามารถกู้คืนรายการนี้ได้ id:{idDelete} หากคุณลบรายการนี้
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>ยกเลิก</Button>
+                        <Button onClick={deleteProduct}>ลบ</Button>
+                    </DialogActions>
+                </Dialog>
+            </NoSsr>
+        </div>
+    );
+
+}
+
+export async function getServerSideProps(context) {
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
+        "store": "user001"
+    })
+    const data = await res.data
+    console.log(data)
+    return {
+        props: {
+            data
+        },
+    }
+}
+
+export default View

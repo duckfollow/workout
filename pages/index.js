@@ -1,129 +1,168 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { useState } from 'react'
+import Link from 'next/link'
+import styles from '../styles/Profile.module.css'
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios'
 
-export default function Home() {
-  const [second, setSecond] = useState(15)
-  const [time, setTime] = useState(second)
-  const [count, setCount] = useState(0)
-  const [isStart, setIsStart] = useState(false)
-  var interval = null
-  const sqSize = 200;
-  const strokeWidth = 15;
-  const viewBox = `0 0 ${sqSize} ${sqSize}`;
-  const radius = (sqSize - strokeWidth) / 2;
-  const dashArray = radius * Math.PI * 2;
+function Profile({ data }) {
+  const router = useRouter();
+  const [dataTable, setDataTable] = useState(data)
+  const [open, setOpen] = useState(false);
+  const [idDelete, setIdDelete] = useState();
 
-  const clickStart = () => {
-    var timer = time;
-    setIsStart(true)
-    interval = setInterval(() => {
-      timer = timer - 1;
-      setTime(timer)
-      console.log(timer)
-      if (timer <= 0) {
-        clearInterval(interval)
-        setCount(count => count + 1)
-        setTime(second)
-        setIsStart(false)
-      }
-    }, 1000)
+  const handleClickOpen = (id) => {
+    setIdDelete(id)
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const createTable = () => {
+    axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/create`, {
+      store: 'user001'
+    }).then(res => {
+      console.log(res)
+      readTable()
+    })
   }
 
-  const addSecond = () => {
-    if (!isStart) {
-      if (second < 60) {
-        let newSecond = second + 5;
-        setSecond(newSecond)
-        setTime(newSecond)
-      } else {
-        setSecond(15)
-        setTime(15)
-      }
-    }
+  const readTable = () => {
+    axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/read`, {
+      store: 'user001'
+    }).then(res => {
+      setDataTable(res.data)
+    })
   }
+
+  const deleteTable = () => {
+    axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/delete`, {
+      id: idDelete
+    }).then(res => {
+      setOpen(false);
+      readTable()
+    })
+  }
+
+  const clickOrder = (order, id) => {
+    router.push(`/order/${order}/${id}`)
+  }
+
   return (
-
     <div className={styles.container}>
       <Head>
-        <title>Workout</title>
-        <meta name="description" content="Workout Application" />
+        <title>ข้าวต้มกุ๊ย คอแห้ง</title>
+        <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://workout.duckfollow.co"
-          rel="noopener noreferrer">Workout</a>
+          Welcome <a>ข้าวต้มกุ๊ย คอแห้ง</a>
         </h1>
+        <div>
+          <Image src='/logo.jpg' alt="" width={150} height={150} className={styles.img_profile} />
+        </div>
 
-        <p className={styles.description}>
-          x{count}
-        </p>
+        <div className={styles.grid_menu}>
+          <Link href={`/products/view`} passHref>
+            <div className={styles.card_product}>
+              <Image src={'/shelf.png'} alt={''} width={40} height={40} />
+              <span>&nbsp;เพิ่มสินค้า</span>
+            </div>
+          </Link>
+          <div className={styles.card_notification} onClick={createTable}>
+            <Image src={'/table.png'} alt={''} width={40} height={40} />
+            <span>&nbsp;เพิ่มโต๊ะ</span>
+          </div>
+        </div>
 
-        <svg
-          width={sqSize}
-          height={sqSize}
-          viewBox={viewBox}
-          onClick={addSecond}>
-          <circle
-            className="circle-background"
-            cx={sqSize / 2}
-            cy={sqSize / 2}
-            r={radius}
-            strokeWidth={`${strokeWidth}px`} />
-          <circle
-            className="circle-progress"
-            cx={sqSize / 2}
-            cy={sqSize / 2}
-            r={radius}
-            strokeWidth={`${strokeWidth}px`}
-            // Start progress marker at 12 O'Clock
-            transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
-            style={{
-              strokeDasharray: dashArray,
-              strokeDashoffset: (dashArray - dashArray * ((time * 100) / second) / 100)
-            }} />
-          <text
-            className="circle-text"
-            x="50%"
-            y="50%"
-            dy=".3em"
-            textAnchor="middle">
-            {time}
-          </text>
-        </svg>
-
-        <p>
-          <button className={styles.button} onClick={clickStart} disabled={isStart}>Start</button>
-        </p>
-
-        {/* <div className={styles.grid}>
-          <div className={styles.card}>
-              <Image src="/plank.png" alt="plank" width={64} height={64} />
-          </div>
-          <div className={styles.card}>
-              <Image src="/yoga.png" alt="yoga" width={64} height={64} />
-          </div>
-          <div className={styles.card}>
-              <Image src="/yoga1.png" alt="yoga1" width={64} height={64} />
-          </div>
-          <div className={styles.card}>
-              <Image src="/yoga2.png" alt="yoga2" width={64} height={64} />
-          </div>
-        </div> */}
+        <div className={styles.grid}>
+          {
+            dataTable.data.map((item, index) => {
+              return (
+                <div className={styles.card} key={index}>
+                  <div className={styles.view_table}>
+                    <div className={styles.text}>
+                      <span
+                        style={
+                          {
+                            fontSize: '20px',
+                          }
+                        }>โต๊ะ</span>
+                      <span
+                        style={{
+                          fontSize: '60px',
+                        }}>{index + 1}</span>
+                      <span
+                        style={
+                          {
+                            fontSize: '12px',
+                          }
+                        }>
+                        (id: {item.id})
+                      </span>
+                    </div>
+                    <div className={styles.table}>
+                      <Image src={'/table.png'} alt={''} width={100} height={100} />
+                      <div>
+                        <Button variant="outlined" color="primary" onClick={() => {
+                          clickOrder(index + 1, item.id)
+                        }}>สั่งอาหาร</Button> {' '}
+                        <Button variant="outlined" color="error" onClick={() => {
+                          handleClickOpen(item.id)
+                        }}>ลบ</Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })
+          }
+        </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://tech.duckfollow.co"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by duckfollow
-        </a>
-      </footer>
+      <Dialog
+        open={open}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"คุณต้องการจะลบใช่หรือไม่?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            คุณจะไม่สามารถกู้คืนรายการนี้ได้ id:{idDelete} หากคุณลบรายการนี้
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>ยกเลิก</Button>
+          <Button onClick={deleteTable}>ลบ</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }
+
+export async function getServerSideProps(context) {
+  const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/read`, {
+    "store": "user001"
+  })
+  const data = await res.data
+
+  return {
+    props: {
+      data
+    },
+  }
+}
+
+export default Profile
