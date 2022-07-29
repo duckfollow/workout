@@ -213,11 +213,20 @@ function Order({ data, data_order }) {
                                     display: 'flex',
                                     justifyContent: 'center',
                                     alignItems: 'center',
+                                    flexDirection: 'column'
                                 }
                             }>
                                 <NoSsr>
                                     <QRCode value={`https://workout.duckfollow.co/receipt/${order}/${id}`} />
                                 </NoSsr>
+                                <span
+                                    style={
+                                        {
+                                            fontSize: '12px',
+                                        }
+                                    }>
+                                    สามารถสแกน QR code เพื่อดูใบเสร็จและออเดอร์ได้
+                                </span>
                             </div>
                         </div>
                         {/* <div className={styles.view_button_receipt}>

@@ -195,7 +195,7 @@ function Order({ data, data_order }) {
                                                         <span className={styles.name}>{item.name}</span>
                                                         <span className={styles.price}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
                                                         <span>
-                                                            <Button variant="outlined" size='small' color="primary" onClick={() => {
+                                                            <Button variant="outlined" size='small' color="error" onClick={() => {
                                                                 updateStatus(item.orderId, 0)
                                                             }}>ยกเลิก</Button>
                                                         </span>
@@ -212,18 +212,27 @@ function Order({ data, data_order }) {
                             </div>
                         </div>
                         <div className={styles.foot}>
-                        <div style={
+                            <div style={
                                 {
                                     background: 'white',
                                     padding: '16px',
                                     display: 'flex',
                                     justifyContent: 'center',
                                     alignItems: 'center',
+                                    flexDirection: 'column'
                                 }
                             }>
                                 <NoSsr>
                                     <QRCode value={`https://workout.duckfollow.co/receipt/${order}/${id}`} />
                                 </NoSsr>
+                                <span
+                                    style={
+                                        {
+                                            fontSize: '12px',
+                                        }
+                                    }>
+                                    สามารถสแกน QR code เพื่อดูใบเสร็จและออเดอร์ได้
+                                </span>
                             </div>
                         </div>
                         <div className={styles.view_button_receipt}>
@@ -243,7 +252,7 @@ function Order({ data, data_order }) {
                                         <Tab label="อาหาร" {...a11yProps(0)} />
                                         <Tab label="ของหวาน" {...a11yProps(1)} />
                                         <Tab label="เครื่องดื่ม" {...a11yProps(2)} />
-                                        <Tab label="ปิด" {...a11yProps(2)} onClick={closeShare}/>
+                                        <Tab label="ปิด" {...a11yProps(2)} onClick={closeShare} />
                                     </Tabs>
                                 </Box>
                                 <TabPanel value={value} index={0}>
@@ -380,16 +389,15 @@ function Order({ data, data_order }) {
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+                <DialogTitle>{"คุณต้องการชำระออเดอร์นี้ใช่หรือไม่?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running.
+                        ตรวจสอบข้อมูลก่อนการชำระเงิน จำนวน {totalPrice().toLocaleString('th-TH', { style: 'currency', currency: 'THB' })} หากต้องการชำระเงินกรุณากดปุ่มยืนยัน
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Disagree</Button>
-                    <Button onClick={clickPriceOrder}>Agree</Button>
+                    <Button onClick={handleClose}>ยกเลิก</Button>
+                    <Button onClick={clickPriceOrder}>ยืนยัน</Button>
                 </DialogActions>
             </Dialog>
         </div>
