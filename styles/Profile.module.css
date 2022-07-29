@@ -586,6 +586,18 @@
     outline: none;
     -webkit-appearance: none;
   }
+
+  .inputSelect {
+    text-decoration: none;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    display: flex;
+    font-size: 1rem;
+    width: 500px;
+    outline: none;
+    -webkit-appearance: none;
+  }
   
   .inputText:hover,
   .inputText:focus,
@@ -1320,6 +1332,10 @@ Order Product
     .inputText {
       width: 100%;
     }
+
+    .inputSelect {
+        width: 100%;
+      }
   
     .inputTextArea {
       width: 100%;
