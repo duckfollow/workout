@@ -20,6 +20,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import QRCode from "react-qr-code";
 
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import Stack from '@mui/material/Stack';
+
 function Order({ data, data_order }) {
     const router = useRouter();
     const { order, id } = router.query
@@ -270,9 +274,15 @@ function Order({ data, data_order }) {
                                 </span>
                             </div>
                         </div>
-                        <div className={styles.view_button_receipt}>
-                            <Button variant="outlined" color="primary" onClick={clickShare}>เพิ่ม ออเดอร์</Button> &nbsp; <Button variant="contained" color="success" onClick={handleClickOpen}>ชำระเงิน</Button>
-                        </div>
+                        <Stack direction="row" spacing={2} style={
+                            {
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }
+                        }>
+                            <Button variant="outlined" startIcon={<AddIcon />} color="primary" onClick={clickShare}>เพิ่ม ออเดอร์</Button><Button variant="outlined" startIcon={<PaidOutlinedIcon />} color="success" onClick={handleClickOpen}>ชำระเงิน</Button>
+                        </Stack>
                     </div>
                 </div>
             </div>

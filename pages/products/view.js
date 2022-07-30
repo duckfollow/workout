@@ -20,6 +20,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import AddIcon from '@mui/icons-material/Add';
+
 function View({ data }) {
     const router = useRouter();
     const [dataProduct, setDataProduct] = useState(data.data ? data.data : [])
@@ -100,6 +102,11 @@ function View({ data }) {
         router.push(`/products/edit/${id}`)
     }
 
+    const clickAdd = () => {
+        router.push(`/products/add`)
+        setValue(0)
+    }
+
     return (
         <div>
             <Head>
@@ -114,9 +121,10 @@ function View({ data }) {
                             <Tab label="อาหาร" {...a11yProps(0)} />
                             <Tab label="ของหวาน" {...a11yProps(1)} />
                             <Tab label="เครื่องดื่ม" {...a11yProps(2)} />
+                            <Tab icon={<AddIcon />} iconPosition="start" label="เพิ่มสินค้าของคุณ" onClick={clickAdd}/>
                         </Tabs>
                     </Box>
-                    <Link href={`/products/add`} passHref>
+                    {/* <Link href={`/products/add`} passHref>
                         <div className={styles.card_product} style={
                             {
                                 fontSize: '20px',
@@ -126,7 +134,8 @@ function View({ data }) {
                             <Image src={'/plus.png'} alt={''} width={40} height={40} />
                             <span>&nbsp;เพิ่มสินค้า</span>
                         </div>
-                    </Link>
+                        <Button variant="outlined" startIcon={<AddIcon />} color="primary">เพิ่มสินค้าของคุณ</Button>
+                    </Link> */}
                     <TabPanel value={value} index={0}>
                         <div className={styles.grid_product}>
                             {
