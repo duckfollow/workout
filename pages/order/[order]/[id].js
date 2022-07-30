@@ -186,7 +186,7 @@ function Order({ data, data_order }) {
                                         {
                                             dataOrder.map((item, index) => {
                                                 return (
-                                                    <div  key={index}>
+                                                    <div key={index}>
                                                         <li className={styles.cart_item} style={
                                                             {
                                                                 textDecoration: item.status === 0 ? 'line-through' : 'none'
@@ -280,7 +280,11 @@ function Order({ data, data_order }) {
                                                                 createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
                                                             }
                                                         }>
-                                                            <div className={styles.text}>
+                                                            <div className={styles.text} style={
+                                                                {
+                                                                    width: '50%',
+                                                                }
+                                                            }>
                                                                 <span
                                                                     style={
                                                                         {
@@ -300,7 +304,11 @@ function Order({ data, data_order }) {
                                                                     (id: {item.productId})
                                                                 </span>
                                                             </div>
-                                                            <div className={styles.table}>
+                                                            <div className={styles.table} style={
+                                                                {
+                                                                    width: '50%',
+                                                                }
+                                                            }>
                                                                 <Image src={item.image} alt={''} width={100} height={100} />
                                                             </div>
                                                         </div>
@@ -321,7 +329,11 @@ function Order({ data, data_order }) {
                                                                 createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
                                                             }
                                                         }>
-                                                            <div className={styles.text}>
+                                                            <div className={styles.text} style={
+                                                                {
+                                                                    width: '50%',
+                                                                }
+                                                            }>
                                                                 <span
                                                                     style={
                                                                         {
@@ -341,7 +353,11 @@ function Order({ data, data_order }) {
                                                                     (id: {item.productId})
                                                                 </span>
                                                             </div>
-                                                            <div className={styles.table}>
+                                                            <div className={styles.table} style={
+                                                                {
+                                                                    width: '50%',
+                                                                }
+                                                            }>
                                                                 <Image src={item.image} alt={''} width={100} height={100} />
                                                             </div>
                                                         </div>
@@ -362,7 +378,11 @@ function Order({ data, data_order }) {
                                                                 createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
                                                             }
                                                         }>
-                                                            <div className={styles.text}>
+                                                            <div className={styles.text} style={
+                                                                {
+                                                                    width: '50%',
+                                                                }
+                                                            }>
                                                                 <span
                                                                     style={
                                                                         {
@@ -382,7 +402,11 @@ function Order({ data, data_order }) {
                                                                     (id: {item.productId})
                                                                 </span>
                                                             </div>
-                                                            <div className={styles.table}>
+                                                            <div className={styles.table} style={
+                                                                {
+                                                                    width: '50%',
+                                                                }
+                                                            }>
                                                                 <Image src={item.image} alt={''} width={100} height={100} />
                                                             </div>
                                                         </div>

@@ -123,7 +123,11 @@ function View({ data }) {
                                     return (
                                         <div className={styles.card} key={item.productId}>
                                             <div className={styles.view_table}>
-                                                <div className={styles.text}>
+                                                <div className={styles.text} style={
+                                                    {
+                                                        width: '50%',
+                                                    }
+                                                }>
                                                     <span
                                                         style={
                                                             {
@@ -143,7 +147,11 @@ function View({ data }) {
                                                         (id: {item.productId})
                                                     </span>
                                                 </div>
-                                                <div className={styles.table}>
+                                                <div className={styles.table} style={
+                                                    {
+                                                        width: '50%',
+                                                    }
+                                                }>
                                                     <Image src={item.image} alt={''} width={100} height={100} />
                                                     <div>
                                                         <Button variant="outlined" color="primary" onClick={() => {
@@ -162,13 +170,17 @@ function View({ data }) {
                         </div>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                    <div className={styles.grid_product}>
+                        <div className={styles.grid_product}>
                             {
                                 productFillter(2).map((item, index) => {
                                     return (
                                         <div className={styles.card} key={item.productId}>
                                             <div className={styles.view_table}>
-                                                <div className={styles.text}>
+                                                <div className={styles.text} style={
+                                                    {
+                                                        width: '50%',
+                                                    }
+                                                }>
                                                     <span
                                                         style={
                                                             {
@@ -188,7 +200,11 @@ function View({ data }) {
                                                         (id: {item.productId})
                                                     </span>
                                                 </div>
-                                                <div className={styles.table}>
+                                                <div className={styles.table} style={
+                                                    {
+                                                        width: '50%',
+                                                    }
+                                                }>
                                                     <Image src={item.image} alt={''} width={100} height={100} />
                                                     <div>
                                                         <Button variant="outlined" color="primary" onClick={() => {
@@ -207,13 +223,17 @@ function View({ data }) {
                         </div>
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                    <div className={styles.grid_product}>
+                        <div className={styles.grid_product}>
                             {
                                 productFillter(3).map((item, index) => {
                                     return (
                                         <div className={styles.card} key={item.productId}>
                                             <div className={styles.view_table}>
-                                                <div className={styles.text}>
+                                                <div className={styles.text} style={
+                                                    {
+                                                        width: '50%',
+                                                    }
+                                                }>
                                                     <span
                                                         style={
                                                             {
@@ -233,7 +253,11 @@ function View({ data }) {
                                                         (id: {item.productId})
                                                     </span>
                                                 </div>
-                                                <div className={styles.table}>
+                                                <div className={styles.table} style={
+                                                    {
+                                                        width: '50%',
+                                                    }
+                                                }>
                                                     <Image src={item.image} alt={''} width={100} height={100} />
                                                     <div>
                                                         <Button variant="outlined" color="primary" onClick={() => {
