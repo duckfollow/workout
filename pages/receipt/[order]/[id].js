@@ -55,7 +55,7 @@ function Order({ data_order }) {
                     <div className={styles.receipt_box}>
                         <div className={styles.head_receipt}>
                             <div className={styles.logo_receipt}>
-                                <Image src="/logo.jpg" width={42} height={42} />
+                                <Image src="/chef.png" width={42} height={42} />
                             </div>
                             <div className={styles.number}>
                                 <div className={styles.date}>{(new Date()).toLocaleDateString('th-TH')}</div>
@@ -64,7 +64,7 @@ function Order({ data_order }) {
                         </div>
                         <div className={styles.body_receipt}>
                             <div className={styles.info}>
-                                <div className={styles.welcome}>Receipt, <span className={styles.username}>ข้าวต้มกุ๊ย คอแห้ง</span></div>
+                                <div className={styles.welcome}>Receipt, <span className={styles.username}>Demo Food</span></div>
                                 <p>จำนวน ({dataOrder.length}) รายการ</p>
                             </div>
                             <div className={styles.cart_receipt}>

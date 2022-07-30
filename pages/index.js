@@ -81,17 +81,17 @@ function Profile({ data }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>ข้าวต้มกุ๊ย คอแห้ง</title>
+        <title>Demo Food</title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome <a>ข้าวต้มกุ๊ย คอแห้ง</a>
+          Welcome <a>Demo Food</a>
         </h1>
         <div>
-          <Image src='/logo.jpg' alt="" width={150} height={150} className={styles.img_profile} />
+          <Image src='/chef.png' alt="" width={150} height={150} className={styles.img_profile} />
         </div>
 
         <div className={styles.grid_menu}>

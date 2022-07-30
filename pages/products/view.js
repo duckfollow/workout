@@ -103,7 +103,7 @@ function View({ data }) {
     return (
         <div>
             <Head>
-                <title>ข้าวต้มกุ๊ย คอแห้ง</title>
+                <title>Demo Food</title>
                 <meta name="description" content="" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
