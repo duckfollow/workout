@@ -144,12 +144,17 @@ function Order({ data, data_order }) {
     };
 
     const clickPriceOrder = () => {
-        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/price`, {
-            tableId: id
-        }).then(res => {
-            setOpen(false);
-            readOrder()
-        })
+        let total = totalPrice()
+        if (total > 0) {
+            axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/price`, {
+                tableId: id
+            }).then(res => {
+                setOpen(false);
+                let audio = document.getElementById('myAudio')
+                audio.play()
+                readOrder()
+            })
+        }
     }
 
     const productFillter = (type) => {
@@ -446,6 +451,7 @@ function Order({ data, data_order }) {
                     <Button onClick={clickPriceOrder}>ยืนยัน</Button>
                 </DialogActions>
             </Dialog>
+            <audio id="myAudio" src='/sound.mp3'></audio>
         </div>
     )
 }
