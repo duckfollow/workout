@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 import styles from '../../styles/Profile.module.css'
 import axios from 'axios'
 
@@ -20,6 +21,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 function View({ data }) {
+    const router = useRouter();
     const [dataProduct, setDataProduct] = useState(data.data ? data.data : [])
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
@@ -94,8 +96,17 @@ function View({ data }) {
         return data
     }
 
+    const clickEdit = (id) => {
+        router.push(`/products/edit/${id}`)
+    }
+
     return (
         <div>
+            <Head>
+                <title>ข้าวต้มกุ๊ย คอแห้ง</title>
+                <meta name="description" content="" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
             <NoSsr>
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -121,7 +132,7 @@ function View({ data }) {
                             {
                                 productFillter(1).map((item, index) => {
                                     return (
-                                        <div className={styles.card} key={item.productId}>
+                                        <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId}>
                                             <div className={styles.view_table}>
                                                 <div className={styles.text} style={
                                                     {
@@ -153,11 +164,16 @@ function View({ data }) {
                                                     }
                                                 }>
                                                     <Image src={item.image} alt={''} width={100} height={100} />
-                                                    <div>
-                                                        <Button variant="outlined" color="primary" onClick={() => {
-
+                                                    <div
+                                                        style={
+                                                            {
+                                                                marginTop: '10px',
+                                                            }
+                                                        }>
+                                                        <Button variant="outlined" color="primary" size="small" onClick={() => {
+                                                            clickEdit(item.productId)
                                                         }}>แก้ไข</Button> {' '}
-                                                        <Button variant="outlined" color="error" onClick={() => {
+                                                        <Button variant="outlined" color="error" size="small" onClick={() => {
                                                             handleClickOpen(item.productId)
                                                         }}>ลบ</Button>
                                                     </div>
@@ -174,7 +190,7 @@ function View({ data }) {
                             {
                                 productFillter(2).map((item, index) => {
                                     return (
-                                        <div className={styles.card} key={item.productId}>
+                                        <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId}>
                                             <div className={styles.view_table}>
                                                 <div className={styles.text} style={
                                                     {
@@ -206,11 +222,15 @@ function View({ data }) {
                                                     }
                                                 }>
                                                     <Image src={item.image} alt={''} width={100} height={100} />
-                                                    <div>
-                                                        <Button variant="outlined" color="primary" onClick={() => {
-
+                                                    <div style={
+                                                        {
+                                                            marginTop: '10px',
+                                                        }
+                                                    }>
+                                                        <Button variant="outlined" color="primary" size="small" onClick={() => {
+                                                            clickEdit(item.productId)
                                                         }}>แก้ไข</Button> {' '}
-                                                        <Button variant="outlined" color="error" onClick={() => {
+                                                        <Button variant="outlined" color="error" size="small" onClick={() => {
                                                             handleClickOpen(item.productId)
                                                         }}>ลบ</Button>
                                                     </div>
@@ -227,7 +247,7 @@ function View({ data }) {
                             {
                                 productFillter(3).map((item, index) => {
                                     return (
-                                        <div className={styles.card} key={item.productId}>
+                                        <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId}>
                                             <div className={styles.view_table}>
                                                 <div className={styles.text} style={
                                                     {
@@ -259,11 +279,15 @@ function View({ data }) {
                                                     }
                                                 }>
                                                     <Image src={item.image} alt={''} width={100} height={100} />
-                                                    <div>
-                                                        <Button variant="outlined" color="primary" onClick={() => {
-
+                                                    <div style={
+                                                        {
+                                                            marginTop: '10px',
+                                                        }
+                                                    }>
+                                                        <Button variant="outlined" color="primary" size="small" onClick={() => {
+                                                            clickEdit(item.productId)
                                                         }}>แก้ไข</Button> {' '}
-                                                        <Button variant="outlined" color="error" onClick={() => {
+                                                        <Button variant="outlined" color="error" size="small" onClick={() => {
                                                             handleClickOpen(item.productId)
                                                         }}>ลบ</Button>
                                                     </div>

@@ -88,20 +88,22 @@ function Order({ data, data_order }) {
     }
 
     // create new order
-    const createOrder = (productId, amount, status, price, name, image) => {
-        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/create`, {
-            store: process.env.NEXT_PUBLIC_USER,
-            tableId: id,
-            productId: productId,
-            amount: amount,
-            status: status,
-            price: price,
-            name: name,
-            image: image
-        }).then(res => {
-            setIsShare(false)
-            readOrder()
-        })
+    const createOrder = (productId, amount, status, price, name, image, isActive) => {
+        if (isActive) {
+            axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/create`, {
+                store: process.env.NEXT_PUBLIC_USER,
+                tableId: id,
+                productId: productId,
+                amount: amount,
+                status: status,
+                price: price,
+                name: name,
+                image: image
+            }).then(res => {
+                setIsShare(false)
+                readOrder()
+            })
+        }
     }
 
     // read order
@@ -159,7 +161,7 @@ function Order({ data, data_order }) {
         <div>
             <Head>
                 <title>รับออเดอร์โต๊ะ {order}</title>
-                <meta name="description" content="เว็บไซต์เกษตรเพื่อเกษตรกรรวมกลุ่มซื้อขายแลกเปลี่ยนสินค้าเกี่ยวกับเกษตร" />
+                <meta name="description" content="" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className={styles.view_receipt}>
@@ -274,10 +276,12 @@ function Order({ data, data_order }) {
                                         {
                                             productFillter(1).map((item, index) => {
                                                 return (
-                                                    <div className={styles.card} key={item.productId}>
+                                                    <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId} style={{
+                                                        cursor: item.isActive ? 'pointer' : 'not-allowed',
+                                                    }}>
                                                         <div className={styles.view_table} onClick={
                                                             () => {
-                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
+                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image, item.isActive)
                                                             }
                                                         }>
                                                             <div className={styles.text} style={
@@ -323,10 +327,12 @@ function Order({ data, data_order }) {
                                         {
                                             productFillter(2).map((item, index) => {
                                                 return (
-                                                    <div className={styles.card} key={item.productId}>
+                                                    <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId} style={{
+                                                        cursor: item.isActive ? 'pointer' : 'not-allowed',
+                                                    }}>
                                                         <div className={styles.view_table} onClick={
                                                             () => {
-                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
+                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image, item.isActive)
                                                             }
                                                         }>
                                                             <div className={styles.text} style={
@@ -372,10 +378,12 @@ function Order({ data, data_order }) {
                                         {
                                             productFillter(3).map((item, index) => {
                                                 return (
-                                                    <div className={styles.card} key={item.productId}>
+                                                    <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId} style={{
+                                                        cursor: item.isActive ? 'pointer' : 'not-allowed',
+                                                    }}>
                                                         <div className={styles.view_table} onClick={
                                                             () => {
-                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
+                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image, item.isActive)
                                                             }
                                                         }>
                                                             <div className={styles.text} style={

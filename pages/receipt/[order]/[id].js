@@ -47,7 +47,7 @@ function Order({ data_order }) {
         <div>
             <Head>
                 <title>ใบเสร็จโต๊ะ {order}</title>
-                <meta name="description" content="เว็บไซต์เกษตรเพื่อเกษตรกรรวมกลุ่มซื้อขายแลกเปลี่ยนสินค้าเกี่ยวกับเกษตร" />
+                <meta name="description" content="" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className={styles.view_receipt}>
