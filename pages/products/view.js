@@ -278,7 +278,7 @@ function View({ data }) {
 
 export async function getServerSideProps(context) {
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
-        "store": "user001"
+        "store": process.env.NEXT_PUBLIC_USER
     })
     const data = await res.data
     console.log(data)

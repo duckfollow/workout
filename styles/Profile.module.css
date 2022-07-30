@@ -1277,6 +1277,16 @@ Order Product
     }
 }
 
+.view_order {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 5px solid #f3f3f3;
+}
+
 
 @media (max-width: 600px) {
     .grid {

@@ -90,7 +90,7 @@ function Order({ data, data_order }) {
     // create new order
     const createOrder = (productId, amount, status, price, name, image) => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/create`, {
-            store: 'user001',
+            store: process.env.NEXT_PUBLIC_USER,
             tableId: id,
             productId: productId,
             amount: amount,
@@ -107,7 +107,7 @@ function Order({ data, data_order }) {
     // read order
     const readOrder = () => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
-            store: 'user001',
+            store: process.env.NEXT_PUBLIC_USER,
             tableId: id
         }).then(res => {
             setDataOrder(res.data.data)
@@ -117,7 +117,7 @@ function Order({ data, data_order }) {
     const totalPrice = () => {
         let total = 0
         dataOrder.map(item => {
-            if (item.status === 1) {
+            if (item.status === 3) {
                 total += item.price
             }
         })
@@ -186,20 +186,34 @@ function Order({ data, data_order }) {
                                         {
                                             dataOrder.map((item, index) => {
                                                 return (
-                                                    <li className={styles.cart_item} key={index} style={
-                                                        {
-                                                            textDecoration: item.status === 0 ? 'line-through' : 'none'
-                                                        }
-                                                    }>
-                                                        <span className={styles.index}>{index + 1}</span>
-                                                        <span className={styles.name}>{item.name}</span>
-                                                        <span className={styles.price}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
-                                                        <span>
-                                                            <Button variant="outlined" size='small' color="error" onClick={() => {
+                                                    <div>
+                                                        <li className={styles.cart_item} key={index} style={
+                                                            {
+                                                                textDecoration: item.status === 0 ? 'line-through' : 'none'
+                                                            }
+                                                        }>
+                                                            <span className={styles.index}>{index + 1}</span>
+                                                            <span className={styles.name}>{item.name}</span>
+                                                            <span className={styles.price}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
+                                                        </li>
+                                                        <div
+                                                            style={
+                                                                {
+                                                                    borderBottom: '2px dotted #e0e0e0',
+                                                                    paddingBottom: '10px',
+                                                                    justifyContent: 'center',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center'
+                                                                }
+                                                            }>
+                                                            <Button variant="outlined" size='small' color="primary" disabled={item.status == 3 ? true : false} onClick={() => {
+                                                                updateStatus(item.orderId, 3)
+                                                            }}>เสร็จแล้ว</Button>&nbsp;
+                                                            <Button variant="outlined" size='small' color="error" disabled={item.status == 3 ? true : false} onClick={() => {
                                                                 updateStatus(item.orderId, 0)
                                                             }}>ยกเลิก</Button>
-                                                        </span>
-                                                    </li>
+                                                        </div>
+                                                    </div>
                                                 )
                                             })
                                         }
@@ -407,11 +421,11 @@ function Order({ data, data_order }) {
 export async function getServerSideProps(context) {
     console.log(context.query)
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
-        "store": "user001"
+        "store": process.env.NEXT_PUBLIC_USER
     })
 
     const res_order = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
-        "store": "user001",
+        "store": process.env.NEXT_PUBLIC_USER,
         "tableId": context.query.id
     })
 

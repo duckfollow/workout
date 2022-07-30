@@ -400,13 +400,12 @@ function Order({ data, data_order }) {
 }
 
 export async function getServerSideProps(context) {
-    console.log(context.query)
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
-        "store": "user001"
+        "store": process.env.NEXT_PUBLIC_USER
     })
 
     const res_order = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
-        "store": "user001",
+        "store": process.env.NEXT_PUBLIC_USER,
         "tableId": context.query.id
     })
 

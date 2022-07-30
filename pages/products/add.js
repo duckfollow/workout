@@ -45,7 +45,7 @@ function AddProduct() {
             "isActive": true,
             "amount": 0,
             "type": type,
-            "store": "user001"
+            "store": process.env.NEXT_PUBLIC_USER
         }
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/create`, data, {
             headers: {

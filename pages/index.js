@@ -20,6 +20,16 @@ function Profile({ data }) {
   const [open, setOpen] = useState(false);
   const [idDelete, setIdDelete] = useState();
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      readTable();
+    }, 3200)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [dataTable])
+
   const handleClickOpen = (id) => {
     setIdDelete(id)
     setOpen(true);
@@ -30,7 +40,7 @@ function Profile({ data }) {
   };
   const createTable = () => {
     axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/create`, {
-      store: 'user001'
+      store: process.env.NEXT_PUBLIC_USER
     }).then(res => {
       console.log(res)
       readTable()
@@ -39,7 +49,7 @@ function Profile({ data }) {
 
   const readTable = () => {
     axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/read`, {
-      store: 'user001'
+      store: process.env.NEXT_PUBLIC_USER
     }).then(res => {
       setDataTable(res.data)
     })
@@ -56,6 +66,16 @@ function Profile({ data }) {
 
   const clickOrder = (order, id) => {
     router.push(`/order/${order}/${id}`)
+  }
+
+  const getOrderCount = (index, status) => {
+    try {
+      let count = dataTable.data[index].foodtable_orders.filter(order => order.status === status).length
+      return count
+    } catch (error) {
+      return 0
+    }
+
   }
 
   return (
@@ -114,6 +134,18 @@ function Profile({ data }) {
                       </span>
                     </div>
                     <div className={styles.table}>
+                      <div className={styles.view_order}>
+                        <span style={
+                          {
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                          }
+                        }>
+                          {
+                            getOrderCount(index, 1)
+                          }
+                        </span>
+                      </div>
                       <Image src={'/table.png'} alt={''} width={100} height={100} />
                       <div>
                         <Button variant="outlined" color="primary" onClick={() => {
@@ -152,16 +184,16 @@ function Profile({ data }) {
   )
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticProps() {
   const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/read`, {
-    "store": "user001"
+    "store": process.env.NEXT_PUBLIC_USER
   })
   const data = await res.data
 
   return {
     props: {
       data
-    },
+    }
   }
 }
 
