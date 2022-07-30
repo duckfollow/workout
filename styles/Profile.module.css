@@ -1313,7 +1313,12 @@ Order Product
   
     .card {
       margin: 0px 0px 10px 0px;
-      width: 90%;
+      width: 95%;
+    }
+
+    .card_disable {
+      margin: 0px 0px 10px 0px;
+      width: 95%;
     }
   
     .card_list {
