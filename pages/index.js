@@ -68,16 +68,6 @@ function Profile({ data }) {
     router.push(`/order/${order}/${id}`)
   }
 
-  const getOrderCount = (index, status) => {
-    try {
-      let count = dataTable.data[index].foodtable_orders.filter(order => order.status === status).length
-      return count
-    } catch (error) {
-      return 0
-    }
-
-  }
-
   return (
     <div className={styles.container}>
       <Head>
