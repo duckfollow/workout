@@ -5,108 +5,28 @@ import styles from '../../../styles/Profile.module.css'
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import Button from '@mui/material/Button';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import NoSsr from "@mui/material/NoSsr";
-
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import QRCode from "react-qr-code";
 
-function Order({ data, data_order }) {
+function Order({ data_order }) {
     const router = useRouter();
     const { order, id } = router.query
-    const [dataProduct, setDataProduct] = useState(data.data ? data.data : [])
     const [dataOrder, setDataOrder] = useState(data_order.data ? data_order.data : [])
-    const [isShare, setIsShare] = useState(false)
-    const [isAnimate, setIsAnimate] = useState(false)
-    const [value, setValue] = useState(0);
-    const [open, setOpen] = useState(false);
 
-    const clickShare = () => {
-        setIsShare(true)
-    }
-
-    const closeShare = () => {
-        setIsShare(false)
-    }
-    const animateStart = () => {
-        setIsAnimate(true)
-    }
-    const animateEnd = () => {
-        if (!isShare) {
-            setIsAnimate(false)
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            readOrder();
+        }, 3200)
+    
+        return () => {
+          clearInterval(intervalId)
         }
-    }
-    const handleScroll = () => {
-        setIsShare(false)
-    }
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-    function TabPanel(props) {
-        const { children, value, index, ...other } = props;
-
-        return (
-            <div
-                role="tabpanel"
-                hidden={value !== index}
-                id={`simple-tabpanel-${index}`}
-                aria-labelledby={`simple-tab-${index}`}
-                {...other}
-            >
-                {value === index && (
-                    <Box sx={{ p: 3 }}>
-                        <Typography>{children}</Typography>
-                    </Box>
-                )}
-            </div>
-        );
-    }
-
-    TabPanel.propTypes = {
-        children: PropTypes.node,
-        index: PropTypes.number.isRequired,
-        value: PropTypes.number.isRequired,
-    };
-
-    function a11yProps(index) {
-        return {
-            id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
-        };
-    }
-
-    // create new order
-    const createOrder = (productId, amount, status, price, name, image) => {
-        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/create`, {
-            store: 'user001',
-            tableId: id,
-            productId: productId,
-            amount: amount,
-            status: status,
-            price: price,
-            name: name,
-            image: image
-        }).then(res => {
-            setIsShare(false)
-            readOrder()
-        })
-    }
+      }, [dataOrder])
 
     // read order
     const readOrder = () => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
-            store: 'user001',
+            store: process.env.NEXT_PUBLIC_USER,
             tableId: id
         }).then(res => {
             setDataOrder(res.data.data)
@@ -121,37 +41,6 @@ function Order({ data, data_order }) {
             }
         })
         return total
-    }
-
-    const updateStatus = (orderId, status) => {
-        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/update`, {
-            orderId: orderId,
-            status: status
-        }).then(res => {
-            readOrder()
-        })
-    }
-
-    const handleClickOpen = (id) => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const clickPriceOrder = () => {
-        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/price`, {
-            tableId: id
-        }).then(res => {
-            setOpen(false);
-            readOrder()
-        })
-    }
-
-    const productFillter = (type) => {
-        let data = dataProduct.filter(item => item.type === type)
-        return data
     }
 
     return (
@@ -235,185 +124,19 @@ function Order({ data, data_order }) {
                     </div>
                 </div>
             </div>
-
-            <div className={styles.view_share} show={isShare ? "true" : !isAnimate ? "false" : "true"}>
-                <div className={styles.view_share_content} animation={isShare ? "true" : "false"} onAnimationEnd={animateEnd} onAnimationStart={animateStart}>
-                    <div className={styles.content_share}>
-                        <NoSsr>
-                            <Box sx={{ width: '100%' }}>
-                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                        <Tab label="อาหาร" {...a11yProps(0)} />
-                                        <Tab label="ของหวาน" {...a11yProps(1)} />
-                                        <Tab label="เครื่องดื่ม" {...a11yProps(2)} />
-                                        <Tab label="ปิด" {...a11yProps(2)} onClick={closeShare} />
-                                    </Tabs>
-                                </Box>
-                                <TabPanel value={value} index={0}>
-                                    <div className={styles.grid_product}>
-                                        {
-                                            productFillter(1).map((item, index) => {
-                                                return (
-                                                    <div className={styles.card} key={item.productId}>
-                                                        <div className={styles.view_table} onClick={
-                                                            () => {
-                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
-                                                            }
-                                                        }>
-                                                            <div className={styles.text}>
-                                                                <span
-                                                                    style={
-                                                                        {
-                                                                            fontSize: '20px',
-                                                                        }
-                                                                    }>{item.name}</span>
-                                                                <span
-                                                                    style={{
-                                                                        fontSize: '20px',
-                                                                    }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
-                                                                <span
-                                                                    style={
-                                                                        {
-                                                                            fontSize: '12px',
-                                                                        }
-                                                                    }>
-                                                                    (id: {item.productId})
-                                                                </span>
-                                                            </div>
-                                                            <div className={styles.table}>
-                                                                <Image src={item.image} alt={''} width={100} height={100} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </TabPanel>
-                                <TabPanel value={value} index={1}>
-                                    <div className={styles.grid_product}>
-                                        {
-                                            productFillter(2).map((item, index) => {
-                                                return (
-                                                    <div className={styles.card} key={item.productId}>
-                                                        <div className={styles.view_table} onClick={
-                                                            () => {
-                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
-                                                            }
-                                                        }>
-                                                            <div className={styles.text}>
-                                                                <span
-                                                                    style={
-                                                                        {
-                                                                            fontSize: '20px',
-                                                                        }
-                                                                    }>{item.name}</span>
-                                                                <span
-                                                                    style={{
-                                                                        fontSize: '20px',
-                                                                    }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
-                                                                <span
-                                                                    style={
-                                                                        {
-                                                                            fontSize: '12px',
-                                                                        }
-                                                                    }>
-                                                                    (id: {item.productId})
-                                                                </span>
-                                                            </div>
-                                                            <div className={styles.table}>
-                                                                <Image src={item.image} alt={''} width={100} height={100} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </TabPanel>
-                                <TabPanel value={value} index={2}>
-                                    <div className={styles.grid_product}>
-                                        {
-                                            productFillter(3).map((item, index) => {
-                                                return (
-                                                    <div className={styles.card} key={item.productId}>
-                                                        <div className={styles.view_table} onClick={
-                                                            () => {
-                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image)
-                                                            }
-                                                        }>
-                                                            <div className={styles.text}>
-                                                                <span
-                                                                    style={
-                                                                        {
-                                                                            fontSize: '20px',
-                                                                        }
-                                                                    }>{item.name}</span>
-                                                                <span
-                                                                    style={{
-                                                                        fontSize: '20px',
-                                                                    }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
-                                                                <span
-                                                                    style={
-                                                                        {
-                                                                            fontSize: '12px',
-                                                                        }
-                                                                    }>
-                                                                    (id: {item.productId})
-                                                                </span>
-                                                            </div>
-                                                            <div className={styles.table}>
-                                                                <Image src={item.image} alt={''} width={100} height={100} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </TabPanel>
-                            </Box>
-                        </NoSsr>
-                    </div>
-                </div>
-            </div>
-            <Dialog
-                open={open}
-                keepMounted
-                onClose={handleClose}
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Disagree</Button>
-                    <Button onClick={clickPriceOrder}>Agree</Button>
-                </DialogActions>
-            </Dialog>
         </div>
     )
 }
 
 export async function getServerSideProps(context) {
-    const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
-        "store": process.env.NEXT_PUBLIC_USER
-    })
-
     const res_order = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
         "store": process.env.NEXT_PUBLIC_USER,
         "tableId": context.query.id
     })
 
-    const data = await res.data
     const data_order = await res_order.data
     return {
         props: {
-            data,
             data_order
         },
     }
