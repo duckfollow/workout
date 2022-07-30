@@ -205,18 +205,32 @@ function Order({ data, data_order }) {
                                                         </li>
                                                         <div
                                                             style={
-                                                                {
-                                                                    borderBottom: '2px dotted #e0e0e0',
-                                                                    paddingBottom: '10px',
-                                                                    justifyContent: 'center',
-                                                                    display: 'flex',
-                                                                    alignItems: 'center'
-                                                                }
+                                                                item.status === 3 ?
+                                                                    {
+                                                                        borderBottom: '2px dotted #e0e0e0',
+                                                                        height: '1px',
+                                                                    }
+                                                                    :
+                                                                    {
+                                                                        borderBottom: '2px dotted #e0e0e0',
+                                                                        paddingBottom: '10px',
+                                                                        justifyContent: 'center',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                    }
                                                             }>
-                                                            <Button variant="outlined" size='small' color="primary" disabled={item.status == 3 ? true : false} onClick={() => {
+                                                            <Button style={
+                                                                {
+                                                                    display: item.status == 3 ? 'none' : 'block',
+                                                                }
+                                                            } variant="outlined" size='small' color="primary" disabled={item.status == 3 ? true : false} onClick={() => {
                                                                 updateStatus(item.orderId, 3)
                                                             }}>เสร็จแล้ว</Button>&nbsp;
-                                                            <Button variant="outlined" size='small' color="error" disabled={item.status == 3 ? true : false} onClick={() => {
+                                                            <Button style={
+                                                                {
+                                                                    display: item.status == 3 ? 'none' : 'block',
+                                                                }
+                                                            } variant="outlined" size='small' color="error" disabled={item.status == 3 ? true : false} onClick={() => {
                                                                 updateStatus(item.orderId, 0)
                                                             }}>ยกเลิก</Button>
                                                         </div>
@@ -443,7 +457,7 @@ function Order({ data, data_order }) {
                 <DialogTitle>{"คุณต้องการชำระออเดอร์นี้ใช่หรือไม่?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        ตรวจสอบข้อมูลก่อนการชำระเงิน จำนวน {totalPrice().toLocaleString('th-TH', { style: 'currency', currency: 'THB' })} หากต้องการชำระเงินกรุณากดปุ่มยืนยัน
+                        ตรวจสอบข้อมูลก่อนการชำระเงิน จำนวน <strong>{totalPrice().toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</strong> หากต้องการชำระเงินกรุณากดปุ่มยืนยัน
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
