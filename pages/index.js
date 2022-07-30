@@ -142,7 +142,7 @@ function Profile({ data }) {
                           }
                         }>
                           {
-                            getOrderCount(index, 1)
+                            item.count
                           }
                         </span>
                       </div>
@@ -151,7 +151,7 @@ function Profile({ data }) {
                         <Button variant="outlined" color="primary" onClick={() => {
                           clickOrder(index + 1, item.id)
                         }}>สั่งอาหาร</Button> {' '}
-                        <Button variant="outlined" color="error" disabled={getOrderCount(index, 1) == 0 ? false : true} onClick={() => {
+                        <Button variant="outlined" color="error" disabled={item.count == 0 ? false : true} onClick={() => {
                           handleClickOpen(item.id)
                         }}>ลบ</Button>
                       </div>
