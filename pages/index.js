@@ -23,7 +23,7 @@ function Profile({ data }) {
   useEffect(() => {
     const intervalId = setInterval(() => {
       readTable();
-    }, 3000)
+    }, 1500)
 
     return () => {
       clearInterval(intervalId)
