@@ -28,7 +28,7 @@ function Profile({ data }) {
     return () => {
       clearInterval(intervalId)
     }
-  }, [dataTable])
+  }, [])
 
   const handleClickOpen = (id) => {
     setIdDelete(id)
