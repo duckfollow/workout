@@ -186,8 +186,8 @@ function Order({ data, data_order }) {
                                         {
                                             dataOrder.map((item, index) => {
                                                 return (
-                                                    <div>
-                                                        <li className={styles.cart_item} key={index} style={
+                                                    <div  key={index}>
+                                                        <li className={styles.cart_item} style={
                                                             {
                                                                 textDecoration: item.status === 0 ? 'line-through' : 'none'
                                                             }
