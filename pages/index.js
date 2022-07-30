@@ -174,7 +174,7 @@ function Profile({ data }) {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps(context) {
   const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/read`, {
     "store": process.env.NEXT_PUBLIC_USER
   })
