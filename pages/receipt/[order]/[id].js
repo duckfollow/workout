@@ -116,7 +116,7 @@ function Order({ data, data_order }) {
     const totalPrice = () => {
         let total = 0
         dataOrder.map(item => {
-            if (item.status === 1) {
+            if (item.status === 3) {
                 total += item.price
             }
         })
