@@ -117,7 +117,7 @@ function View({ data }) {
             <NoSsr>
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                        <Tabs value={value} onChange={handleChange} variant="scrollable" aria-label="basic tabs example">
                             <Tab label="อาหาร" {...a11yProps(0)} />
                             <Tab label="ของหวาน" {...a11yProps(1)} />
                             <Tab label="เครื่องดื่ม" {...a11yProps(2)} />
