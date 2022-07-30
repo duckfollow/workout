@@ -146,7 +146,7 @@ function Profile({ data }) {
                           }
                         </span>
                       </div>
-                      <Image src={'/table.png'} alt={''} width={100} height={100} />
+                      <Image src={'/table.png'} alt={''} width={100} height={100} objectFit='contain' />
                       <div>
                         <Button variant="outlined" color="primary" onClick={() => {
                           clickOrder(index + 1, item.id)

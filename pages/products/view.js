@@ -163,7 +163,7 @@ function View({ data }) {
                                                         width: '50%',
                                                     }
                                                 }>
-                                                    <Image src={item.image} alt={''} width={100} height={100} />
+                                                    <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
                                                     <div
                                                         style={
                                                             {
@@ -221,7 +221,7 @@ function View({ data }) {
                                                         width: '50%',
                                                     }
                                                 }>
-                                                    <Image src={item.image} alt={''} width={100} height={100} />
+                                                    <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
                                                     <div style={
                                                         {
                                                             marginTop: '10px',
@@ -278,7 +278,7 @@ function View({ data }) {
                                                         width: '50%',
                                                     }
                                                 }>
-                                                    <Image src={item.image} alt={''} width={100} height={100} />
+                                                    <Image src={item.image} alt={''} width={100} height={100} objectFit='contain'/>
                                                     <div style={
                                                         {
                                                             marginTop: '10px',

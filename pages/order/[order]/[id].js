@@ -318,7 +318,7 @@ function Order({ data, data_order }) {
                                                                     width: '50%',
                                                                 }
                                                             }>
-                                                                <Image src={item.image} alt={''} width={100} height={100} />
+                                                                <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -369,7 +369,7 @@ function Order({ data, data_order }) {
                                                                     width: '50%',
                                                                 }
                                                             }>
-                                                                <Image src={item.image} alt={''} width={100} height={100} />
+                                                                <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -420,7 +420,7 @@ function Order({ data, data_order }) {
                                                                     width: '50%',
                                                                 }
                                                             }>
-                                                                <Image src={item.image} alt={''} width={100} height={100} />
+                                                                <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
                                                             </div>
                                                         </div>
                                                     </div>
