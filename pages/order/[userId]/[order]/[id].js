@@ -34,6 +34,16 @@ function Order({ data, data_order }) {
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            readOrder();
+        }, 3200)
+        
+        return () => {
+            clearInterval(intervalId)
+        }
+    }, [dataOrder])
+
     const clickShare = () => {
         setIsShare(true)
     }
