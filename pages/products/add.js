@@ -9,6 +9,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 function AddProduct() {
     const router = useRouter()
@@ -104,9 +107,23 @@ function AddProduct() {
                         <Image className={styles.imageupload} src={imageFile} width={500} height={350} alt="image upload" objectFit="cover" />
                     </div>
             }
-            <input className={styles.inputText} type="text" placeholder="ชื่อ" value={name} onChange={handleName} />
-            <input className={styles.inputText} type="number" placeholder="ราคา" value={price} onChange={handlePrice} />
-            {/* <FormControl sx={{ m: 1}}> */}
+            <Stack
+                component="form"
+                spacing={2}
+                className={styles.view_input}
+                noValidate
+                autoComplete="off"
+            >
+                {/* <input className={styles.inputText} type="text" placeholder="ชื่อ" value={name} onChange={handleName} /> */}
+                <TextField label="ชื่อ" variant="outlined" value={name} onChange={handleName} />
+                {/* <input className={styles.inputText} type="number" placeholder="ราคา" value={price} onChange={handlePrice} /> */}
+                <TextField
+                    label="ราคา"
+                    type="number"
+                    value={price}
+                    onChange={handlePrice}
+                />
+                {/* <FormControl sx={{ m: 1}}> */}
                 <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
@@ -114,16 +131,26 @@ function AddProduct() {
                     onChange={handleType}
                     displayEmpty
                     inputProps={{ 'aria-label': 'Without label' }}
-                    className={styles.inputSelect}
                 >
                     <MenuItem value={1}>อาหาร</MenuItem>
                     <MenuItem value={2}>ของหวาน</MenuItem>
                     <MenuItem value={3}>เครื่องดื่ม</MenuItem>
                 </Select>
-            {/* </FormControl> */}
-            <textarea className={styles.inputTextArea} type="text" rows="4" cols="50" placeholder="รายละเอียด" value={detail} onChange={handleDetail} />
+                {/* </FormControl> */}
+                {/* <textarea className={styles.inputTextArea} type="text" rows="4" cols="50" placeholder="รายละเอียด"  /> */}
+                <TextField
+                    label="รายละเอียด"
+                    multiline
+                    rows={4}
+                    value={detail}
+                    onChange={handleDetail}
+                />
 
-            <button className={styles.button} onClick={addProduct}>เพิ่มสินค้า</button>
+                {/* <button className={styles.button} onClick={addProduct}>เพิ่มสินค้า</button> */}
+                <Button variant="contained" onClick={addProduct} size="large">
+                    เพิ่มสินค้า
+                </Button>
+            </Stack>
 
             {loading ?
                 <div className={styles.loading}>

@@ -12,6 +12,9 @@ import Select from '@mui/material/Select';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 function EditProduct({ data }) {
     const router = useRouter()
@@ -110,30 +113,54 @@ function EditProduct({ data }) {
                         <Image className={styles.imageupload} src={imageFile} width={500} height={350} alt="image upload" objectFit="cover" />
                     </div>
             }
-            <input className={styles.inputText} type="text" placeholder="ชื่อ" value={name} onChange={handleName} />
-            <input className={styles.inputText} type="number" placeholder="ราคา" value={price} onChange={handlePrice} />
-            {/* <FormControl sx={{ m: 1}}> */}
-            <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
-                value={type}
-                onChange={handleType}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-                className={styles.inputSelect}
+            <Stack
+                component="form"
+                spacing={2}
+                className={styles.view_input}
+                noValidate
+                autoComplete="off"
             >
-                <MenuItem value={1}>อาหาร</MenuItem>
-                <MenuItem value={2}>ของหวาน</MenuItem>
-                <MenuItem value={3}>เครื่องดื่ม</MenuItem>
-            </Select>
-            {/* </FormControl> */}
-            <textarea className={styles.inputTextArea} type="text" rows="4" cols="50" placeholder="รายละเอียด" value={detail} onChange={handleDetail} />
-            <FormGroup>
-                <FormControlLabel control={<Checkbox checked={isActive} onChange={() => setIsActive(!isActive)} />} label={isActive?'สถานะ: เปิดใช้งาน':'สถานะ: ปิดใช้งาน'} />
-            </FormGroup>
+                {/* <input className={styles.inputText} type="text" placeholder="ชื่อ" value={name} onChange={handleName} /> */}
+                <TextField label="ชื่อ" variant="outlined" value={name} onChange={handleName} />
+                {/* <input className={styles.inputText} type="number" placeholder="ราคา" value={price} onChange={handlePrice} /> */}
+                <TextField
+                    label="ราคา"
+                    type="number"
+                    value={price}
+                    onChange={handlePrice}
+                />
+                {/* <FormControl sx={{ m: 1}}> */}
+                <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={type}
+                    onChange={handleType}
+                    displayEmpty
+                    inputProps={{ 'aria-label': 'Without label' }}
+                >
+                    <MenuItem value={1}>อาหาร</MenuItem>
+                    <MenuItem value={2}>ของหวาน</MenuItem>
+                    <MenuItem value={3}>เครื่องดื่ม</MenuItem>
+                </Select>
+                {/* </FormControl> */}
+                {/* <textarea className={styles.inputTextArea} type="text" rows="4" cols="50" placeholder="รายละเอียด"  /> */}
+                <TextField
+                    label="รายละเอียด"
+                    multiline
+                    rows={4}
+                    value={detail}
+                    onChange={handleDetail}
+                />
 
-            <button className={styles.button} onClick={editProduct}>อัพเดทสินค้า</button>
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox checked={isActive} onChange={() => setIsActive(!isActive)} />} label={isActive ? 'สถานะ: เปิดใช้งาน' : 'สถานะ: ปิดใช้งาน'} />
+                </FormGroup>
 
+                {/* <button className={styles.button} onClick={editProduct}>อัพเดทสินค้า</button> */}
+                <Button variant="contained" onClick={editProduct} size="large">
+                    อัพเดทสินค้า
+                </Button>
+            </Stack>
             {loading ?
                 <div className={styles.loading}>
                     <div className={styles.loader}></div>

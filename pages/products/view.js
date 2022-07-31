@@ -121,7 +121,7 @@ function View({ data }) {
                             <Tab label="อาหาร" {...a11yProps(0)} />
                             <Tab label="ของหวาน" {...a11yProps(1)} />
                             <Tab label="เครื่องดื่ม" {...a11yProps(2)} />
-                            <Tab icon={<AddIcon />} iconPosition="start" label="เพิ่มสินค้าของคุณ" onClick={clickAdd}/>
+                            <Tab icon={<AddIcon />} iconPosition="start" label="เพิ่มสินค้าของคุณ" onClick={clickAdd} />
                         </Tabs>
                     </Box>
                     {/* <Link href={`/products/add`} passHref>
@@ -179,10 +179,10 @@ function View({ data }) {
                                                                 marginTop: '10px',
                                                             }
                                                         }>
-                                                        <Button variant="outlined" color="primary" size="small" onClick={() => {
+                                                        <Button variant="outlined" color="primary" size="small" disabled={item.status == 99 ? true : false} onClick={() => {
                                                             clickEdit(item.productId)
                                                         }}>แก้ไข</Button> {' '}
-                                                        <Button variant="outlined" color="error" size="small" onClick={() => {
+                                                        <Button variant="outlined" color="error" size="small" disabled={item.status == 99 ? true : false} onClick={() => {
                                                             handleClickOpen(item.productId)
                                                         }}>ลบ</Button>
                                                     </div>
@@ -236,10 +236,10 @@ function View({ data }) {
                                                             marginTop: '10px',
                                                         }
                                                     }>
-                                                        <Button variant="outlined" color="primary" size="small" onClick={() => {
+                                                        <Button variant="outlined" color="primary" size="small" disabled={item.status == 99 ? true : false} onClick={() => {
                                                             clickEdit(item.productId)
                                                         }}>แก้ไข</Button> {' '}
-                                                        <Button variant="outlined" color="error" size="small" onClick={() => {
+                                                        <Button variant="outlined" color="error" size="small" disabled={item.status == 99 ? true : false} onClick={() => {
                                                             handleClickOpen(item.productId)
                                                         }}>ลบ</Button>
                                                     </div>
@@ -287,16 +287,16 @@ function View({ data }) {
                                                         width: '50%',
                                                     }
                                                 }>
-                                                    <Image src={item.image} alt={''} width={100} height={100} objectFit='contain'/>
+                                                    <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
                                                     <div style={
                                                         {
                                                             marginTop: '10px',
                                                         }
                                                     }>
-                                                        <Button variant="outlined" color="primary" size="small" onClick={() => {
+                                                        <Button variant="outlined" color="primary" size="small" disabled={item.status == 99 ? true : false} onClick={() => {
                                                             clickEdit(item.productId)
                                                         }}>แก้ไข</Button> {' '}
-                                                        <Button variant="outlined" color="error" size="small" onClick={() => {
+                                                        <Button variant="outlined" color="error" size="small" disabled={item.status == 99 ? true : false} onClick={() => {
                                                             handleClickOpen(item.productId)
                                                         }}>ลบ</Button>
                                                     </div>
