@@ -20,6 +20,7 @@ function Order({ data_order }) {
     const [dataOrder, setDataOrder] = useState(data_order.data ? data_order.data : [])
     const [switchQR, setSwitchQR] = useState(false);
     const [saveReceipt, setSaveReceipt] = useState(false);
+    const dateTimeReceipt = dataOrder.length > 0 ? `${(new Date(dataOrder[0].createdAt)).toLocaleDateString('th-TH')} ${(new Date(dataOrder[0].createdAt)).toLocaleTimeString('th-TH')}` : `${(new Date()).toLocaleDateString('th-TH')} ${(new Date()).toLocaleTimeString('th-TH')}`
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -82,7 +83,7 @@ function Order({ data_order }) {
                                 <Image src="/chef.png" width={42} height={42} />
                             </div>
                             <div className={styles.number}>
-                                <div className={styles.date}>{(new Date()).toLocaleDateString('th-TH')}</div>
+                                <div className={styles.date}>{dateTimeReceipt}</div>
                                 <div className={styles.ref}>โต๊ะที่ {order}</div>
                             </div>
                         </div>
