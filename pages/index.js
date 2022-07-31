@@ -15,6 +15,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios'
 import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
+import TextField from '@mui/material/TextField';
+import Lottie from "lottie-react";
+import preparing_food from "../public/95592-preparing-food.json";
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function Profile({ data, userId }) {
   const router = useRouter();
@@ -23,6 +28,8 @@ function Profile({ data, userId }) {
   const [idDelete, setIdDelete] = useState();
   // const cookies = parseCookies()
   const [_userId, setUserId] = useState(userId);
+  const [loginId, setLoginId] = useState();
+  const [animateLogin, setAnimateLogin] = useState(false);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -74,13 +81,36 @@ function Profile({ data, userId }) {
 
   const clickTry = () => {
     let userId = randomString()
-    setUserId(userId)
-    setCookie(null, 'userId', userId, { path: '/' })
-    router.reload()
+    axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/user/create`, {
+      id: userId,
+    }).then(res => {
+      setUserId(userId)
+      setCookie(null, 'userId', userId, { path: '/' })
+      router.reload()
+    })
   }
 
   const randomString = () => {
     return (Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 4)).toUpperCase();
+  }
+
+  const clickLogin = () => {
+    axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/user/readById`, {
+      id: loginId
+    }).then(res => {
+      setUserId(res.data.data.id)
+      setCookie(null, 'userId', res.data.data.id, { path: '/' })
+      router.reload()
+    }).catch(err => {
+      setAnimateLogin(true)
+      setLoginId('')
+      console.log(err)
+    })
+  }
+
+  const clickLogout = () => {
+    destroyCookie(null, 'userId', { path: '/' })
+    router.reload()
   }
 
   return (
@@ -107,7 +137,7 @@ function Profile({ data, userId }) {
               alignItems: 'center',
               flexDirection: 'column',
               marginTop: '20px'
-              
+
             }
           }>
             <Button variant="outlined" startIcon={<ScienceOutlinedIcon />} size="small" color="primary" onClick={clickTry}> ทดลองใช้งานฟรี</Button>
@@ -127,7 +157,7 @@ function Profile({ data, userId }) {
                   margin: '10px',
                 }
               }>
-              รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong>
+              รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong> <Button variant="outlined" startIcon={<LogoutIcon/>} size="small" color="primary" onClick={clickLogout}>ออก</Button>
             </span>
         }
 
@@ -217,6 +247,49 @@ function Profile({ data, userId }) {
           <Button onClick={deleteTable}>ลบ</Button>
         </DialogActions>
       </Dialog>
+      <hr />
+
+      {userId == null ?
+        <main className={styles.main} style={
+          {
+            marginBottom: '50px',
+            border: '1px solid #e0e0e0',
+            padding: '20px',
+            borderRadius: '5px',
+          }
+        }>
+          <p
+            style={
+              {
+                marginTop: '0px',
+                marginBottom: '0px',
+              }
+            }>
+            ยินดีต้อนรับกลับมาใช้งานใหม่อีกครั้ง
+          </p>
+          <Lottie id='lottie' style={
+            {
+              width: '260px',
+              height: 'auto',
+            }
+          } animationData={preparing_food} loop={true} />
+          <TextField
+            placeholder='ใส่รหัสผู้ใช้งานเดิมของคุณ'
+            size='small'
+            value={loginId}
+            className={animateLogin ? styles.input_login : ""}
+            onAnimationEnd={() => {
+              setAnimateLogin(false)
+            }}
+            onChange={
+              (e) => {
+                setLoginId(e.target.value)
+              }
+            } />
+          <br />
+          <Button variant="outlined" startIcon={<LoginIcon/>} size="small" color="primary" onClick={clickLogin}>ตกลง</Button>
+        </main>
+        : null}
     </div>
   )
 }
