@@ -99,7 +99,7 @@ function Order({ data, data_order }) {
                 tableId: id,
                 productId: productId,
                 amount: amount,
-                status: status,
+                status: /*status*/ 1,
                 price: price,
                 name: name,
                 image: image
