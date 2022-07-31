@@ -285,7 +285,7 @@ function Order({ data, data_order }) {
                                     <a href={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`}</a>
                                     <br />
                                     {
-                                        switchQR ?'สามารถสแกน QR code เพื่อดูใบเสร็จได้': 'สามารถสแกน QR code เพื่อรับออเดอร์ได้'
+                                        switchQR ? 'สามารถสแกน QR code เพื่อดูใบเสร็จได้' : 'สามารถสแกน QR code เพื่อรับออเดอร์ได้'
                                     }
                                 </p>
                                 <Button variant="outlined" startIcon={<LoopIcon />} size='small' color="primary" onClick={() => {
@@ -307,7 +307,11 @@ function Order({ data, data_order }) {
             </div>
 
             <div className={styles.view_share} show={isShare ? "true" : !isAnimate ? "false" : "true"}>
-                <div className={styles.view_share_content} animation={isShare ? "true" : "false"} onAnimationEnd={animateEnd} onAnimationStart={animateStart}>
+                <div className={styles.view_share_content} animation={isShare ? "true" : "false"} onAnimationEnd={animateEnd} onAnimationStart={animateStart} style={
+                    {
+                        overflowY: 'scroll',
+                    }
+                }>
                     <div className={styles.content_share}>
                         <NoSsr>
                             <Box sx={{ width: '100%' }}>
@@ -320,55 +324,55 @@ function Order({ data, data_order }) {
                                     </Tabs>
                                 </Box>
                                 <TabPanel value={value} index={0}>
-                                    <div className={styles.grid_product}>
-                                        {
-                                            productFillter(1).map((item, index) => {
-                                                return (
-                                                    <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId} style={{
-                                                        cursor: item.isActive ? 'pointer' : 'not-allowed',
-                                                    }}>
-                                                        <div className={styles.view_table} onClick={
-                                                            () => {
-                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image, item.isActive)
-                                                            }
-                                                        }>
-                                                            <div className={styles.text} style={
-                                                                {
-                                                                    width: '50%',
+                                        <div className={styles.grid_product}>
+                                            {
+                                                productFillter(1).map((item, index) => {
+                                                    return (
+                                                        <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId} style={{
+                                                            cursor: item.isActive ? 'pointer' : 'not-allowed',
+                                                        }}>
+                                                            <div className={styles.view_table} onClick={
+                                                                () => {
+                                                                    createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image, item.isActive)
                                                                 }
                                                             }>
-                                                                <span
-                                                                    style={
-                                                                        {
+                                                                <div className={styles.text} style={
+                                                                    {
+                                                                        width: '50%',
+                                                                    }
+                                                                }>
+                                                                    <span
+                                                                        style={
+                                                                            {
+                                                                                fontSize: '20px',
+                                                                            }
+                                                                        }>{item.name}</span>
+                                                                    <span
+                                                                        style={{
                                                                             fontSize: '20px',
-                                                                        }
-                                                                    }>{item.name}</span>
-                                                                <span
-                                                                    style={{
-                                                                        fontSize: '20px',
-                                                                    }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
-                                                                <span
-                                                                    style={
-                                                                        {
-                                                                            fontSize: '12px',
-                                                                        }
-                                                                    }>
-                                                                    (id: {item.productId})
-                                                                </span>
-                                                            </div>
-                                                            <div className={styles.table} style={
-                                                                {
-                                                                    width: '50%',
-                                                                }
-                                                            }>
-                                                                <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
+                                                                        }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
+                                                                    <span
+                                                                        style={
+                                                                            {
+                                                                                fontSize: '12px',
+                                                                            }
+                                                                        }>
+                                                                        (id: {item.productId})
+                                                                    </span>
+                                                                </div>
+                                                                <div className={styles.table} style={
+                                                                    {
+                                                                        width: '50%',
+                                                                    }
+                                                                }>
+                                                                    <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
                                 </TabPanel>
                                 <TabPanel value={value} index={1}>
                                     <div className={styles.grid_product}>
