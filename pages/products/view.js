@@ -22,7 +22,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import AddIcon from '@mui/icons-material/Add';
 
-function View({ data }) {
+function View({ data, userId }) {
     const router = useRouter();
     const [dataProduct, setDataProduct] = useState(data.data ? data.data : [])
     const [value, setValue] = useState(0);
@@ -40,7 +40,7 @@ function View({ data }) {
 
     const readProduct = () => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
-            store: 'user001'
+            store: userId
         }).then(res => {
             setDataProduct(res.data.data)
         }
@@ -334,14 +334,16 @@ function View({ data }) {
 }
 
 export async function getServerSideProps(context) {
+    const cookies = context.req ? context.req.cookies : '';
+    const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
-        "store": process.env.NEXT_PUBLIC_USER
+        "store": userId
     })
     const data = await res.data
-    console.log(data)
     return {
         props: {
-            data
+            data,
+            userId
         },
     }
 }

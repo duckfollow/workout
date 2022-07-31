@@ -13,12 +13,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios'
+import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
-function Profile({ data }) {
+function Profile({ data, userId }) {
   const router = useRouter();
   const [dataTable, setDataTable] = useState(data)
   const [open, setOpen] = useState(false);
   const [idDelete, setIdDelete] = useState();
+  // const cookies = parseCookies()
+  const [_userId, setUserId] = useState(userId);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -40,7 +44,7 @@ function Profile({ data }) {
   };
   const createTable = () => {
     axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/create`, {
-      store: process.env.NEXT_PUBLIC_USER
+      store: _userId != null ? _userId : process.env.NEXT_PUBLIC_USER
     }).then(res => {
       console.log(res)
       readTable()
@@ -49,7 +53,7 @@ function Profile({ data }) {
 
   const readTable = () => {
     axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/read`, {
-      store: process.env.NEXT_PUBLIC_USER
+      store: _userId != null ? _userId : process.env.NEXT_PUBLIC_USER
     }).then(res => {
       setDataTable(res.data)
     })
@@ -68,6 +72,17 @@ function Profile({ data }) {
     router.push(`/order/${order}/${id}`)
   }
 
+  const clickTry = () => {
+    let userId = randomString()
+    setUserId(userId)
+    setCookie(null, 'userId', userId, { path: '/' })
+    router.reload()
+  }
+
+  const randomString = () => {
+    return (Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 4)).toUpperCase();
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -83,6 +98,19 @@ function Profile({ data }) {
         <div>
           <Image src='/chef.png' alt="" width={150} height={150} className={styles.img_profile} />
         </div>
+
+        {
+          userId == null ? <Button variant="outlined" startIcon={<ScienceOutlinedIcon />} size="small" color="primary" onClick={clickTry}> ทดลองใช้งานฟรี</Button>
+            :
+            <span
+              style={
+                {
+                  margin: '10px',
+                }
+              }>
+              รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong>
+            </span>
+        }
 
         <div className={styles.grid_menu}>
           <Link href={`/products/view`} passHref>
@@ -175,14 +203,19 @@ function Profile({ data }) {
 }
 
 export async function getServerSideProps(context) {
+  const cookies = context.req ? context.req.cookies : '';
+  const userId = cookies.userId !== undefined ? cookies.userId : null;
+  console.log(userId)
   const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/read`, {
-    "store": process.env.NEXT_PUBLIC_USER
+    "store": userId != null ? userId : process.env.NEXT_PUBLIC_USER
   })
   const data = await res.data
+  console.log(data)
 
   return {
     props: {
-      data
+      data,
+      userId
     }
   }
 }

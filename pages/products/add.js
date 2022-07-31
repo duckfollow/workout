@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-function AddProduct() {
+function AddProduct({ userId }) {
     const router = useRouter()
     const [imageFile, setImageFile] = useState(null)
     const [imageType, setImageType] = useState()
@@ -48,7 +48,7 @@ function AddProduct() {
             "isActive": true,
             "amount": 0,
             "type": type,
-            "store": process.env.NEXT_PUBLIC_USER
+            "store": userId
         }
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/create`, data, {
             headers: {
@@ -159,6 +159,16 @@ function AddProduct() {
             }
         </div>
     )
+}
+
+export async function getServerSideProps(context) {
+    const cookies = context.req ? context.req.cookies : '';
+    const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
+    return {
+        props: {
+            userId
+        },
+    }
 }
 
 export default AddProduct

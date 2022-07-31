@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../../../styles/Profile.module.css'
+import styles from '../../../../styles/Profile.module.css'
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -10,23 +10,23 @@ import QRCode from "react-qr-code";
 
 function Order({ data_order }) {
     const router = useRouter();
-    const { order, id } = router.query
+    const { userId, order, id } = router.query
     const [dataOrder, setDataOrder] = useState(data_order.data ? data_order.data : [])
 
     useEffect(() => {
         const intervalId = setInterval(() => {
             readOrder();
         }, 3200)
-    
+
         return () => {
-          clearInterval(intervalId)
+            clearInterval(intervalId)
         }
-      }, [dataOrder])
+    }, [dataOrder])
 
     // read order
     const readOrder = () => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
-            store: process.env.NEXT_PUBLIC_USER,
+            store: userId,
             tableId: id
         }).then(res => {
             setDataOrder(res.data.data)
@@ -106,16 +106,18 @@ function Order({ data_order }) {
                                 }
                             }>
                                 <NoSsr>
-                                    <QRCode value={`https://workout.duckfollow.co/receipt/${order}/${id}`} />
+                                    <QRCode value={`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`} />
                                 </NoSsr>
-                                <span
+                                <p align="center"
                                     style={
                                         {
                                             fontSize: '12px',
                                         }
                                     }>
+                                    <a href={`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`}</a>
+                                    <br />
                                     สามารถสแกน QR code เพื่อดูใบเสร็จและออเดอร์ได้
-                                </span>
+                                </p>
                             </div>
                         </div>
                         {/* <div className={styles.view_button_receipt}>
@@ -130,7 +132,7 @@ function Order({ data_order }) {
 
 export async function getServerSideProps(context) {
     const res_order = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
-        "store": process.env.NEXT_PUBLIC_USER,
+        "store": context.query.userId,
         "tableId": context.query.id
     })
 

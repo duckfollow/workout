@@ -24,7 +24,7 @@ import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 
-function Order({ data, data_order }) {
+function Order({ data, data_order, userId }) {
     const router = useRouter();
     const { order, id } = router.query
     const [dataProduct, setDataProduct] = useState(data.data ? data.data : [])
@@ -95,7 +95,7 @@ function Order({ data, data_order }) {
     const createOrder = (productId, amount, status, price, name, image, isActive) => {
         if (isActive) {
             axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/create`, {
-                store: process.env.NEXT_PUBLIC_USER,
+                store: userId,
                 tableId: id,
                 productId: productId,
                 amount: amount,
@@ -113,7 +113,7 @@ function Order({ data, data_order }) {
     // read order
     const readOrder = () => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
-            store: process.env.NEXT_PUBLIC_USER,
+            store: userId,
             tableId: id
         }).then(res => {
             setDataOrder(res.data.data)
@@ -262,16 +262,18 @@ function Order({ data, data_order }) {
                                 }
                             }>
                                 <NoSsr>
-                                    <QRCode value={`https://workout.duckfollow.co/receipt/${order}/${id}`} />
+                                    <QRCode value={`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`} />
                                 </NoSsr>
-                                <span
+                                <p align="center"
                                     style={
                                         {
                                             fontSize: '12px',
                                         }
                                     }>
+                                    <a href={`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`}</a>
+                                    <br />
                                     สามารถสแกน QR code เพื่อดูใบเสร็จและออเดอร์ได้
-                                </span>
+                                </p>
                             </div>
                         </div>
                         <Stack direction="row" spacing={2} style={
@@ -481,13 +483,14 @@ function Order({ data, data_order }) {
 }
 
 export async function getServerSideProps(context) {
-    console.log(context.query)
+    const cookies = context.req ? context.req.cookies : '';
+    const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
-        "store": process.env.NEXT_PUBLIC_USER
+        "store": userId
     })
 
     const res_order = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/read`, {
-        "store": process.env.NEXT_PUBLIC_USER,
+        "store": userId,
         "tableId": context.query.id
     })
 
@@ -496,7 +499,8 @@ export async function getServerSideProps(context) {
     return {
         props: {
             data,
-            data_order
+            data_order,
+            userId
         },
     }
 }

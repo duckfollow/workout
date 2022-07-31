@@ -16,7 +16,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-function EditProduct({ data }) {
+function EditProduct({ data, userId }) {
     const router = useRouter()
     const productId = router.query.id;
     const [imageFile, setImageFile] = useState(data.data.image)
@@ -54,7 +54,7 @@ function EditProduct({ data }) {
             "isActive": isActive,
             "amount": 0,
             "type": type,
-            "store": process.env.NEXT_PUBLIC_USER
+            "store": userId
         }
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/update`, data, {
             headers: {
@@ -171,14 +171,16 @@ function EditProduct({ data }) {
 }
 
 export async function getServerSideProps(context) {
+    const cookies = context.req ? context.req.cookies : '';
+    const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/readById`, {
         "productId": context.query.id,
     })
     const data = await res.data
-    console.log(data)
     return {
         props: {
-            data
+            data,
+            userId
         },
     }
 }
