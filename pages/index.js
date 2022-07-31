@@ -100,7 +100,26 @@ function Profile({ data, userId }) {
         </div>
 
         {
-          userId == null ? <Button variant="outlined" startIcon={<ScienceOutlinedIcon />} size="small" color="primary" onClick={clickTry}> ทดลองใช้งานฟรี</Button>
+          userId == null ? <div style={
+            {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+              marginTop: '20px'
+              
+            }
+          }>
+            <Button variant="outlined" startIcon={<ScienceOutlinedIcon />} size="small" color="primary" onClick={clickTry}> ทดลองใช้งานฟรี</Button>
+            <p align="center"
+              style={{
+                fontSize: '12px',
+                paddingLeft: '20px',
+                paddingRight: '20px',
+              }}>
+              คลิกที่ปุ่มด้านบนเพื่อทดลองใช้งานฟรี ระบบจะสร้างรหัสผู้ใช้งานใหม่ หรือจะใช้งานในโหมด demo ได้เลย
+            </p>
+          </div>
             :
             <span
               style={
