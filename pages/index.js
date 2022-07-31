@@ -76,7 +76,7 @@ function Profile({ data, userId }) {
   }
 
   const clickOrder = (order, id) => {
-    router.push(`/order/${order}/${id}`)
+    router.push(`/order/${userId}/${order}/${id}`)
   }
 
   const clickTry = () => {
@@ -130,7 +130,7 @@ function Profile({ data, userId }) {
         </div>
 
         {
-          userId == null ? <div style={
+          _userId == process.env.NEXT_PUBLIC_USER ? <div style={
             {
               display: 'flex',
               justifyContent: 'center',
@@ -249,7 +249,7 @@ function Profile({ data, userId }) {
       </Dialog>
       <hr />
 
-      {userId == null ?
+      {_userId == process.env.NEXT_PUBLIC_USER ?
         <main className={styles.main} style={
           {
             marginBottom: '50px',
@@ -296,14 +296,12 @@ function Profile({ data, userId }) {
 
 export async function getServerSideProps(context) {
   const cookies = context.req ? context.req.cookies : '';
-  const userId = cookies.userId !== undefined ? cookies.userId : null;
+  const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
   console.log(userId)
   const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/read`, {
-    "store": userId != null ? userId : process.env.NEXT_PUBLIC_USER
+    "store": userId
   })
   const data = await res.data
-  console.log(data)
-
   return {
     props: {
       data,

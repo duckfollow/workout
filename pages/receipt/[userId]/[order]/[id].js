@@ -59,12 +59,12 @@ function Order({ data_order }) {
                             </div>
                             <div className={styles.number}>
                                 <div className={styles.date}>{(new Date()).toLocaleDateString('th-TH')}</div>
-                                <div className={styles.ref}>โต๊ะ-{order}</div>
+                                <div className={styles.ref}>โต๊ะที่ {order}</div>
                             </div>
                         </div>
                         <div className={styles.body_receipt}>
                             <div className={styles.info}>
-                                <div className={styles.welcome}>Receipt, <span className={styles.username}>Demo Food</span></div>
+                                <div className={styles.welcome}>Receipt, <span className={styles.username}>Demo Food ({userId})</span></div>
                                 <p>จำนวน ({dataOrder.length}) รายการ</p>
                             </div>
                             <div className={styles.cart_receipt}>

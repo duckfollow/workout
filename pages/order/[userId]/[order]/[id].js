@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../../../styles/Profile.module.css'
+import styles from '../../../../styles/Profile.module.css'
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -24,9 +24,9 @@ import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 
-function Order({ data, data_order, userId }) {
+function Order({ data, data_order }) {
     const router = useRouter();
-    const { order, id } = router.query
+    const { userId, order, id } = router.query
     const [dataProduct, setDataProduct] = useState(data.data ? data.data : [])
     const [dataOrder, setDataOrder] = useState(data_order.data ? data_order.data : [])
     const [isShare, setIsShare] = useState(false)
@@ -182,12 +182,12 @@ function Order({ data, data_order, userId }) {
                             </div>
                             <div className={styles.number}>
                                 <div className={styles.date}>{(new Date()).toLocaleDateString('th-TH')}</div>
-                                <div className={styles.ref}>โต๊ะ-{order}</div>
+                                <div className={styles.ref}>โต๊ะที่ {order}</div>
                             </div>
                         </div>
                         <div className={styles.body_receipt}>
                             <div className={styles.info}>
-                                <div className={styles.welcome}>Receipt, <span className={styles.username}>Demo Food</span></div>
+                                <div className={styles.welcome}>Receipt, <span className={styles.username}>Demo Food ({userId})</span></div>
                                 <p>จำนวน ({dataOrder.length}) รายการ</p>
                             </div>
                             <div className={styles.cart_receipt}>
@@ -483,8 +483,7 @@ function Order({ data, data_order, userId }) {
 }
 
 export async function getServerSideProps(context) {
-    const cookies = context.req ? context.req.cookies : '';
-    const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
+    const userId = context.query.userId
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
         "store": userId
     })
@@ -499,8 +498,7 @@ export async function getServerSideProps(context) {
     return {
         props: {
             data,
-            data_order,
-            userId
+            data_order
         },
     }
 }
