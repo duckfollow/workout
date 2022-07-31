@@ -1087,6 +1087,18 @@
   z-index: 1;
 }
 
+.container_receipt_save {
+  width: 420px;
+  height: auto;
+  border-radius: 5px;
+  background-color: white;
+  /* position: absolute; */
+  /* top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%); */
+  z-index: 1;
+}
+
 /* receipt_box */
 .receipt_box>* {
   padding: 16px 32px;

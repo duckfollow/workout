@@ -9,12 +9,17 @@ import NoSsr from "@mui/material/NoSsr";
 import QRCode from "react-qr-code";
 import LoopIcon from '@mui/icons-material/Loop';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import html2canvas from 'html2canvas';
+import DownloadIcon from '@mui/icons-material/Download';
 
 function Order({ data_order }) {
     const router = useRouter();
     const { userId, order, id } = router.query
     const [dataOrder, setDataOrder] = useState(data_order.data ? data_order.data : [])
     const [switchQR, setSwitchQR] = useState(false);
+    const [saveReceipt, setSaveReceipt] = useState(false);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -46,6 +51,22 @@ function Order({ data_order }) {
         return total
     }
 
+    const downloadImage = (blob, fileName) => {
+        const fakeLink = window.document.createElement("a");
+        fakeLink.style = "display:none;";
+        fakeLink.download = fileName;
+
+        fakeLink.href = blob;
+
+        document.body.appendChild(fakeLink);
+        fakeLink.click();
+        document.body.removeChild(fakeLink);
+
+        fakeLink.remove();
+
+        setSaveReceipt(false)
+    };
+
     return (
         <div>
             <Head>
@@ -54,7 +75,7 @@ function Order({ data_order }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className={styles.view_receipt}>
-                <div className={styles.container_receipt}>
+                <div id="capture" className={saveReceipt ? styles.container_receipt_save : styles.container_receipt}>
                     <div className={styles.receipt_box}>
                         <div className={styles.head_receipt}>
                             <div className={styles.logo_receipt}>
@@ -120,12 +141,32 @@ function Order({ data_order }) {
                                     <a href={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`}</a>
                                     <br />
                                     {
-                                        switchQR ?'สามารถสแกน QR code เพื่อดูใบเสร็จได้': 'สามารถสแกน QR code เพื่อรับออเดอร์ได้'
+                                        switchQR ? 'สามารถสแกน QR code เพื่อดูใบเสร็จได้' : 'สามารถสแกน QR code เพื่อรับออเดอร์ได้'
                                     }
                                 </p>
-                                <Button variant="outlined" startIcon={<LoopIcon />} size='small' color="primary" onClick={() => {
-                                    setSwitchQR(!switchQR)
-                                }}>{switchQR ? 'QRCode สั่งอาหาร' : 'QRCode ใบเสร็จ'}</Button>
+                                <Stack direction="row" spacing={2} style={
+                                    {
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }
+                                }>
+                                    <Button variant="outlined" startIcon={<LoopIcon />} size='small' color="primary" onClick={() => {
+                                        setSwitchQR(!switchQR)
+                                    }}>{switchQR ? 'QRCode สั่งอาหาร' : 'QRCode ใบเสร็จ'}</Button>
+                                    <IconButton variant="outlined" size='small' color="success" onClick={() => {
+                                        setSaveReceipt(true)
+                                        setTimeout(() => {
+                                            html2canvas(document.querySelector("#capture")).then(canvas => {
+                                                // document.body.appendChild(canvas)
+                                                const image = canvas.toDataURL("image/png", 1.0);
+                                                downloadImage(image, `receipt_${userId}_${order}_${id}_${(new Date().toISOString())}.png`);
+                                            });
+                                        }, 2000)
+                                    }}>
+                                        <DownloadIcon />
+                                    </IconButton>
+                                </Stack>
                             </div>
                         </div>
                         {/* <div className={styles.view_button_receipt}>
