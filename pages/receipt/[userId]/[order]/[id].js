@@ -7,11 +7,14 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import NoSsr from "@mui/material/NoSsr";
 import QRCode from "react-qr-code";
+import LoopIcon from '@mui/icons-material/Loop';
+import Button from '@mui/material/Button';
 
 function Order({ data_order }) {
     const router = useRouter();
     const { userId, order, id } = router.query
     const [dataOrder, setDataOrder] = useState(data_order.data ? data_order.data : [])
+    const [switchQR, setSwitchQR] = useState(false);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -106,7 +109,7 @@ function Order({ data_order }) {
                                 }
                             }>
                                 <NoSsr>
-                                    <QRCode value={`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`} />
+                                    <QRCode value={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`} />
                                 </NoSsr>
                                 <p align="center"
                                     style={
@@ -114,10 +117,15 @@ function Order({ data_order }) {
                                             fontSize: '12px',
                                         }
                                     }>
-                                    <a href={`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{`https://workout.duckfollow.co/receipt/${userId}/${order}/${id}`}</a>
+                                    <a href={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`}</a>
                                     <br />
-                                    สามารถสแกน QR code เพื่อดูใบเสร็จและออเดอร์ได้
+                                    {
+                                        switchQR ?'สามารถสแกน QR code เพื่อดูใบเสร็จได้': 'สามารถสแกน QR code เพื่อรับออเดอร์ได้'
+                                    }
                                 </p>
+                                <Button variant="outlined" startIcon={<LoopIcon />} size='small' color="primary" onClick={() => {
+                                    setSwitchQR(!switchQR)
+                                }}>{switchQR ? 'QRCode สั่งอาหาร' : 'QRCode ใบเสร็จ'}</Button>
                             </div>
                         </div>
                         {/* <div className={styles.view_button_receipt}>
