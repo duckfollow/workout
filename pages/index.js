@@ -218,7 +218,7 @@ function Profile({ data, userId }) {
                         <Button variant="outlined" color="primary" onClick={() => {
                           clickOrder(index + 1, item.id)
                         }}>สั่งอาหาร</Button> {' '}
-                        <Button variant="outlined" color="error" disabled={item.count == 0 ? false : true} onClick={() => {
+                        <Button variant="outlined" color="error" disabled={item.count == 0 && item.count_wait == 0 ? false : true} onClick={() => {
                           handleClickOpen(item.id)
                         }}>ลบ</Button>
                       </div>
