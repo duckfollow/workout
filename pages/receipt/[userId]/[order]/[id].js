@@ -105,7 +105,7 @@ function Order({ data_order }) {
                                                         }
                                                     }>
                                                         <span className={styles.index}>{index + 1}</span>
-                                                        <span className={styles.name}>{item.name}</span>
+                                                        <span className={styles.name}>{item.name} {item.status == 3? '✔️': ''}</span>
                                                         <span className={styles.price}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
                                                     </li>
                                                 )
