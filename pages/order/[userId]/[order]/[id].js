@@ -164,7 +164,9 @@ function Order({ data, data_order }) {
         let total = totalPrice()
         if (total > 0) {
             axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/order/price`, {
-                tableId: id
+                tableId: id,
+                store: userId,
+                date_of_price: dateTimeReceipt,
             }).then(res => {
                 setOpen(false);
                 let audio = document.getElementById('myAudio')
