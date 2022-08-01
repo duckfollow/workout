@@ -114,6 +114,24 @@ function Profile({ data, userId }) {
     router.reload()
   }
 
+  const downloadCSV = (e) => {
+    // Prevent Form submit, the form will refresh too fast and can't be sent the data to backend database if no prevent default
+    e.preventDefault();
+    // Create an anchor element and dispatch a click event on it
+    // to trigger a download
+    const a = document.createElement("a");
+    //  ***Need to change "output.csv" => This is a file name can be changed
+    a.download = "output.csv";
+    a.href = `https://api.duckfollow.co/api/v1/food/order/report/${userId}`;
+    const clickEvt = new MouseEvent("click", {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvt);
+    a.remove();
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -173,6 +191,9 @@ function Profile({ data, userId }) {
           <div className={styles.card_notification} onClick={createTable}>
             <Image src={'/table.png'} alt={''} width={40} height={40} />
             <span>&nbsp;เพิ่มโต๊ะ</span>
+          </div>
+          <div className={styles.card_notification} onClick={downloadCSV}>
+            <Image src={'/statistics.png'} alt={''} width={40} height={40} />
           </div>
         </div>
 
@@ -306,7 +327,7 @@ function Profile({ data, userId }) {
                 }
               } />
             <br />
-            <Button fullWidth variant="outlined" startIcon={<LoginIcon />} size="small" color="primary" onClick={clickLogin}>เข้าใช้งานอีกครั้ง</Button>
+            <Button fullWidth variant="outlined" startIcon={<LoginIcon />} size="medium" color="primary" onClick={clickLogin}>เข้าใช้งานอีกครั้ง</Button>
           </div>
           <div className={styles.main} style={
             {
@@ -372,7 +393,7 @@ function Profile({ data, userId }) {
                   ✔️ QRCode แสกนดูใบเสร็จ/รับออเดอร์โต๊ะ<br/>
                   ✔️ ดูรายการออเดอร์เรียลไทม์<br/>
                   ✔️ บันทึกใบเสร็จไม่จำกัดจำนวน<br/>
-                  ✔️ ออกรายงานประจำวัน(on process)<br/>
+                  ✔️ ออกรายงานประจำวัน<br/>
                 </p>
               </div>
             </div>
