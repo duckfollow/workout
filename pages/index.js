@@ -20,6 +20,7 @@ import Lottie from "lottie-react";
 import preparing_food from "../public/95592-preparing-food.json";
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 function Profile({ data, userId }) {
   const router = useRouter();
@@ -122,6 +123,7 @@ function Profile({ data, userId }) {
       </Head>
 
       <main className={styles.main}>
+        <br />
         <h1 className={styles.title}>
           Welcome <a>Demo Food</a>
         </h1>
@@ -157,7 +159,7 @@ function Profile({ data, userId }) {
                   margin: '10px',
                 }
               }>
-              รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong> <Button variant="outlined" startIcon={<LogoutIcon/>} size="small" color="primary" onClick={clickLogout}>ออก</Button>
+              รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong> <Button variant="outlined" startIcon={<LogoutIcon />} size="small" color="primary" onClick={clickLogout}>ออก</Button>
             </span>
         }
 
@@ -215,9 +217,9 @@ function Profile({ data, userId }) {
                       </div>
                       <Image src={'/table.png'} alt={''} width={100} height={100} objectFit='contain' />
                       <div>
-                        <Button variant="outlined" color="primary" onClick={() => {
+                        <Button variant="outlined" startIcon={item.count == 0 && item.count_wait > 0 ? <HourglassBottomIcon className={styles.hourglass} /> : null} color={item.count == 0 && item.count_wait > 0 ? 'primary' : 'primary'} onClick={() => {
                           clickOrder(index + 1, item.id)
-                        }}>สั่งอาหาร</Button> {' '}
+                        }}>{item.count == 0 && item.count_wait > 0 ? 'รอชำระ' : 'สั่งอาหาร'}</Button> {' '}
                         <Button variant="outlined" color="error" disabled={item.count == 0 && item.count_wait == 0 ? false : true} onClick={() => {
                           handleClickOpen(item.id)
                         }}>ลบ</Button>
@@ -250,45 +252,132 @@ function Profile({ data, userId }) {
       <hr />
 
       {_userId == process.env.NEXT_PUBLIC_USER ?
-        <main className={styles.main} style={
+        <div style={
           {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            padding: '10px',
             marginBottom: '50px',
-            border: '1px solid #e0e0e0',
-            padding: '20px',
-            borderRadius: '5px',
           }
         }>
-          <p
-            style={
+          <div className={styles.main} style={
+            {
+              marginBottom: '10px',
+              border: '1px solid #e0e0e0',
+              padding: '20px',
+              borderRadius: '5px',
+              marginLeft: '3px',
+              marginRight: '3px',
+              minHeight: '450px',
+            }
+          }>
+            <p
+              style={
+                {
+                  marginTop: '0px',
+                  marginBottom: '0px',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }
+              }>
+              ยินดีต้อนรับกลับมาใช้งานใหม่อีกครั้ง
+            </p>
+            <Lottie id='lottie' style={
               {
-                marginTop: '0px',
-                marginBottom: '0px',
+                width: '260px',
+                height: 'auto',
+              }
+            } animationData={preparing_food} loop={true} />
+            <TextField
+              placeholder='ใส่รหัสผู้ใช้งานเดิมของคุณ'
+              size='small'
+              value={loginId}
+              fullWidth
+              className={animateLogin ? styles.input_login : ""}
+              onAnimationEnd={() => {
+                setAnimateLogin(false)
+              }}
+              onChange={
+                (e) => {
+                  setLoginId(e.target.value)
+                }
+              } />
+            <br />
+            <Button fullWidth variant="outlined" startIcon={<LoginIcon />} size="small" color="primary" onClick={clickLogin}>เข้าใช้งานอีกครั้ง</Button>
+          </div>
+          <div className={styles.main} style={
+            {
+              marginBottom: '10px',
+              border: '1px solid #e0e0e0',
+              padding: '20px',
+              borderRadius: '5px',
+              marginLeft: '3px',
+              marginRight: '3px',
+              minHeight: '450px',
+            }
+          }>
+            <p
+              style={
+                {
+                  marginTop: '0px',
+                  marginBottom: '0px',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }
+              }>
+              แพ็กเกจ
+            </p>
+            <div style={
+              {
+                display: 'flex',
+                flexWrap: 'wrap',
+                flexDirection: 'row',
               }
             }>
-            ยินดีต้อนรับกลับมาใช้งานใหม่อีกครั้ง
-          </p>
-          <Lottie id='lottie' style={
-            {
-              width: '260px',
-              height: 'auto',
-            }
-          } animationData={preparing_food} loop={true} />
-          <TextField
-            placeholder='ใส่รหัสผู้ใช้งานเดิมของคุณ'
-            size='small'
-            value={loginId}
-            className={animateLogin ? styles.input_login : ""}
-            onAnimationEnd={() => {
-              setAnimateLogin(false)
-            }}
-            onChange={
-              (e) => {
-                setLoginId(e.target.value)
-              }
-            } />
-          <br />
-          <Button variant="outlined" startIcon={<LoginIcon/>} size="small" color="primary" onClick={clickLogin}>ตกลง</Button>
-        </main>
+              <div style={
+                {
+                  padding: '10px',
+                }
+              }>
+                <p align='center' style={
+                  {
+                    color: '#0073cd',
+                    fontSize: '35px',
+                    fontWeight: 'bold',
+                    marginBottom: '0px',
+                    marginTop: '0px',
+                  }
+                }>
+                  Starter
+                </p>
+                <p align='center' style={{
+                  fontSize: '30px',
+                  marginBottom: '0px',
+                  marginTop: '0px',
+                  color: '#ff5f5a',
+                }}>
+                  ฟรี
+                </p>
+                <p>
+                  <strong>ฟีเจอร์หลัก:</strong><br/>
+                  ✔️ เพิ่ม/ลบ โต๊ะไม่จำกัดจำนวน<br/>
+                  ✔️ เพิ่ม/ลบ สินค้าไม่จำกัดจำนวน<br/>
+                  ✔️ จัดการสินค้าไม่จำกัดจำนวน<br/>
+                  ✔️ รับออเดอร์ไม่จำกัดจำนวน<br/>
+                  ✔️ ดูใบเสร็จเรียลไทม์<br/>
+                  ✔️ QRCode แสกนดูใบเสร็จ/รับออเดอร์โต๊ะ<br/>
+                  ✔️ ดูรายการออเดอร์เรียลไทม์<br/>
+                  ✔️ บันทึกใบเสร็จไม่จำกัดจำนวน<br/>
+                  ✔️ ออกรายงานประจำวัน(on process)<br/>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
         : null}
     </div>
   )

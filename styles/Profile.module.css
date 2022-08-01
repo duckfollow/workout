@@ -1367,10 +1367,38 @@ Order Product
 }
 
 @keyframes shake {
-  0% { margin-left: 0rem; }
-  25% { margin-left: 0.5rem; }
-  75% { margin-left: -0.5rem; }
-  100% { margin-left: 0rem; }
+  0% {
+    margin-left: 0rem;
+  }
+
+  25% {
+    margin-left: 0.5rem;
+  }
+
+  75% {
+    margin-left: -0.5rem;
+  }
+
+  100% {
+    margin-left: 0rem;
+  }
+}
+
+.hourglass {
+  animation-duration: 4s;
+	animation-iteration-count: infinite;
+  animation-name: flip;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes flip {
+  from,
+  90% {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(180deg);
+  }
 }
 
 @media (max-width: 600px) {
