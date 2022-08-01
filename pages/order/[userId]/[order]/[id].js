@@ -24,6 +24,10 @@ import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import LoopIcon from '@mui/icons-material/Loop';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
+import IcecreamIcon from '@mui/icons-material/Icecream';
+import SportsBarIcon from '@mui/icons-material/SportsBar';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Order({ data, data_order }) {
     const router = useRouter();
@@ -320,62 +324,62 @@ function Order({ data, data_order }) {
                             <Box sx={{ width: '100%' }}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                        <Tab label="อาหาร" {...a11yProps(0)} />
-                                        <Tab label="ของหวาน" {...a11yProps(1)} />
-                                        <Tab label="เครื่องดื่ม" {...a11yProps(2)} />
-                                        <Tab label="ปิด" {...a11yProps(2)} onClick={closeShare} />
+                                        <Tab icon={<FastfoodIcon />} iconPosition="start" label="อาหาร" {...a11yProps(0)} />
+                                        <Tab icon={<IcecreamIcon />} iconPosition="start" label="ของหวาน" {...a11yProps(1)} />
+                                        <Tab icon={<SportsBarIcon />} iconPosition="start" label="เครื่องดื่ม" {...a11yProps(2)} />
+                                        <Tab icon={<CloseIcon />} iconPosition="start" label="ปิด" {...a11yProps(2)} onClick={closeShare} />
                                     </Tabs>
                                 </Box>
                                 <TabPanel value={value} index={0}>
-                                        <div className={styles.grid_product}>
-                                            {
-                                                productFillter(1).map((item, index) => {
-                                                    return (
-                                                        <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId} style={{
-                                                            cursor: item.isActive ? 'pointer' : 'not-allowed',
-                                                        }}>
-                                                            <div className={styles.view_table} onClick={
-                                                                () => {
-                                                                    createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image, item.isActive)
+                                    <div className={styles.grid_product}>
+                                        {
+                                            productFillter(1).map((item, index) => {
+                                                return (
+                                                    <div className={item.isActive ? styles.card : styles.card_disable} key={item.productId} style={{
+                                                        cursor: item.isActive ? 'pointer' : 'not-allowed',
+                                                    }}>
+                                                        <div className={styles.view_table} onClick={
+                                                            () => {
+                                                                createOrder(item.productId, item.amount, item.status, item.price, item.name, item.image, item.isActive)
+                                                            }
+                                                        }>
+                                                            <div className={styles.text} style={
+                                                                {
+                                                                    width: '50%',
                                                                 }
                                                             }>
-                                                                <div className={styles.text} style={
-                                                                    {
-                                                                        width: '50%',
-                                                                    }
-                                                                }>
-                                                                    <span
-                                                                        style={
-                                                                            {
-                                                                                fontSize: '20px',
-                                                                            }
-                                                                        }>{item.name}</span>
-                                                                    <span
-                                                                        style={{
+                                                                <span
+                                                                    style={
+                                                                        {
                                                                             fontSize: '20px',
-                                                                        }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
-                                                                    <span
-                                                                        style={
-                                                                            {
-                                                                                fontSize: '12px',
-                                                                            }
-                                                                        }>
-                                                                        (id: {item.productId})
-                                                                    </span>
-                                                                </div>
-                                                                <div className={styles.table} style={
-                                                                    {
-                                                                        width: '50%',
-                                                                    }
-                                                                }>
-                                                                    <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
-                                                                </div>
+                                                                        }
+                                                                    }>{item.name}</span>
+                                                                <span
+                                                                    style={{
+                                                                        fontSize: '20px',
+                                                                    }}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
+                                                                <span
+                                                                    style={
+                                                                        {
+                                                                            fontSize: '12px',
+                                                                        }
+                                                                    }>
+                                                                    (id: {item.productId})
+                                                                </span>
+                                                            </div>
+                                                            <div className={styles.table} style={
+                                                                {
+                                                                    width: '50%',
+                                                                }
+                                                            }>
+                                                                <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
                                                             </div>
                                                         </div>
-                                                    )
-                                                })
-                                            }
-                                        </div>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
                                 </TabPanel>
                                 <TabPanel value={value} index={1}>
                                     <div className={styles.grid_product}>

@@ -21,6 +21,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import AddIcon from '@mui/icons-material/Add';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
+import IcecreamIcon from '@mui/icons-material/Icecream';
+import SportsBarIcon from '@mui/icons-material/SportsBar';
 
 function View({ data, userId }) {
     const router = useRouter();
@@ -118,9 +121,9 @@ function View({ data, userId }) {
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} variant="scrollable" aria-label="basic tabs example">
-                            <Tab label="อาหาร" {...a11yProps(0)} />
-                            <Tab label="ของหวาน" {...a11yProps(1)} />
-                            <Tab label="เครื่องดื่ม" {...a11yProps(2)} />
+                            <Tab icon={<FastfoodIcon />} iconPosition="start" label="อาหาร" {...a11yProps(0)} />
+                            <Tab icon={<IcecreamIcon />} iconPosition="start" label="ของหวาน" {...a11yProps(1)} />
+                            <Tab icon={<SportsBarIcon />} iconPosition="start" label="เครื่องดื่ม" {...a11yProps(2)} />
                             <Tab icon={<AddIcon />} iconPosition="start" label="เพิ่มสินค้าของคุณ" onClick={clickAdd} />
                         </Tabs>
                     </Box>

@@ -1286,7 +1286,7 @@ Order Product
   transition: 0.3s;
   position: fixed;
   bottom: 0;
-  min-width: 99%;
+  min-width: 100%;
   padding: 5px;
 }
 
