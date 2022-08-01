@@ -236,7 +236,7 @@ function Profile({ data, userId }) {
                           }
                         </span>
                       </div>
-                      <Image src={'/table.png'} alt={''} width={100} height={100} objectFit='contain' />
+                      <Image src={item.count_wait < 5 ? `/table${item.count_wait}.png` : `/table5.png`} alt={''} width={100} height={100} objectFit='contain' />
                       <div>
                         <Button variant="outlined" startIcon={item.count == 0 && item.count_wait > 0 ? <HourglassBottomIcon className={styles.hourglass} /> : null} color={item.count == 0 && item.count_wait > 0 ? 'primary' : 'primary'} onClick={() => {
                           clickOrder(index + 1, item.id)
@@ -384,16 +384,16 @@ function Profile({ data, userId }) {
                   ฟรี
                 </p>
                 <p>
-                  <strong>ฟีเจอร์หลัก:</strong><br/>
-                  ✔️ เพิ่ม/ลบ โต๊ะไม่จำกัดจำนวน<br/>
-                  ✔️ เพิ่ม/ลบ สินค้าไม่จำกัดจำนวน<br/>
-                  ✔️ จัดการสินค้าไม่จำกัดจำนวน<br/>
-                  ✔️ รับออเดอร์ไม่จำกัดจำนวน<br/>
-                  ✔️ ดูใบเสร็จเรียลไทม์<br/>
-                  ✔️ QRCode แสกนดูใบเสร็จ/รับออเดอร์โต๊ะ<br/>
-                  ✔️ ดูรายการออเดอร์เรียลไทม์<br/>
-                  ✔️ บันทึกใบเสร็จไม่จำกัดจำนวน<br/>
-                  ✔️ ออกรายงานประจำวัน<br/>
+                  <strong>ฟีเจอร์หลัก:</strong><br />
+                  ✔️ เพิ่ม/ลบ โต๊ะไม่จำกัดจำนวน<br />
+                  ✔️ เพิ่ม/ลบ สินค้าไม่จำกัดจำนวน<br />
+                  ✔️ จัดการสินค้าไม่จำกัดจำนวน<br />
+                  ✔️ รับออเดอร์ไม่จำกัดจำนวน<br />
+                  ✔️ ดูใบเสร็จเรียลไทม์<br />
+                  ✔️ QRCode แสกนดูใบเสร็จ/รับออเดอร์โต๊ะ<br />
+                  ✔️ ดูรายการออเดอร์เรียลไทม์<br />
+                  ✔️ บันทึกใบเสร็จไม่จำกัดจำนวน<br />
+                  ✔️ ออกรายงานประจำวัน<br />
                 </p>
               </div>
             </div>
