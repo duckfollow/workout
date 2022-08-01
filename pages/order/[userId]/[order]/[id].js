@@ -323,7 +323,7 @@ function Order({ data, data_order }) {
                         <NoSsr>
                             <Box sx={{ width: '100%' }}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                                    <Tabs value={value} onChange={handleChange} variant="scrollable" aria-label="basic tabs example">
                                         <Tab icon={<FastfoodIcon />} iconPosition="start" label="อาหาร" {...a11yProps(0)} />
                                         <Tab icon={<IcecreamIcon />} iconPosition="start" label="ของหวาน" {...a11yProps(1)} />
                                         <Tab icon={<SportsBarIcon />} iconPosition="start" label="เครื่องดื่ม" {...a11yProps(2)} />
