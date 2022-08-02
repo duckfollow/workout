@@ -131,7 +131,7 @@ function Order({ data_order }) {
                                 }
                             }>
                                 <NoSsr>
-                                    <QRCode value={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`} />
+                                    <QRCode value={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/member/${userId}/${order}/${id}`} />
                                 </NoSsr>
                                 <p align="center"
                                     style={
@@ -139,7 +139,7 @@ function Order({ data_order }) {
                                             fontSize: '12px',
                                         }
                                     }>
-                                    <a href={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/order/${userId}/${order}/${id}`}</a>
+                                    <a href={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/member/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/member/${userId}/${order}/${id}`}</a>
                                     <br />
                                     {
                                         switchQR ? 'สามารถสแกน QR code เพื่อดูใบเสร็จได้' : 'สามารถสแกน QR code เพื่อรับออเดอร์ได้'

@@ -1386,16 +1386,18 @@ Order Product
 
 .hourglass {
   animation-duration: 4s;
-	animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
   animation-name: flip;
   animation-timing-function: ease-in-out;
 }
 
 @keyframes flip {
+
   from,
   90% {
     transform: rotate(0);
   }
+
   to {
     transform: rotate(180deg);
   }

@@ -29,8 +29,6 @@ import IcecreamIcon from '@mui/icons-material/Icecream';
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-import PrintIcon from '@mui/icons-material/Print';
-import html2canvas from 'html2canvas';
 
 function Order({ data, data_order }) {
     const router = useRouter();
@@ -42,7 +40,6 @@ function Order({ data, data_order }) {
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
     const [switchQR, setSwitchQR] = useState(false);
-    const [saveReceipt, setSaveReceipt] = useState(false);
     const dateTimeReceipt = dataOrder.length > 0 ? `${(new Date(dataOrder[0].createdAt)).toLocaleDateString('th-TH')} ${(new Date(dataOrder[0].createdAt)).toLocaleTimeString('th-TH')}` : `${(new Date()).toLocaleDateString('th-TH')} ${(new Date()).toLocaleTimeString('th-TH')}`
 
     useEffect(() => {
@@ -189,22 +186,6 @@ function Order({ data, data_order }) {
         return data
     }
 
-    const downloadImage = (blob, fileName) => {
-        const fakeLink = window.document.createElement("a");
-        fakeLink.style = "display:none;";
-        fakeLink.download = fileName;
-
-        fakeLink.href = blob;
-
-        document.body.appendChild(fakeLink);
-        fakeLink.click();
-        document.body.removeChild(fakeLink);
-
-        fakeLink.remove();
-
-        setSaveReceipt(false)
-    };
-
     return (
         <div>
             <Head>
@@ -213,7 +194,7 @@ function Order({ data, data_order }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className={styles.view_receipt}>
-                <div id="capture" className={saveReceipt ? styles.container_receipt_save : styles.container_receipt}>
+                <div className={styles.container_receipt}>
                     <div className={styles.receipt_box}>
                         <div className={styles.head_receipt}>
                             <div className={styles.logo_receipt}>
@@ -264,18 +245,27 @@ function Order({ data, data_order }) {
                                                             }>
                                                             <Button style={
                                                                 {
-                                                                    display: item.status == 3 ? 'none' : 'block',
+                                                                    display: 'none',
                                                                 }
-                                                            } variant="outlined" size='small' color="primary" disabled={item.status == 3 ? true : false} onClick={() => {
+                                                            } variant="outlined" size='small' color="primary" hidden disabled={item.status == 3 ? true : false} onClick={() => {
                                                                 updateStatus(item.orderId, 3)
                                                             }}>เสร็จแล้ว</Button>&nbsp;
                                                             <Button style={
                                                                 {
-                                                                    display: item.status == 3 ? 'none' : 'block',
+                                                                    display: /*item.status == 3 ? 'none' : */'none',
                                                                 }
                                                             } variant="outlined" size='small' color="error" disabled={item.status == 3 ? true : false} onClick={() => {
                                                                 updateStatus(item.orderId, 0)
                                                             }}>ยกเลิก</Button>
+                                                            <IconButton style={
+                                                                {
+                                                                    display: item.status == 3 ? 'none' : 'block',
+                                                                }
+                                                            } color="error" component="label" disabled={item.status == 3 ? true : false} onClick={() => {
+                                                                updateStatus(item.orderId, 0)
+                                                            }}>
+                                                                <CloseIcon />
+                                                            </IconButton>
                                                         </div>
                                                     </div>
                                                 )
@@ -309,56 +299,29 @@ function Order({ data, data_order }) {
                                             fontSize: '12px',
                                         }
                                     }>
-                                    <Link href={switchQR ? `/receipt/${userId}/${order}/${id}` : `/member/${userId}/${order}/${id}`} passHref>
-                                        <a target="_blank" rel="noopener noreferrer">{switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/member/${userId}/${order}/${id}`}</a>
-                                    </Link>
+                                    <a href={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/member/${userId}/${order}/${id}`} target="_blank" rel="noopener noreferrer">{switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/member/${userId}/${order}/${id}`}</a>
                                     <br />
                                     {
                                         switchQR ? 'สามารถสแกน QR code เพื่อดูใบเสร็จได้' : 'สามารถสแกน QR code เพื่อรับออเดอร์ได้'
                                     }
                                 </p>
-                                <Stack direction="row" spacing={2} style={
-                                    {
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }
-                                }>
-                                    <Button variant="outlined" startIcon={<LoopIcon />} size='small' color="primary" onClick={() => {
-                                        setSwitchQR(!switchQR)
-                                    }}>{switchQR ? 'QRCode สั่งอาหาร' : 'QRCode ใบเสร็จ'}</Button>
-                                    {/* <Link href={`/receipt/${userId}/${order}/${id}`}> */}
-                                    <IconButton variant="outlined" size='small' color="primary" onClick={() => {
-                                        setSaveReceipt(true)
-                                        setTimeout(() => {
-                                            html2canvas(document.querySelector("#capture")).then(canvas => {
-                                                // document.body.appendChild(canvas)
-                                                const image = canvas.toDataURL("image/png", 1.0);
-                                                downloadImage(image, `receipt_${userId}_${order}_${id}_${(new Date().toISOString())}.png`);
-                                            });
-                                        }, 2000)
-                                    }}>
-                                        <PrintIcon />
-                                    </IconButton>
-                                    {/* </Link> */}
-                                </Stack>
+                                <Button variant="outlined" startIcon={<LoopIcon />} size='small' color="primary" onClick={() => {
+                                    setSwitchQR(!switchQR)
+                                }}>{switchQR ? 'QRCode สั่งอาหาร' : 'QRCode ใบเสร็จ'}</Button>
                             </div>
                         </div>
+                        <Stack direction="row" spacing={2} style={
+                            {
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }
+                        }>
+                            <Button variant="outlined" startIcon={<AddIcon />} color="primary" onClick={clickShare}>เพิ่ม ออเดอร์</Button><Button variant="outlined" startIcon={<PaidOutlinedIcon />} color="success" onClick={handleClickOpen} style={{ display: 'none' }}>ชำระเงิน</Button>
+                        </Stack>
                     </div>
                 </div>
             </div>
-
-            <Stack direction="row" spacing={2} style={
-                {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }
-            }>
-                <Button variant="outlined" startIcon={<AddIcon />} color="primary" size='large' onClick={clickShare}>เพิ่ม ออเดอร์</Button><Button variant="outlined" startIcon={<PaidOutlinedIcon />} color="success" size='large' onClick={handleClickOpen}>ชำระเงิน</Button>
-            </Stack>
-            <br />
-            <br />
 
             <div className={styles.view_share} show={isShare ? "true" : !isAnimate ? "false" : "true"}>
                 <div className={styles.view_share_content} animation={isShare ? "true" : "false"} onAnimationEnd={animateEnd} onAnimationStart={animateStart} style={
