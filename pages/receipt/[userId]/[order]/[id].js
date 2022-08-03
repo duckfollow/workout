@@ -13,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import html2canvas from 'html2canvas';
 import DownloadIcon from '@mui/icons-material/Download';
+import { io } from 'socket.io-client';
 
 function Order({ data_order }) {
     const router = useRouter();
@@ -21,16 +22,28 @@ function Order({ data_order }) {
     const [switchQR, setSwitchQR] = useState(false);
     const [saveReceipt, setSaveReceipt] = useState(false);
     const dateTimeReceipt = dataOrder.length > 0 ? `${(new Date(dataOrder[0].createdAt)).toLocaleDateString('th-TH')} ${(new Date(dataOrder[0].createdAt)).toLocaleTimeString('th-TH')}` : `${(new Date()).toLocaleDateString('th-TH')} ${(new Date()).toLocaleTimeString('th-TH')}`
+    const socket = io(process.env.NEXT_PUBLIC_URL, { transports: ['websocket'] });
+    const key = `${userId}:${order}:${id}`
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
+    socket.on("message", data => {
+        if (data.key === key) {
             readOrder();
-        }, 3200)
-
-        return () => {
-            clearInterval(intervalId)
         }
-    }, [dataOrder])
+    });
+
+    const handlepost = () => {
+        socket.emit("message", { userId, order, id, key });
+    };
+
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         readOrder();
+    //     }, 3200)
+
+    //     return () => {
+    //         clearInterval(intervalId)
+    //     }
+    // }, [dataOrder])
 
     // read order
     const readOrder = () => {

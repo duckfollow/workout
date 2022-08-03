@@ -31,6 +31,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import PrintIcon from '@mui/icons-material/Print';
 import html2canvas from 'html2canvas';
+import { io } from 'socket.io-client';
+
 
 function Order({ data, data_order }) {
     const router = useRouter();
@@ -44,16 +46,28 @@ function Order({ data, data_order }) {
     const [switchQR, setSwitchQR] = useState(false);
     const [saveReceipt, setSaveReceipt] = useState(false);
     const dateTimeReceipt = dataOrder.length > 0 ? `${(new Date(dataOrder[0].createdAt)).toLocaleDateString('th-TH')} ${(new Date(dataOrder[0].createdAt)).toLocaleTimeString('th-TH')}` : `${(new Date()).toLocaleDateString('th-TH')} ${(new Date()).toLocaleTimeString('th-TH')}`
+    const socket = io(process.env.NEXT_PUBLIC_URL, { transports: ['websocket'] });
+    const key = `${userId}:${order}:${id}`
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
+    socket.on("message", data => {
+        if (data.key === key) {
             readOrder();
-        }, 3200)
-
-        return () => {
-            clearInterval(intervalId)
         }
-    }, [dataOrder])
+    });
+
+    const handlepost = () => {
+        socket.emit("message", { userId, order, id, key });
+    };
+
+    // useEffect(() => {
+    //     const intervalId = setInterval(() => {
+    //         readOrder();
+    //     }, 3200)
+
+    //     return () => {
+    //         clearInterval(intervalId)
+    //     }
+    // }, [dataOrder])
 
     const clickShare = () => {
         setIsShare(true)
@@ -125,8 +139,10 @@ function Order({ data, data_order }) {
                 name: name,
                 image: image
             }).then(res => {
+                console.log(res.data)
                 setIsShare(false)
-                readOrder()
+                // readOrder()
+                handlepost()
             })
         }
     }
@@ -156,7 +172,8 @@ function Order({ data, data_order }) {
             orderId: orderId,
             status: status
         }).then(res => {
-            readOrder()
+            // readOrder()
+            handlepost()
         })
     }
 
@@ -179,7 +196,7 @@ function Order({ data, data_order }) {
                 setOpen(false);
                 let audio = document.getElementById('myAudio')
                 audio.play()
-                readOrder()
+                handlepost()
             })
         }
     }

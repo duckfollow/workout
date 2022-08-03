@@ -21,6 +21,7 @@ import preparing_food from "../public/95592-preparing-food.json";
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import { io } from 'socket.io-client';
 
 function Profile({ data, userId }) {
   const router = useRouter();
@@ -31,16 +32,27 @@ function Profile({ data, userId }) {
   const [_userId, setUserId] = useState(userId);
   const [loginId, setLoginId] = useState();
   const [animateLogin, setAnimateLogin] = useState(false);
+  const socket = io(process.env.NEXT_PUBLIC_URL, { transports: ['websocket'] });
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
+  socket.on("message", data => {
+    if (data.userId === _userId) {
       readTable();
-    }, 1500)
-
-    return () => {
-      clearInterval(intervalId)
     }
-  }, [])
+  });
+
+  const handlepost = () => {
+    socket.emit("message", { userId });
+};
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     readTable();
+  //   }, 1500)
+
+  //   return () => {
+  //     clearInterval(intervalId)
+  //   }
+  // }, [])
 
   const handleClickOpen = (id) => {
     setIdDelete(id)
@@ -54,8 +66,7 @@ function Profile({ data, userId }) {
     axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/table/create`, {
       store: _userId != null ? _userId : process.env.NEXT_PUBLIC_USER
     }).then(res => {
-      console.log(res)
-      readTable()
+      handlepost()
     })
   }
 
@@ -72,7 +83,7 @@ function Profile({ data, userId }) {
       id: idDelete
     }).then(res => {
       setOpen(false);
-      readTable()
+      handlepost()
     })
   }
 
