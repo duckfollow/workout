@@ -42,7 +42,7 @@ function Order({ data, data_order }) {
     const [open, setOpen] = useState(false);
     const [switchQR, setSwitchQR] = useState(false);
     const dateTimeReceipt = dataOrder.length > 0 ? `${(new Date(dataOrder[0].createdAt)).toLocaleDateString('th-TH')} ${(new Date(dataOrder[0].createdAt)).toLocaleTimeString('th-TH')}` : `${(new Date()).toLocaleDateString('th-TH')} ${(new Date()).toLocaleTimeString('th-TH')}`
-    const socket = io(process.env.NEXT_PUBLIC_URL, { transports: ['websocket'] });
+    const socket = io(process.env.NEXT_PUBLIC_URL_WEBSOCKET, { transports: ['websocket'] });
     const key = `${userId}:${order}:${id}`
 
     socket.on("message", data => {

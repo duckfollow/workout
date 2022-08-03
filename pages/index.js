@@ -32,7 +32,7 @@ function Profile({ data, userId }) {
   const [_userId, setUserId] = useState(userId);
   const [loginId, setLoginId] = useState();
   const [animateLogin, setAnimateLogin] = useState(false);
-  const socket = io(process.env.NEXT_PUBLIC_URL, { transports: ['websocket'] });
+  const socket = io(process.env.NEXT_PUBLIC_URL_WEBSOCKET, { transports: ['websocket'] });
 
   socket.on("message", data => {
     if (data.userId === _userId) {
