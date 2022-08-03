@@ -1,3 +1,15 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap');
+
+/* From Public Directory */
+/* @font-face {
+  font-family: 'Prompt';
+  src: url('/fonts/Prompt.ttf');
+  font-style: medium;
+  font-weight: normal;
+  font-display: swap;
+} */
+
 html,
 body {
   padding: 0;
