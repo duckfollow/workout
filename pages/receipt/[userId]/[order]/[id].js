@@ -21,29 +21,38 @@ function Order({ data_order }) {
     const [dataOrder, setDataOrder] = useState(data_order.data ? data_order.data : [])
     const [switchQR, setSwitchQR] = useState(false);
     const [saveReceipt, setSaveReceipt] = useState(false);
-    const dateTimeReceipt = dataOrder.length > 0 ? `${(new Date(dataOrder[0].createdAt)).toLocaleDateString('th-TH')} ${(new Date(dataOrder[0].createdAt)).toLocaleTimeString('th-TH')}` : `${(new Date()).toLocaleDateString('th-TH')} ${(new Date()).toLocaleTimeString('th-TH')}`
+    const [dateTimeReceipt, setDateTimeReceipt] = useState('');
     const socket = io(process.env.NEXT_PUBLIC_URL_WEBSOCKET, { transports: ['websocket'] });
     const key = `${userId}:${order}:${id}`
 
-    socket.on("message", data => {
-        if (data.key === key) {
-            readOrder();
+    useEffect(() => {
+        socket.connect();
+        socket.on("message", data => {
+            if (data.key === key) {
+                readOrder();
+            }
+        });
+
+        return () => {
+            socket.disconnect();
         }
-    });
+    }, [])
 
     const handlepost = () => {
         socket.emit("message", { userId, order, id, key });
     };
 
-    // useEffect(() => {
-    //     const intervalId = setInterval(() => {
-    //         readOrder();
-    //     }, 3200)
+    useEffect(() => {
+        // const intervalId = setInterval(() => {
+        //     readOrder();
+        // }, 3200)
 
-    //     return () => {
-    //         clearInterval(intervalId)
-    //     }
-    // }, [dataOrder])
+        // return () => {
+        //     clearInterval(intervalId)
+        // }
+        let date_data = dataOrder.length > 0 ? `${(new Date(dataOrder[0].createdAt)).toLocaleDateString('th-TH')} ${(new Date(dataOrder[0].createdAt)).toLocaleTimeString('th-TH')}` : `${(new Date()).toLocaleDateString('th-TH')} ${(new Date()).toLocaleTimeString('th-TH')}`
+        setDateTimeReceipt(date_data)
+    }, [dateTimeReceipt])
 
     // read order
     const readOrder = () => {
@@ -118,7 +127,7 @@ function Order({ data_order }) {
                                                         }
                                                     }>
                                                         <span className={styles.index}>{index + 1}</span>
-                                                        <span className={styles.name}>{item.name} {item.status == 3? '✔️': ''}</span>
+                                                        <span className={styles.name}>{item.name} {item.status == 3 ? '✔️' : ''}</span>
                                                         <span className={styles.price}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
                                                     </li>
                                                 )

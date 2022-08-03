@@ -34,16 +34,6 @@ function Profile({ data, userId }) {
   const [animateLogin, setAnimateLogin] = useState(false);
   const socket = io(process.env.NEXT_PUBLIC_URL_WEBSOCKET, { transports: ['websocket'] });
 
-  socket.on("message", data => {
-    if (data.userId === _userId) {
-      readTable();
-    }
-  });
-
-  const handlepost = () => {
-    socket.emit("message", { userId });
-};
-
   // useEffect(() => {
   //   const intervalId = setInterval(() => {
   //     readTable();
@@ -53,6 +43,26 @@ function Profile({ data, userId }) {
   //     clearInterval(intervalId)
   //   }
   // }, [])
+
+  useEffect(() => {
+    socket.connect();
+    socket.on("message", data => {
+      if (data.userId === _userId) {
+        readTable();
+      }
+    });
+
+    return () => {
+      socket.disconnect();
+    }
+  }, [])
+
+  const handlepost = () => {
+    setTimeout(() => {
+      socket.connect();
+      socket.emit("message", { userId });
+    }, 300);
+  };
 
   const handleClickOpen = (id) => {
     setIdDelete(id)
@@ -284,128 +294,226 @@ function Profile({ data, userId }) {
       <hr />
 
       {_userId == process.env.NEXT_PUBLIC_USER ?
-        <div style={
-          {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            padding: '10px',
-            marginBottom: '50px',
-          }
-        }>
-          <div className={styles.main} style={
-            {
-              marginBottom: '10px',
-              border: '1px solid #e0e0e0',
-              padding: '20px',
-              borderRadius: '5px',
-              marginLeft: '3px',
-              marginRight: '3px',
-              minHeight: '450px',
-            }
-          }>
-            <p
-              style={
-                {
-                  marginTop: '0px',
-                  marginBottom: '0px',
-                  fontSize: '18px',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }
-              }>
-              ยินดีต้อนรับกลับมาใช้งานใหม่อีกครั้ง
-            </p>
-            <Lottie id='lottie' style={
+        <div className={styles.view_show_sale}>
+          <div>
+            <p align='center' style={
               {
-                width: '260px',
-                height: 'auto',
-              }
-            } animationData={preparing_food} loop={true} />
-            <TextField
-              placeholder='ใส่รหัสผู้ใช้งานเดิมของคุณ'
-              size='small'
-              value={loginId}
-              fullWidth
-              className={animateLogin ? styles.input_login : ""}
-              onAnimationEnd={() => {
-                setAnimateLogin(false)
-              }}
-              onChange={
-                (e) => {
-                  setLoginId(e.target.value)
-                }
-              } />
-            <br />
-            <Button fullWidth variant="outlined" startIcon={<LoginIcon />} size="medium" color="primary" onClick={clickLogin}>เข้าใช้งานอีกครั้ง</Button>
-          </div>
-          <div className={styles.main} style={
-            {
-              marginBottom: '10px',
-              border: '1px solid #e0e0e0',
-              padding: '20px',
-              borderRadius: '5px',
-              marginLeft: '3px',
-              marginRight: '3px',
-              minHeight: '450px',
-            }
-          }>
-            <p
-              style={
-                {
-                  marginTop: '0px',
-                  marginBottom: '0px',
-                  fontSize: '18px',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }
-              }>
-              แพ็กเกจ
-            </p>
-            <div style={
-              {
-                display: 'flex',
-                flexWrap: 'wrap',
-                flexDirection: 'row',
+                fontSize: '50px',
+                fontWeight: 'bold',
               }
             }>
-              <div style={
-                {
-                  padding: '10px',
-                }
-              }>
-                <p align='center' style={
+              ทำไมต้องใช้เรา?
+            </p>
+            <div>
+              <div className={styles.grid}>
+                <div className={styles.card} style={
                   {
-                    color: '#0073cd',
-                    fontSize: '35px',
-                    fontWeight: 'bold',
-                    marginBottom: '0px',
-                    marginTop: '0px',
+                    minHeight: '190px',
                   }
                 }>
-                  Starter
-                </p>
-                <p align='center' style={{
-                  fontSize: '30px',
-                  marginBottom: '0px',
-                  marginTop: '0px',
-                  color: '#ff5f5a',
-                }}>
-                  ฟรี
-                </p>
-                <p>
-                  <strong>ฟีเจอร์หลัก:</strong><br />
-                  ✔️ เพิ่ม/ลบ โต๊ะไม่จำกัดจำนวน<br />
-                  ✔️ เพิ่ม/ลบ สินค้าไม่จำกัดจำนวน<br />
-                  ✔️ จัดการสินค้าไม่จำกัดจำนวน<br />
-                  ✔️ รับออเดอร์ไม่จำกัดจำนวน<br />
-                  ✔️ ดูใบเสร็จเรียลไทม์<br />
-                  ✔️ QRCode แสกนดูใบเสร็จ/รับออเดอร์โต๊ะ<br />
-                  ✔️ ดูรายการออเดอร์เรียลไทม์<br />
-                  ✔️ บันทึกใบเสร็จไม่จำกัดจำนวน<br />
-                  ✔️ ออกรายงานประจำวัน<br />
-                </p>
+                  <Image src={'/profits.png'} alt={''} width={40} height={40} />
+                  <h3 style={
+                    {
+                      marginBottom: '5px',
+                      marginTop: '5px',
+                    }
+                  }>1. เพิ่มยอดขายให้กับร้านค้า</h3>
+                  <p style={
+                    {
+                      marginTop: '0px',
+                    }
+                  }>
+                    ระบบรายงานยอดขายประจำวัน เพื่อให้ร้านค้าสามารถตรวจสอบยอดขายประจำวันได้อย่างรวดเร็ว
+                  </p>
+                </div>
+                <div className={styles.card} style={
+                  {
+                    minHeight: '190px',
+                  }
+                }>
+                  <Image src={'/paper.png'} alt={''} width={40} height={40} />
+                  <h3 style={
+                    {
+                      marginBottom: '5px',
+                      marginTop: '5px',
+                    }
+                  }>2. ช่วยลดการใช้กระดาษ</h3>
+                  <p style={
+                    {
+                      marginTop: '0px',
+                    }
+                  }>
+                    ลดการใช้กระดาษ ลดต้นทุน ลดค่าใช้จ่าย ช่วยโลกลดโลกร้อน
+                  </p>
+                </div>
+                <div className={styles.card} style={
+                  {
+                    minHeight: '190px',
+                  }
+                }>
+                  <Image src={'/easy.png'} alt={''} width={40} height={40} />
+                  <h3 style={
+                    {
+                      marginBottom: '5px',
+                      marginTop: '5px',
+                    }
+                  }>3. สะดวก ใช้งานง่าย ทดลองใช้ฟรี</h3>
+                  <p style={
+                    {
+                      marginTop: '0px',
+                    }
+                  }>
+                    สามารถทดลองใช้งานได้ไม่มีกำหนดเวลา ทดลองใช้งานฟรี
+                  </p>
+
+                </div>
+                <div className={styles.card} style={
+                  {
+                    minHeight: '190px',
+                  }
+                }>
+                  <Image src={'/tv-show.png'} alt={''} width={40} height={40} />
+                  <h3 style={
+                    {
+                      marginBottom: '5px',
+                      marginTop: '5px',
+                    }
+                  }>4. พัฒนาฟีเจอร์ใหม่ๆ</h3>
+                  <p style={
+                    {
+                      marginTop: '0px',
+                    }
+                  }>
+                    มีฟีเจอร์ใหม่ๆ ให้ทดลองใช้งาน ลองเล่นตลอดเวลา
+                  </p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={
+            {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              padding: '10px',
+              marginBottom: '50px',
+            }
+          }>
+            <div className={styles.main} style={
+              {
+                marginBottom: '10px',
+                border: '1px solid #e0e0e0',
+                padding: '20px',
+                borderRadius: '5px',
+                marginLeft: '3px',
+                marginRight: '3px',
+                minHeight: '485px',
+              }
+            }>
+              <p
+                style={
+                  {
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                  }
+                }>
+                ยินดีต้อนรับกลับมาใช้งานใหม่อีกครั้ง
+              </p>
+              <Lottie id='lottie' style={
+                {
+                  width: '260px',
+                  height: 'auto',
+                }
+              } animationData={preparing_food} loop={true} />
+              <TextField
+                placeholder='ใส่รหัสผู้ใช้งานเดิมของคุณ'
+                size='small'
+                value={loginId}
+                fullWidth
+                className={animateLogin ? styles.input_login : ""}
+                onAnimationEnd={() => {
+                  setAnimateLogin(false)
+                }}
+                onChange={
+                  (e) => {
+                    setLoginId(e.target.value)
+                  }
+                } />
+              <br />
+              <Button fullWidth variant="outlined" startIcon={<LoginIcon />} size="medium" color="primary" onClick={clickLogin}>เข้าใช้งานอีกครั้ง</Button>
+            </div>
+            <div className={styles.main} style={
+              {
+                marginBottom: '10px',
+                border: '1px solid #e0e0e0',
+                padding: '20px',
+                borderRadius: '5px',
+                marginLeft: '3px',
+                marginRight: '3px',
+                minHeight: '485px',
+              }
+            }>
+              <p
+                style={
+                  {
+                    marginTop: '0px',
+                    marginBottom: '0px',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                  }
+                }>
+                แพ็กเกจ
+              </p>
+              <div style={
+                {
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  flexDirection: 'row',
+                }
+              }>
+                <div style={
+                  {
+                    padding: '10px',
+                  }
+                }>
+                  <p align='center' style={
+                    {
+                      color: '#0073cd',
+                      fontSize: '35px',
+                      fontWeight: 'bold',
+                      marginBottom: '0px',
+                      marginTop: '0px',
+                    }
+                  }>
+                    Starter
+                  </p>
+                  <p align='center' style={{
+                    fontSize: '30px',
+                    marginBottom: '0px',
+                    marginTop: '0px',
+                    color: '#ff5f5a',
+                  }}>
+                    ฟรี
+                  </p>
+                  <p>
+                    <strong>ฟีเจอร์หลัก:</strong><br />
+                    ✔️ เพิ่ม/ลบ โต๊ะไม่จำกัดจำนวน<br />
+                    ✔️ เพิ่ม/ลบ สินค้าไม่จำกัดจำนวน<br />
+                    ✔️ จัดการสินค้าไม่จำกัดจำนวน<br />
+                    ✔️ รับออเดอร์ไม่จำกัดจำนวน<br />
+                    ✔️ ดูใบเสร็จเรียลไทม์<br />
+                    ✔️ QRCode แสกนดูใบเสร็จ/รับออเดอร์โต๊ะ<br />
+                    ✔️ ดูรายการออเดอร์เรียลไทม์<br />
+                    ✔️ บันทึกใบเสร็จไม่จำกัดจำนวน<br />
+                    ✔️ ออกรายงานประจำวัน<br />
+                  </p>
+                </div>
               </div>
             </div>
           </div>
