@@ -1,0 +1,102 @@
+.layout {
+    width: 100vw;
+    height: 100vh;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f2f5;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.view_otp {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.view_otp * {
+    margin: 10px;
+}
+
+.opt_input {
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.columns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 320px;
+    margin-top: 50px;
+}
+
+.column {
+    flex: 33.33%;
+    display: flex;
+    justify-content: center;
+}
+
+.circle_btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    margin: 10px;
+    font-size: 20px;
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #a6a6a7;
+    border-radius: 100%;
+}
+
+.circle_hover {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #a6a6a7;
+    background-color: #666464;
+    border-radius: 100%;
+}
+
+.view_shake {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    animation: shake 0.2s ease-in-out 0s 2;
+}
+
+.view_shake * {
+    margin: 10px;
+}
+
+@keyframes shake {
+    0% {
+        margin-left: 0rem;
+    }
+
+    25% {
+        margin-left: 0.5rem;
+    }
+
+    75% {
+        margin-left: -0.5rem;
+    }
+
+    100% {
+        margin-left: 0rem;
+    }
+}

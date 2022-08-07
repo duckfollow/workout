@@ -121,9 +121,14 @@ function Profile({ data, userId }) {
     axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/user/readById`, {
       id: loginId
     }).then(res => {
-      setUserId(res.data.data.id)
-      setCookie(null, 'userId', res.data.data.id, { path: '/' })
-      router.reload()
+      if (Boolean(res.data.data.isfirstLogin)) {
+        router.push(`/verify/${res.data.token}`)
+      } else {
+        // setUserId(res.data.data.id)
+        // setCookie(null, 'userId', res.data.data.id, { path: '/' })
+        // router.reload()
+        router.push(`/confirm/${res.data.token}`)
+      }
     }).catch(err => {
       setAnimateLogin(true)
       setLoginId('')

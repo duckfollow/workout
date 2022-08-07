@@ -17,7 +17,7 @@ import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import TextField from '@mui/material/TextField';
 import Lottie from "lottie-react";
-import preparing_food from "../../public/95592-preparing-food.json";
+import calendar_booking from "../../public/46690-calendar-booking.json";
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -112,9 +112,14 @@ function Booking({ data, userId }) {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/user/readById`, {
             id: loginId
         }).then(res => {
-            setUserId(res.data.data.id)
-            setCookie(null, 'userId', res.data.data.id, { path: '/' })
-            router.reload()
+            if (Boolean(res.data.data.isfirstLogin)) {
+                router.push(`/verify/${res.data.token}`)
+            } else {
+                // setUserId(res.data.data.id)
+                // setCookie(null, 'userId', res.data.data.id, { path: '/' })
+                // router.reload()
+                router.push(`/confirm/${res.data.token}`)
+            }
         }).catch(err => {
             setAnimateLogin(true)
             setLoginId('')
@@ -203,7 +208,7 @@ function Booking({ data, userId }) {
                     </Link>
                     <div className={styles.card_notification} onClick={createRoom}>
                         <Image src={'/living-room.png'} alt={''} width={40} height={40} />
-                        <span>&nbsp;เพิ่มห้องพัก</span>
+                        <span>&nbsp;เพิ่มห้อง</span>
                     </div>
                     <div className={styles.card_notification} onClick={downloadCSV}>
                         <Image src={'/statistics.png'} alt={''} width={40} height={40} />
@@ -408,9 +413,9 @@ function Booking({ data, userId }) {
                             <Lottie id='lottie' style={
                                 {
                                     width: '260px',
-                                    height: 'auto',
+                                    height: '260px',
                                 }
-                            } animationData={preparing_food} loop={true} />
+                            } animationData={calendar_booking} loop={true} />
                             <TextField
                                 placeholder='ใส่รหัสผู้ใช้งานเดิมของคุณ'
                                 size='small'
