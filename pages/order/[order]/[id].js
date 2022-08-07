@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../../../../styles/Profile.module.css'
+import styles from '../../../styles/Profile.module.css'
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -34,9 +34,9 @@ import html2canvas from 'html2canvas';
 import { io } from 'socket.io-client';
 
 
-function Order({ data, data_order }) {
+function Order({ data, data_order,userId }) {
     const router = useRouter();
-    const { userId, order, id } = router.query
+    const { order, id } = router.query
     const [dataProduct, setDataProduct] = useState(data.data ? data.data : [])
     const [dataOrder, setDataOrder] = useState(data_order.data ? data_order.data : [])
     const [isShare, setIsShare] = useState(false)
@@ -587,7 +587,8 @@ function Order({ data, data_order }) {
 }
 
 export async function getServerSideProps(context) {
-    const userId = context.query.userId
+    const cookies = context.req ? context.req.cookies : '';
+    const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/product/read`, {
         "store": userId
     })
@@ -602,7 +603,8 @@ export async function getServerSideProps(context) {
     return {
         props: {
             data,
-            data_order
+            data_order,
+            userId
         },
     }
 }

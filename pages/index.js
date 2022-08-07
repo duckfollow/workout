@@ -99,7 +99,7 @@ function Profile({ data, userId }) {
   }
 
   const clickOrder = (order, id) => {
-    router.push(`/order/${userId}/${order}/${id}`)
+    router.push(`/order/${order}/${id}`)
   }
 
   const clickTry = () => {
