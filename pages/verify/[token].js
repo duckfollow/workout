@@ -44,7 +44,7 @@ function Pincode() {
                         }
                     }).then(res => {
                         setCookie(null, 'userId', res.data.userId, { path: '/' })
-                        router.push('/');
+                        router.replace('/');
                     }).catch(err => {
                         console.log(err);
                         setPincodeState("NewPin");
