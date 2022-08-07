@@ -17,6 +17,7 @@ function Pincode() {
         if (!isError) {
             let _pincode = pincode + pin
             pincodeArray.push(pin);
+            console.log(pincodeArray);
             setPincode(_pincode);
             if (_pincode.length === 6) {
                 let data = {
@@ -53,23 +54,12 @@ function Pincode() {
                         }, 1000)
                     }
                 }>
-                    <div className={Boolean(pincodeArray[0]) ? styles.circle_hover : styles.circle}>
-                    </div>
-                    <div className={Boolean(pincodeArray[1]) ? styles.circle_hover : styles.circle}>
-
-                    </div>
-                    <div className={Boolean(pincodeArray[2]) ? styles.circle_hover : styles.circle}>
-
-                    </div>
-                    <div className={Boolean(pincodeArray[3]) ? styles.circle_hover : styles.circle}>
-
-                    </div>
-                    <div className={Boolean(pincodeArray[4]) ? styles.circle_hover : styles.circle}>
-
-                    </div>
-                    <div className={Boolean(pincodeArray[5]) ? styles.circle_hover : styles.circle}>
-
-                    </div>
+                    <div className={pincodeArray[0] !== undefined ? styles.circle_hover : styles.circle}></div>
+                    <div className={pincodeArray[1] !== undefined ? styles.circle_hover : styles.circle}></div>
+                    <div className={pincodeArray[2] !== undefined ? styles.circle_hover : styles.circle}></div>
+                    <div className={pincodeArray[3] !== undefined ? styles.circle_hover : styles.circle}></div>
+                    <div className={pincodeArray[4] !== undefined ? styles.circle_hover : styles.circle}></div>
+                    <div className={pincodeArray[5] !== undefined ? styles.circle_hover : styles.circle}></div>
                 </div>
 
                 <div className={styles.columns}>
