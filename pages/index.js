@@ -22,6 +22,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { io } from 'socket.io-client';
+const { AppBar } = require('../components')
 
 function Profile({ data, userId }) {
   const router = useRouter();
@@ -160,9 +161,9 @@ function Profile({ data, userId }) {
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <AppBar />
 
       <main className={styles.main}>
-        <br />
         <h1 className={styles.title}>
           Welcome <a>Demo Food</a>
         </h1>
@@ -184,7 +185,7 @@ function Profile({ data, userId }) {
             <Button variant="outlined" startIcon={<ScienceOutlinedIcon />} size="small" color="primary" onClick={clickTry}> ทดลองใช้งานฟรี</Button>
             <p align="center"
               style={{
-                fontSize: '12px',
+                fontSize: '14px',
                 paddingLeft: '20px',
                 paddingRight: '20px',
               }}>
