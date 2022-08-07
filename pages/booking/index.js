@@ -135,7 +135,7 @@ function Booking({ data, userId }) {
         const a = document.createElement("a");
         //  ***Need to change "output.csv" => This is a file name can be changed
         a.download = "output.csv";
-        a.href = `https://api.duckfollow.co/api/v1/food/order/report/${userId}`;
+        a.href = `https://api.duckfollow.co/api/v1/booking/room/booking/report/${userId}`;
         const clickEvt = new MouseEvent("click", {
             view: window,
             bubbles: true,
