@@ -83,15 +83,17 @@ export default function View({ data, userId, current_date, id }) {
         }).then(res => {
             // console.log(res.data)
             let data = []
-            data = res.data.data.map(item => {
-                return {
-                    id: item.id,
-                    startDate: new Date(item.start_date),
-                    endDate: new Date(item.end_date),
-                    title: `${item.title} ${item.firstname} ${item.lastname} ${item.phone} ${item.email} room ${item.roomId}`,
-                    roomId: item.roomId,
-                }
-            })
+            if (res.data.length > 0) {
+                data = res.data.data.map(item => {
+                    return {
+                        id: item.id,
+                        startDate: new Date(item.start_date),
+                        endDate: new Date(item.end_date),
+                        title: `${item.title} ${item.firstname} ${item.lastname} ${item.phone} ${item.email} room ${item.roomId}`,
+                        roomId: item.roomId,
+                    }
+                })
+            }
             data.push({
                 id: checkOut,
                 startDate: new Date(checkIn),
@@ -114,23 +116,24 @@ export default function View({ data, userId, current_date, id }) {
 
     const handleCheckOut = (value) => {
         let checkOut = moment(value).format('YYYY-MM-DD 17:00:00');
-        console.log(checkOut)
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/booking/read`, {
             "store": userId,
             "current_date": currentDate,
             "roomId": [id],
         }).then(res => {
-            // console.log(res.data)
+            console.log(res.data.data)
             let data = []
-            data = res.data.data.map(item => {
-                return {
-                    id: item.id,
-                    startDate: new Date(item.start_date),
-                    endDate: new Date(item.end_date),
-                    title: `${item.title} ${item.firstname} ${item.lastname} ${item.phone} ${item.email} room ${item.roomId}`,
-                    roomId: item.roomId,
-                }
-            })
+            if (res.data.data.length > 0) {
+                data = res.data.data.map(item => {
+                    return {
+                        id: item.id,
+                        startDate: new Date(item.start_date),
+                        endDate: new Date(item.end_date),
+                        title: `${item.title} ${item.firstname} ${item.lastname} ${item.phone} ${item.email} room ${item.roomId}`,
+                        roomId: item.roomId,
+                    }
+                })
+            }
             data.push({
                 id: checkOut,
                 startDate: new Date(checkIn),
