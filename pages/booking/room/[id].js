@@ -298,7 +298,7 @@ export default function View({ data, userId, current_date, id }) {
                                             onChange={(newValue) => {
                                                 handleCheckIn(newValue)
                                             }}
-                                            renderInput={(params) => <TextField {...params} />}
+                                            renderInput={(params) => <TextField fullWidth {...params} />}
                                         />
 
                                         <DesktopDatePicker
@@ -308,7 +308,7 @@ export default function View({ data, userId, current_date, id }) {
                                             onChange={(newValue) => {
                                                 handleCheckOut(newValue)
                                             }}
-                                            renderInput={(params) => <TextField {...params} />}
+                                            renderInput={(params) => <TextField fullWidth {...params} />}
                                         />
 
                                     </Stack>
