@@ -82,7 +82,8 @@ export default function View({ data, userId, current_date, id }) {
             "roomId": [id],
         }).then(res => {
             // console.log(res.data)
-            let data = res.data.data.map(item => {
+            let data = []
+            data = res.data.data.map(item => {
                 return {
                     id: item.id,
                     startDate: new Date(item.start_date),
@@ -120,7 +121,8 @@ export default function View({ data, userId, current_date, id }) {
             "roomId": [id],
         }).then(res => {
             // console.log(res.data)
-            let data = res.data.data.map(item => {
+            let data = []
+            data = res.data.data.map(item => {
                 return {
                     id: item.id,
                     startDate: new Date(item.start_date),
