@@ -308,9 +308,6 @@ export default function View({ data, userId, current_date, id }) {
                                             onChange={(newValue) => {
                                                 handleCheckOut(newValue)
                                             }}
-                                            onClose={(newValue) => {
-                                                handleCheckOut(newValue)
-                                            }}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
 
