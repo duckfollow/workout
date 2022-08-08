@@ -25,6 +25,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import { Stack } from '@mui/material';
+import NoSsr from "@mui/material/NoSsr";
 
 
 const ExternalViewSwitcher = ({
@@ -139,18 +140,20 @@ export default function View({ data, userId, current_date, id, data_room }) {
             <Box>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={4}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DesktopDatePicker
-                                // label="For desktop"
-                                value={currentDate}
-                                minDate={new Date('2017-01-01')}
-                                onChange={(newValue) => {
-                                    console.log(newValue)
-                                    handleChange(newValue)
-                                }}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider>
+                        <NoSsr>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DesktopDatePicker
+                                    // label="For desktop"
+                                    value={currentDate}
+                                    minDate={new Date('2017-01-01')}
+                                    onChange={(newValue) => {
+                                        console.log(newValue)
+                                        handleChange(newValue)
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+                        </NoSsr>
                         <Stack direction='row' spacing={2} style={
                             {
                                 marginTop: '20px',

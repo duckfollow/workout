@@ -29,6 +29,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import moment from 'moment';
+import NoSsr from "@mui/material/NoSsr";
 
 const ExternalViewSwitcher = ({
     currentViewName,
@@ -283,37 +284,39 @@ export default function View({ data, userId, current_date, id }) {
                         }>
                             <h2>ข้อมูลการจอง</h2>
                             <Stack direction='column' spacing={2}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <Stack direction="row" spacing={2} style={
-                                        {
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                        }
-                                    }>
-                                        <DesktopDatePicker
-                                            label="Check-in"
-                                            value={checkIn}
-                                            minDate={new Date('2017-01-01')}
-                                            onChange={(newValue) => {
-                                                handleCheckIn(newValue)
-                                            }}
-                                            renderInput={(params) => <TextField fullWidth {...params} />}
-                                        />
+                                <NoSsr>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <Stack direction="row" spacing={2} style={
+                                            {
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                            }
+                                        }>
+                                            <DesktopDatePicker
+                                                label="Check-in"
+                                                value={checkIn}
+                                                minDate={new Date('2017-01-01')}
+                                                onChange={(newValue) => {
+                                                    handleCheckIn(newValue)
+                                                }}
+                                                renderInput={(params) => <TextField fullWidth {...params} />}
+                                            />
 
-                                        <DesktopDatePicker
-                                            label="Check-out"
-                                            value={checkOut}
-                                            minDate={new Date('2017-01-01')}
-                                            onChange={(newValue) => {
-                                                handleCheckOut(newValue)
-                                            }}
-                                            renderInput={(params) => <TextField fullWidth {...params} />}
-                                        />
+                                            <DesktopDatePicker
+                                                label="Check-out"
+                                                value={checkOut}
+                                                minDate={new Date('2017-01-01')}
+                                                onChange={(newValue) => {
+                                                    handleCheckOut(newValue)
+                                                }}
+                                                renderInput={(params) => <TextField fullWidth {...params} />}
+                                            />
 
-                                    </Stack>
+                                        </Stack>
 
-                                </LocalizationProvider>
+                                    </LocalizationProvider>
+                                </NoSsr>
 
                                 <TextField id="outlined-basic" label="ชื่อ" variant="outlined" value={firstname} onChange={
                                     (e) => {
