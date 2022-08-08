@@ -115,7 +115,7 @@ export default function View({ data, userId, current_date, id }) {
     }
 
     const handleCheckOut = (value) => {
-        let checkOut = moment(value).format('YYYY-MM-DD 17:00:00');
+        let checkOut = moment(value).format('YYYY-MM-DD 24:00:00');
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/booking/read`, {
             "store": userId,
             "current_date": currentDate,
