@@ -241,38 +241,44 @@ export default function View({ data, userId, current_date, id }) {
                 currentViewName={currentViewName}
                 onChange={currentViewNameChange}
             /> */}
+            <Paper style={
+                {
+                    padding: '20px',
+                    margin: '20px',
+                }
+            }>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <Stack direction="row" spacing={2} style={
+                        {
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }
+                    }>
+                        <DesktopDatePicker
+                            label="Check-in"
+                            value={checkIn}
+                            minDate={new Date('2017-01-01')}
+                            onChange={(newValue) => {
+                                handleCheckIn(newValue)
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
 
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Stack direction="row" spacing={2} style={
-                    {
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }
-                }>
-                    <DesktopDatePicker
-                        label="Check-in"
-                        value={checkIn}
-                        minDate={new Date('2017-01-01')}
-                        onChange={(newValue) => {
-                            handleCheckIn(newValue)
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
+                        <DesktopDatePicker
+                            label="Check-out"
+                            value={checkOut}
+                            minDate={new Date('2017-01-01')}
+                            onChange={(newValue) => {
+                                handleCheckOut(newValue)
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
 
-                    <DesktopDatePicker
-                        label="Check-out"
-                        value={checkOut}
-                        minDate={new Date('2017-01-01')}
-                        onChange={(newValue) => {
-                            handleCheckOut(newValue)
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
+                    </Stack>
 
-                </Stack>
-
-            </LocalizationProvider>
+                </LocalizationProvider>
+            </Paper>
 
             <Paper style={
                 {
@@ -329,13 +335,14 @@ export default function View({ data, userId, current_date, id }) {
             <Paper style={
                 {
                     padding: '20px',
+                    margin: '20px',
                 }
             }>
                 <h1>ข้อมูลการจอง</h1>
                 <Box
                     component="form"
                     sx={{
-                        '& > :not(style)': { m: 1, width: '25ch' },
+                        '& > :not(style)': { m: 1, width: '100%' },
                     }}
                     noValidate
                     autoComplete="off"
@@ -354,26 +361,26 @@ export default function View({ data, userId, current_date, id }) {
                 <Box
                     component="form"
                     sx={{
-                        '& > :not(style)': { m: 1, width: '25ch' },
+                        '& > :not(style)': { m: 1, width: '100%' },
                     }}
                     noValidate
                     autoComplete="off"
                 >
-                    <TextField id="outlined-basic" label="เบอร์โทร" variant="outlined" value={phone} onChange={
+                    <TextField id="outlined-basic" inputProps={{ maxLength: 10 }} label="เบอร์โทร" variant="outlined" value={phone} onChange={
                         (e) => {
                             setPhone(e.target.value)
                         }
                     } />
-                    <TextField id="outlined-basic" label="อีเมล" variant="outlined" value={email} onChange={
+                    <TextField id="outlined-basic" type={'email'} label="อีเมล" variant="outlined" value={email} onChange={
                         (e) => {
                             setEmail(e.target.value)
                         }
-                    }/>
+                    } />
                 </Box>
                 <Box
                     component="form"
                     sx={{
-                        '& > :not(style)': { m: 1, width: '25ch' },
+                        '& > :not(style)': { m: 1, width: '100%' },
                     }}
                     noValidate
                     autoComplete="off"
@@ -387,7 +394,7 @@ export default function View({ data, userId, current_date, id }) {
                 <Box
                     component="form"
                     sx={{
-                        '& > :not(style)': { m: 1, width: '25ch' },
+                        '& > :not(style)': { m: 1, width: '100%' },
                     }}
                 >
                     <Button variant="contained" color="primary" onClick={handleBooking}>
