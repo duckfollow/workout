@@ -21,6 +21,10 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import moment from 'moment';
+import { Stack } from '@mui/material';
 
 
 const ExternalViewSwitcher = ({
@@ -118,11 +122,7 @@ export default function View({ data, userId, current_date, id, data_room }) {
     return (
         <div style={
             {
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
+                padding: '20px',
             }
         }>
             <Head>
@@ -133,80 +133,86 @@ export default function View({ data, userId, current_date, id, data_room }) {
                 currentViewName={currentViewName}
                 onChange={currentViewNameChange}
             /> */}
-            <div style={
-                {
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'left',
-                    alignItems: 'left',
-                    width: '100%',
-                }
-            }>
-                {
-                    data_room.data.map(item => {
-                        return <div key={item.id} style={
+            <h1>
+                ปฏิทินเดือน {new Date(currentDate).toLocaleString('th-TH', { month: 'long' })} {new Date(currentDate).getFullYear() + 543}
+            </h1>
+            <Box>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={4}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DesktopDatePicker
+                                // label="For desktop"
+                                value={currentDate}
+                                minDate={new Date('2017-01-01')}
+                                onChange={(newValue) => {
+                                    console.log(newValue)
+                                    handleChange(newValue)
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
+                        <Stack direction='row' spacing={2} style={
                             {
-                                padding: '10px',
-                                border: '1px solid',
-                                borderColor: listRoom.includes(item.id) ? '#5DADE2' : '#ccc',
-                                borderRadius: '5px',
-                                margin: '5px',
-                                cursor: 'pointer',
+                                marginTop: '20px',
                             }
-                        } onClick={() => {
-                            selectRoom(item.id)
-                        }
-                        }>Room {item.id}</div>
-                    })
-                }
+                        }>
+                            {
+                                data_room.data.map(item => {
+                                    return <div key={item.id} style={
+                                        {
+                                            padding: '10px',
+                                            border: '1px solid',
+                                            borderColor: listRoom.includes(item.id) ? '#5DADE2' : '#ccc',
+                                            borderRadius: '5px',
+                                            cursor: 'pointer',
+                                        }
+                                    } onClick={() => {
+                                        selectRoom(item.id)
+                                    }
+                                    }>Room {item.id}</div>
+                                })
+                            }
 
-            </div>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DesktopDatePicker
-                    // label="For desktop"
-                    value={currentDate}
-                    minDate={new Date('2017-01-01')}
-                    onChange={(newValue) => {
-                        console.log(newValue)
-                        handleChange(newValue)
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-            </LocalizationProvider>
-                <Paper>
-                    <Scheduler
-                        data={schedulerData}
-                        height='100%'
-                    >
-                        <ViewState
-                            currentDate={currentDate}
-                            defaultCurrentDate={currentDate}
-                            currentViewName={currentViewName}
-                        />
-                        {/* <EditingState
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={12} md={8}>
+                        <Paper>
+                            <Scheduler
+                                data={schedulerData}
+                                height='100%'
+                            >
+                                <ViewState
+                                    currentDate={currentDate}
+                                    defaultCurrentDate={currentDate}
+                                    currentViewName={currentViewName}
+                                />
+                                {/* <EditingState
                         onCommitChanges={commitChanges}
                     />
                     <EditRecurrenceMenu /> */}
-                        <WeekView
-                            startDayHour={0}
-                            endDayHour={24}
-                        />
-                        <WeekView
-                            name="Work Week"
-                            excludedDays={[0, 6]}
-                            startDayHour={0}
-                            endDayHour={24}
-                        />
-                        <MonthView />
+                                <WeekView
+                                    startDayHour={0}
+                                    endDayHour={24}
+                                />
+                                <WeekView
+                                    name="Work Week"
+                                    excludedDays={[0, 6]}
+                                    startDayHour={0}
+                                    endDayHour={24}
+                                />
+                                <MonthView />
 
-                        <Appointments />
-                        <AppointmentTooltip />
-                        <Resources
-                            data={resources}
-                            mainResourceName="roomId"
-                        />
-                    </Scheduler>
-                </Paper>
+                                <Appointments />
+                                <AppointmentTooltip />
+                                <Resources
+                                    data={resources}
+                                    mainResourceName="roomId"
+                                />
+                            </Scheduler>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </Box>
         </div>
     )
 }

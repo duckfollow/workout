@@ -27,6 +27,8 @@ import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import moment from 'moment';
 
 const ExternalViewSwitcher = ({
     currentViewName,
@@ -97,17 +99,21 @@ export default function View({ data, userId, current_date, id }) {
                 roomId: id + 1,
             })
             setSchedulerData(data)
+            console.log(_currentDate)
             setCurrentDate(_currentDate);
         })
     }
 
     const handleCheckIn = (value) => {
-        setCheckIn(value);
-        setCheckOut(value);
+        let checkInDate = moment(value).format('YYYY-MM-DD HH:mm:ss')
+        setCheckIn(checkInDate);
+        // setCheckOut(checkInDate);
+        setCurrentDate(checkInDate);
     }
 
     const handleCheckOut = (value) => {
-        let checkOut = value;
+        let checkOut = moment(value).format('YYYY-MM-DD 17:00:00');
+        console.log(checkOut)
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/booking/read`, {
             "store": userId,
             "current_date": currentDate,
@@ -221,16 +227,34 @@ export default function View({ data, userId, current_date, id }) {
         })
     }
 
+    const handleCancel = () => {
+        let _currentDate = new Date()
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/booking/read`, {
+            "store": userId,
+            "current_date": _currentDate,
+            "roomId": [id],
+        }).then(res => {
+            // console.log(res.data)
+            let data = res.data.data.map(item => {
+                return {
+                    id: item.id,
+                    startDate: new Date(item.start_date),
+                    endDate: new Date(item.end_date),
+                    title: `${item.title} ${item.firstname} ${item.lastname} ${item.phone} ${item.email} room ${item.roomId}`,
+                    roomId: item.roomId,
+                }
+            })
+            setSchedulerData(data)
+            setCurrentDate(_currentDate);
+        })
+    }
+
 
     return (
         <div style={
             {
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: '50px',
-                marginBottom: '50px',
+                padding: '20px',
+                marginBottom: '20px',
             }
         }>
             <Head>
@@ -241,167 +265,144 @@ export default function View({ data, userId, current_date, id }) {
                 currentViewName={currentViewName}
                 onChange={currentViewNameChange}
             /> */}
-            <Paper style={
-                {
-                    padding: '20px',
-                    margin: '20px',
-                }
-            }>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <Stack direction="row" spacing={2} style={
-                        {
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }
-                    }>
-                        <DesktopDatePicker
-                            label="Check-in"
-                            value={checkIn}
-                            minDate={new Date('2017-01-01')}
-                            onChange={(newValue) => {
-                                handleCheckIn(newValue)
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
+            <h1>
+                ปฏิทินเดือน {new Date(currentDate).toLocaleString('th-TH', { month: 'long' })} {new Date(currentDate).getFullYear() + 543}
+            </h1>
+            <Box>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={4}>
+                        <Paper style={
+                            {
+                                padding: '20px',
+                            }
+                        }>
+                            <h2>ข้อมูลการจอง</h2>
+                            <Stack direction='column' spacing={2}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <Stack direction="row" spacing={2} style={
+                                        {
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }
+                                    }>
+                                        <DesktopDatePicker
+                                            label="Check-in"
+                                            value={checkIn}
+                                            minDate={new Date('2017-01-01')}
+                                            onChange={(newValue) => {
+                                                handleCheckIn(newValue)
+                                            }}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
 
-                        <DesktopDatePicker
-                            label="Check-out"
-                            value={checkOut}
-                            minDate={new Date('2017-01-01')}
-                            onChange={(newValue) => {
-                                handleCheckOut(newValue)
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
+                                        <DesktopDatePicker
+                                            label="Check-out"
+                                            value={checkOut}
+                                            minDate={new Date('2017-01-01')}
+                                            onChange={(newValue) => {
+                                                handleCheckOut(newValue)
+                                            }}
+                                            onClose={(newValue) => {
+                                                handleCheckOut(newValue)
+                                            }}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
 
-                    </Stack>
+                                    </Stack>
 
-                </LocalizationProvider>
-            </Paper>
+                                </LocalizationProvider>
 
-            <Paper style={
-                {
-                    margin: '20px',
-                }
-            }>
-                <Stack direction="row" style={
-                    {
-                        display: 'flex',
-                        justifyContent: 'right',
-                        alignItems: 'center',
-                    }
-                }>
-                    <IconButton aria-label="delete" size="large" onClick={handleLeftButton}>
-                        <ChevronLeftIcon fontSize="inherit" />
-                    </IconButton>
-                    <IconButton aria-label="delete" size="large" onClick={handleRightButton}>
-                        <ChevronRightIcon fontSize="inherit" />
-                    </IconButton>
-                </Stack>
-                <Scheduler
-                    data={schedulerData}
-                    height='100%'
-                >
-                    <ViewState
-                        currentDate={currentDate}
-                        defaultCurrentDate={currentDate}
-                        currentViewName={currentViewName}
-                    />
-                    {/* <EditingState
+                                <TextField id="outlined-basic" label="ชื่อ" variant="outlined" value={firstname} onChange={
+                                    (e) => {
+                                        setFirstname(e.target.value)
+                                    }
+                                } />
+                                <TextField id="outlined-basic" label="นามสกุล" variant="outlined" value={lastname} onChange={
+                                    (e) => {
+                                        setLastname(e.target.value)
+                                    }
+                                } />
+
+                                <TextField id="outlined-basic" inputProps={{ maxLength: 10 }} label="เบอร์โทร" variant="outlined" value={phone} onChange={
+                                    (e) => {
+                                        setPhone(e.target.value)
+                                    }
+                                } />
+                                <TextField id="outlined-basic" type={'email'} label="อีเมล" variant="outlined" value={email} onChange={
+                                    (e) => {
+                                        setEmail(e.target.value)
+                                    }
+                                } />
+
+                                <TextField id="outlined-basic" label="note" variant="outlined" value={title} onChange={
+                                    (e) => {
+                                        setTitle(e.target.value)
+                                    }
+                                } />
+                                <Stack direction='row' spacing={2}>
+                                    <Button fullWidth size='large' variant="outlined" color="primary" onClick={handleCancel}>
+                                        ยกเลิก
+                                    </Button>
+                                    <Button fullWidth size='large' variant="contained" color="primary" onClick={handleBooking}>
+                                        บันทึก
+                                    </Button>
+                                </Stack>
+                            </Stack>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={8}>
+                        <div>
+                            <Stack direction="row" style={
+                                {
+                                    display: 'flex',
+                                    justifyContent: 'left',
+                                    alignItems: 'center',
+                                }
+                            }>
+                                <IconButton aria-label="delete" size="large" onClick={handleLeftButton}>
+                                    <ChevronLeftIcon fontSize="inherit" />
+                                </IconButton>
+                                <IconButton aria-label="delete" size="large" onClick={handleRightButton}>
+                                    <ChevronRightIcon fontSize="inherit" />
+                                </IconButton>
+                            </Stack>
+                            <Scheduler
+                                data={schedulerData}
+                                height='100%'
+                            >
+                                <ViewState
+                                    currentDate={currentDate}
+                                    defaultCurrentDate={currentDate}
+                                    currentViewName={currentViewName}
+                                />
+                                {/* <EditingState
                         onCommitChanges={commitChanges}
                     />
                     <EditRecurrenceMenu /> */}
-                    <WeekView
-                        startDayHour={0}
-                        endDayHour={24}
-                    />
-                    <WeekView
-                        name="Work Week"
-                        excludedDays={[0, 6]}
-                        startDayHour={0}
-                        endDayHour={24}
-                    />
-                    <MonthView />
+                                <WeekView
+                                    startDayHour={0}
+                                    endDayHour={24}
+                                />
+                                <WeekView
+                                    name="Work Week"
+                                    excludedDays={[0, 6]}
+                                    startDayHour={0}
+                                    endDayHour={24}
+                                />
+                                <MonthView />
 
-                    <Appointments />
-                    <AppointmentTooltip />
-                    <Resources
-                        data={resources}
-                        mainResourceName="roomId"
-                    />
-                </Scheduler>
-            </Paper>
-            <Paper style={
-                {
-                    padding: '20px',
-                    margin: '20px',
-                }
-            }>
-                <h1>ข้อมูลการจอง</h1>
-                <Box
-                    component="form"
-                    sx={{
-                        '& > :not(style)': { m: 1, width: '100%' },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <TextField id="outlined-basic" label="ชื่อ" variant="outlined" value={firstname} onChange={
-                        (e) => {
-                            setFirstname(e.target.value)
-                        }
-                    } />
-                    <TextField id="outlined-basic" label="นามสกุล" variant="outlined" value={lastname} onChange={
-                        (e) => {
-                            setLastname(e.target.value)
-                        }
-                    } />
-                </Box>
-                <Box
-                    component="form"
-                    sx={{
-                        '& > :not(style)': { m: 1, width: '100%' },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <TextField id="outlined-basic" inputProps={{ maxLength: 10 }} label="เบอร์โทร" variant="outlined" value={phone} onChange={
-                        (e) => {
-                            setPhone(e.target.value)
-                        }
-                    } />
-                    <TextField id="outlined-basic" type={'email'} label="อีเมล" variant="outlined" value={email} onChange={
-                        (e) => {
-                            setEmail(e.target.value)
-                        }
-                    } />
-                </Box>
-                <Box
-                    component="form"
-                    sx={{
-                        '& > :not(style)': { m: 1, width: '100%' },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <TextField id="outlined-basic" label="note" variant="outlined" value={title} onChange={
-                        (e) => {
-                            setTitle(e.target.value)
-                        }
-                    } />
-                </Box>
-                <Box
-                    component="form"
-                    sx={{
-                        '& > :not(style)': { m: 1, width: '100%' },
-                    }}
-                >
-                    <Button variant="contained" color="primary" onClick={handleBooking}>
-                        บันทึก
-                    </Button>
-                </Box>
-            </Paper>
+                                <Appointments />
+                                <AppointmentTooltip />
+                                <Resources
+                                    data={resources}
+                                    mainResourceName="roomId"
+                                />
+                            </Scheduler>
+                        </div>
+                    </Grid>
+                </Grid>
+            </Box>
         </div>
     )
 }
