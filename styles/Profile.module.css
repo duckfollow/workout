@@ -1411,7 +1411,10 @@ Order Product
   display: flex;
   /* align-items: center;
   justify-content: center; */
+  overflow-y: scroll;
+  overflow-x: hidden;
   flex-wrap: wrap;
+  max-height: 570px;
   padding: 15px;
 }
 
@@ -1423,7 +1426,7 @@ Order Product
 .scrolling_wrapper_flexbox::-webkit-scrollbar-track {
   border-radius: 10px;
 }
- 
+
 /* Handle */
 .scrolling_wrapper_flexbox::-webkit-scrollbar-thumb {
   border-radius: 10px;
@@ -1431,7 +1434,7 @@ Order Product
 
 /* Handle on hover */
 .scrolling_wrapper_flexbox::-webkit-scrollbar-thumb:hover {
-  background: #154360; 
+  background: #154360;
 }
 
 .card_test {
