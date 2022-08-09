@@ -32,6 +32,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import styles from '../../../../styles/Profile.module.css'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
 const ExternalViewSwitcher = ({
@@ -175,7 +176,11 @@ export default function View({ data, userId, current_date, id, data_room }) {
                                     //     selectRoom(item.id)
                                     // }
                                     // }>Room {item.id}</div>
-                                    return <Card key={item.id} sx={{ maxWidth: 345,minWidth:240 }} className={styles.card_test}>
+                                    return <Card key={item.id} sx={{ maxWidth: 345, minWidth: 240 }} className={styles.card_test} onClick={
+                                        () => {
+                                            selectRoom(item.id)
+                                        }
+                                    }>
                                         <CardActionArea>
                                             <CardMedia
                                                 component="img"
@@ -194,7 +199,7 @@ export default function View({ data, userId, current_date, id, data_room }) {
                                             </CardContent>
                                         </CardActionArea>
                                         <CardActions>
-                                            <Button size="small" color="primary" onClick={
+                                            <Button size='medium' color="primary" startIcon={listRoom.includes(item.id) ? <CheckCircleIcon /> : null} onClick={
                                                 () => {
                                                     selectRoom(item.id)
                                                 }
