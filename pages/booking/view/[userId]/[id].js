@@ -26,6 +26,12 @@ import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import { Stack } from '@mui/material';
 import NoSsr from "@mui/material/NoSsr";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { Button, CardActionArea, CardActions } from '@mui/material';
+import styles from '../../../../styles/Profile.module.css'
 
 
 const ExternalViewSwitcher = ({
@@ -154,29 +160,53 @@ export default function View({ data, userId, current_date, id, data_room }) {
                                 />
                             </LocalizationProvider>
                         </NoSsr>
-                        <Stack direction='row' spacing={2} style={
-                            {
-                                marginTop: '20px',
-                            }
-                        }>
+                        <div className={styles.scrolling_wrapper_flexbox}>
                             {
                                 data_room.data.map(item => {
-                                    return <div key={item.id} style={
-                                        {
-                                            padding: '10px',
-                                            border: '1px solid',
-                                            borderColor: listRoom.includes(item.id) ? '#5DADE2' : '#ccc',
-                                            borderRadius: '5px',
-                                            cursor: 'pointer',
-                                        }
-                                    } onClick={() => {
-                                        selectRoom(item.id)
-                                    }
-                                    }>Room {item.id}</div>
+                                    // return <div key={item.id} style={
+                                    //     {
+                                    //         padding: '10px',
+                                    //         border: '1px solid',
+                                    //         borderColor: listRoom.includes(item.id) ? '#5DADE2' : '#ccc',
+                                    //         borderRadius: '5px',
+                                    //         cursor: 'pointer',
+                                    //     }
+                                    // } onClick={() => {
+                                    //     selectRoom(item.id)
+                                    // }
+                                    // }>Room {item.id}</div>
+                                    return <Card key={item.id} sx={{ maxWidth: 345,minWidth:240 }} className={styles.card_test}>
+                                        <CardActionArea>
+                                            <CardMedia
+                                                component="img"
+                                                height="140"
+                                                image="/bed.png"
+                                                alt="green iguana"
+                                            />
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="div">
+                                                    Room {item.id}
+                                                </Typography>
+                                                {/* <Typography variant="body2" color="text.secondary">
+                                                    Lizards are a widespread group of squamate reptiles, with over 6,000
+                                                    species, ranging across all continents except Antarctica
+                                                </Typography> */}
+                                            </CardContent>
+                                        </CardActionArea>
+                                        <CardActions>
+                                            <Button size="small" color="primary" onClick={
+                                                () => {
+                                                    selectRoom(item.id)
+                                                }
+                                            }>
+                                                เลือก
+                                            </Button>
+                                        </CardActions>
+                                    </Card>
                                 })
                             }
 
-                        </Stack>
+                        </div>
                     </Grid>
                     <Grid item xs={12} md={8}>
                         <Paper>

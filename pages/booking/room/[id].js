@@ -276,7 +276,7 @@ export default function View({ data, userId, current_date, id }) {
             </h1>
             <Box>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={4} order={{ xs: 2, md: 1 }}>
                         <Paper style={
                             {
                                 padding: '20px',
@@ -356,7 +356,7 @@ export default function View({ data, userId, current_date, id }) {
                             </Stack>
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} md={8}>
+                    <Grid item xs={12} md={8} order={{ xs: 1, md: 2 }}>
                         <div>
                             <Stack direction="row" style={
                                 {
