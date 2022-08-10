@@ -30,6 +30,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import moment from 'moment';
 import NoSsr from "@mui/material/NoSsr";
+import TuneIcon from '@mui/icons-material/Tune';
+import { useRouter } from 'next/router';
 
 const ExternalViewSwitcher = ({
     currentViewName,
@@ -50,6 +52,7 @@ const ExternalViewSwitcher = ({
 
 
 export default function View({ data, userId, current_date, id }) {
+    const router = useRouter();
     const [currentViewName, setCurrentViewName] = useState('Month');
     const dataSchedule = data.data.map(item => {
         return {
@@ -274,6 +277,13 @@ export default function View({ data, userId, current_date, id }) {
             <h1>
                 ปฏิทินเดือน {new Date(currentDate).toLocaleString('th-TH', { month: 'long' })} {new Date(currentDate).getFullYear() + 543}
             </h1>
+            <IconButton size="large" onClick={
+                () => {
+                    router.push(`/booking/room/setting/${id}`)
+                }
+            }>
+                <TuneIcon />
+            </IconButton>
             <Box>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={4} order={{ xs: 2, md: 1 }}>

@@ -22,6 +22,8 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { io } from 'socket.io-client';
+import { IconButton } from '@mui/material';
+import TuneIcon from '@mui/icons-material/Tune';
 const { AppBar } = require('../../components')
 
 function Booking({ data, userId }) {
@@ -248,9 +250,13 @@ function Booking({ data, userId }) {
                                                     // clickOrder(index + 1, item.id)
                                                     router.push(`/booking/room/${item.id}`)
                                                 }}>จอง</Button> {' '}
-                                                {/* <Button variant="outlined" color="primary" onClick={() => {
-                                                    router.push(`/booking/v/${item.id}`)
-                                                }}>ดู</Button> */}
+                                                <IconButton size="large" onClick={
+                                                    () => {
+                                                        router.push(`/booking/room/setting/${item.id}`)
+                                                    }
+                                                }>
+                                                    <TuneIcon />
+                                                </IconButton>
                                             </div>
                                         </div>
                                     </div>

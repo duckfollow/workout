@@ -185,7 +185,7 @@ export default function View({ data, userId, current_date, id, data_room }) {
                                             <CardMedia
                                                 component="img"
                                                 height="140"
-                                                image="/bed.png"
+                                                image={item.booking_room_images[0]!= undefined? item.booking_room_images[0].imageURL :'/bed.png'}
                                                 alt="green iguana"
                                             />
                                             <CardContent>
