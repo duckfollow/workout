@@ -232,8 +232,8 @@ function Booking({ data, userId }) {
                                                 }>ห้อง</span>
                                             <span
                                                 style={{
-                                                    fontSize: '60px',
-                                                }}>{index + 1}</span>
+                                                    fontSize: '40px',
+                                                }}>{item.name ? item.name : index + 1}</span>
                                             <span
                                                 style={
                                                     {

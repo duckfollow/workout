@@ -1,4 +1,6 @@
 import Head from "next/head";
+import Image from 'next/image';
+import { useState } from 'react';
 import axios from "axios";
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -6,8 +8,25 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { useRouter } from "next/router";
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import styles from '../../../../styles/Profile.module.css'
+import success from "../../../../public/96237-success.json";
+import error from "../../../../public/90569-error.json";
+import Lottie from "lottie-react";
 
-const Setting = () => {
+const Setting = ({ data }) => {
+    const [roomData, setRoomData] = useState(data);
+    const [roomName, setRoomName] = useState(roomData.data.name);
+    const [roomType, setRoomType] = useState(roomData.data.type);
+    const [roomCapacity, setRoomCapacity] = useState(roomData.data.capacity);
+    const [roomPrice, setRoomPrice] = useState(roomData.data.price);
+    const [roomDescription, setRoomDescription] = useState(roomData.data.description);
+    const [loading, setLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
     const router = useRouter();
     const { id } = router.query;
     const upload = (event) => {
@@ -26,6 +45,7 @@ const Setting = () => {
             }
             ).then(response => {
                 console.log(response)
+                readRoom()
             }
             ).catch(error => {
                 console.log(error)
@@ -33,41 +53,157 @@ const Setting = () => {
         }
         reader.readAsDataURL(files)
     }
+
+    //update room
+    const updateRoom = () => {
+        let data = {
+            "id": id,
+            "name": roomName,
+            "type": roomType,
+            "capacity": roomCapacity,
+            "price": roomPrice,
+            "description": roomDescription
+        }
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/update`, data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            console.log(response)
+            readRoom()
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    //read room by id
+    const readRoom = () => {
+        axios.get(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/${id}`).then(response => {
+            setRoomData(response.data)
+            setLoading(true)
+            setIsSuccess(true)
+        }).catch(error => {
+            console.log(error)
+            setLoading(true)
+            setIsSuccess(false)
+        })
+    }
+
     return (
-        <div>
+        <div style={
+            {
+                padding: '20px',
+                marginBottom: '20px',
+            }
+        }>
             <Head>
                 <title>Setting</title>
             </Head>
             <h1>Setting</h1>
-            <Stack direction="row" alignItems="center" spacing={2}>
-                <Button variant="contained" component="label">
-                    Upload
-                    <input hidden accept="image/*" multiple type="file" onChange={upload} />
-                </Button>
-                <IconButton color="primary" aria-label="upload picture" component="label">
-                    <input hidden accept="image/*" type="file" />
-                    <PhotoCamera />
-                </IconButton>
-            </Stack>
-            <Stack direction="column" alignItems="center" spacing={2}>
-                <TextField id="outlined-basic" label="ชื่อ" variant="outlined" />
-                <TextField id="outlined-basic" label="นามสกุล" variant="outlined" />
-
-                <TextField id="outlined-basic" inputProps={{ maxLength: 10 }} label="เบอร์โทร" variant="outlined" />
-                <TextField id="outlined-basic" type={'email'} label="อีเมล" variant="outlined" />
-
-                <TextField id="outlined-basic" label="note" variant="outlined" />
-                <Stack direction='row' spacing={2}>
-                    <Button fullWidth size='large' variant="outlined" color="primary">
-                        ยกเลิก
-                    </Button>
-                    <Button fullWidth size='large' variant="contained" color="primary" >
-                        บันทึก
-                    </Button>
-                </Stack>
-            </Stack>
-        </div >
+            <Box>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={4} order={{ xs: 2, md: 1 }}>
+                        <Stack direction="column" spacing={2}>
+                            <TextField id="outlined-basic" inputProps={{ maxLength: 4, pattern: "[a-zA-Z0-9]" }} value={roomName} label="รหัสห้อง" variant="outlined" onChange={
+                                (event) => {
+                                    setRoomName(event.target.value)
+                                }
+                            } />
+                            {/* <TextField id="outlined-basic" label="ชื่อห้อง" variant="outlined" /> */}
+                            <TextField id="outlined-basic" label="ประเภท" variant="outlined" value={roomType} onChange={
+                                (event) => {
+                                    setRoomType(event.target.value)
+                                }
+                            } />
+                            <TextField id="outlined-basic" label="ความจุ" variant="outlined" value={roomCapacity} onChange={
+                                (event) => {
+                                    setRoomCapacity(event.target.value)
+                                }
+                            } />
+                            <TextField id="outlined-basic" label="ราคา" variant="outlined" value={roomPrice} onChange={
+                                (event) => {
+                                    setRoomPrice(event.target.value)
+                                }
+                            } />
+                            <TextField id="outlined-basic" label="รายละเอียด" variant="outlined" value={roomDescription} onChange={
+                                (event) => {
+                                    setRoomDescription(event.target.value)
+                                }
+                            } />
+                            <Stack direction='row' spacing={2}>
+                                <Button fullWidth size='large' variant="outlined" color="primary">
+                                    ยกเลิก
+                                </Button>
+                                <Button fullWidth size='large' variant="contained" color="primary" onClick={updateRoom}>
+                                    บันทึก
+                                </Button>
+                            </Stack>
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={12} md={8} order={{ xs: 1, md: 2 }}>
+                        <Stack direction="row" spacing={2}>
+                            <Button startIcon={<PhotoCamera />} variant="contained" component="label">
+                                Upload
+                                <input hidden accept="image/*" multiple type="file" onChange={upload} />
+                            </Button>
+                            {/* <IconButton color="primary" aria-label="upload picture" component="label">
+                                <input hidden accept="image/*" type="file" />
+                                <PhotoCamera />
+                            </IconButton> */}
+                        </Stack>
+                        <ImageList
+                            sx={{ width: 350, height: 'auto' }}
+                            md={{ width: 1200, height: 'auto' }}
+                            variant="quilted"
+                            rowHeight={121}
+                        >
+                            {
+                                roomData.data.booking_room_images.map((image, index) => {
+                                    return (
+                                        <ImageListItem key={image.id}>
+                                            <img src={image.imageURL} loading="lazy" />
+                                        </ImageListItem>
+                                    )
+                                })
+                            }
+                        </ImageList>
+                    </Grid>
+                </Grid>
+            </Box>
+            {loading ?
+                <div className={styles.loading} onClick={
+                    () => {
+                        setLoading(false)
+                    }
+                }>
+                    <Lottie id='lottie' style={
+                        {
+                            width: '260px',
+                            height: 'auto',
+                        }
+                    } animationData={isSuccess ? success : error} loop={true} onLoopComplete={
+                        () => {
+                            setLoading(false)
+                        }
+                    } />
+                </div> : null
+            }
+        </div>
     );
 }
 
 export default Setting;
+
+export async function getServerSideProps(context) {
+    const cookies = context.req ? context.req.cookies : '';
+    const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
+    const id = context.query.id
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/${id}`)
+    const data = await res.data
+    console.log(data)
+    return {
+        props: {
+            data
+        }
+    }
+}

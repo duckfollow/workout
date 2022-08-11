@@ -426,15 +426,13 @@ export async function getServerSideProps(context) {
     const cookies = context.req ? context.req.cookies : '';
     const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
     const id = context.query.id
-    const current_date = (new Date()).toISOString().split('T')[0]
-    console.log(current_date)
+    const current_date = moment(new Date()).format('YYYY-MM-DD')
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/booking/read`, {
         "store": userId,
         "current_date": current_date,
         "roomId": [id],
     })
     const data = await res.data
-    console.log(data)
     return {
         props: {
             data,
