@@ -112,14 +112,14 @@ export default function View({ data, userId, current_date, id }) {
     }
 
     const handleCheckIn = (value) => {
-        let checkInDate = moment(new Date(value)).format('YYYY-MM-DD HH:mm:ss')
+        let checkInDate = /*moment(value).format('YYYY-MM-DD HH:mm:ss')*/new Date(value)
         setCheckIn(checkInDate);
         // setCheckOut(checkInDate);
         setCurrentDate(checkInDate);
     }
 
     const handleCheckOut = (value) => {
-        let checkOut = moment(new Date(value)).format('YYYY-MM-DD 23:59:59');
+        let checkOut = /*moment(value).format('YYYY-MM-DD 23:59:59');*/new Date(value).setHours(23,59,59,59);
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/booking/read`, {
             "store": userId,
             "current_date": currentDate,
