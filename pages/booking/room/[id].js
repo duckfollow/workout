@@ -310,6 +310,9 @@ export default function View({ data, userId, current_date, id }) {
                                                 onChange={(newValue) => {
                                                     handleCheckIn(newValue)
                                                 }}
+                                                onAccept={(newValue) => {
+                                                    handleCheckIn(newValue)
+                                                }}
                                                 renderInput={(params) => <TextField fullWidth {...params} />}
                                             />
 
@@ -318,6 +321,9 @@ export default function View({ data, userId, current_date, id }) {
                                                 value={checkOut}
                                                 minDate={new Date('2017-01-01')}
                                                 onChange={(newValue) => {
+                                                    handleCheckOut(newValue)
+                                                }}
+                                                onAccept={(newValue) => {
                                                     handleCheckOut(newValue)
                                                 }}
                                                 renderInput={(params) => <TextField fullWidth {...params} />}
