@@ -15,6 +15,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { NoSsr } from '@mui/material';
+import { IconButton } from '@mui/material';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -113,7 +114,9 @@ export default function AppBar() {
           width: '100%',
           visibility: user && isfirstLogin == "false" ? 'visible' : 'hidden',
         }}>
-          <Button>
+          <Button onClick={() => {
+            router.push('/profile')
+          }}>
             <Image src={image} alt="logo" width={30} height={30} style={
               {
                 borderRadius: '50%',
@@ -127,7 +130,10 @@ export default function AppBar() {
               justifyContent: 'center',
             }
           }>
-            <Button variant="outlined" startIcon={<LogoutIcon />} size="small" color="primary" onClick={handleLogout}>ออก</Button>
+            {/* <Button variant="outlined" startIcon={<LogoutIcon />} size="small" color="primary" onClick={handleLogout}>ออก</Button> */}
+            <IconButton size="small" onClick={handleLogout}>
+              <LogoutIcon />
+            </IconButton>
           </div>
         </div>
       </NoSsr>

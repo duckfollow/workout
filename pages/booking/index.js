@@ -205,16 +205,17 @@ function Booking({ data, userId }) {
                             คลิกที่ปุ่มด้านบนเพื่อทดลองใช้งานฟรี ระบบจะสร้างรหัสผู้ใช้งานใหม่ หรือจะใช้งานในโหมด demo ได้เลย
                         </p>
                     </div>
-                        :
-                        <span
-                            style={
-                                {
-                                    margin: '10px',
-                                    display: cookies.isfirstLogin === 'false' ? 'none' : 'block',
-                                }
-                            }>
-                            รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong> <Button variant="outlined" startIcon={<LogoutIcon />} size="small" color="primary" onClick={clickLogout}>ออก</Button>
-                        </span>
+                        : <NoSsr>
+                            <span
+                                style={
+                                    {
+                                        margin: '10px',
+                                        display: cookies.isfirstLogin === 'false' ? 'none' : 'block',
+                                    }
+                                }>
+                                รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong> <Button variant="outlined" startIcon={<LogoutIcon />} size="small" color="primary" onClick={clickLogout}>ออก</Button>
+                            </span>
+                        </NoSsr>
                 }
 
                 <div className={styles.grid_menu}>
