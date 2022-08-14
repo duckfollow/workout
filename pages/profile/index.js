@@ -76,7 +76,7 @@ const Profile = ({ userId, nameUser, imageUser }) => {
                                         flexDirection: 'column',
                                     }
                                 }>
-                                    <Image src={image} alt="user" width={200} height={200} style={{
+                                    <Image src={image} alt="user" width={200} height={200} objectFit="cover" style={{
                                         borderRadius: "50%"
                                     }} />
                                     <IconButton color="primary" aria-label="upload picture" component="label">
