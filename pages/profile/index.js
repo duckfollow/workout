@@ -119,8 +119,8 @@ const Profile = ({ userId, nameUser, imageUser }) => {
 export async function getServerSideProps(context) {
     const cookies = context.req ? context.req.cookies : '';
     const userId = cookies.userId !== undefined ? cookies.userId : '';
-    const nameUser = cookies.name !== undefined ? cookies.name : '';
-    const imageUser = cookies.image !== undefined ? cookies.image : '/tv-show.png';
+    const nameUser = cookies.name !== undefined && cookies.name !== "null" ? cookies.name : '';
+    const imageUser = cookies.image !== undefined && cookies.image !== "null" ? cookies.image : '/tv-show.png';
     return {
         props: {
             userId,
