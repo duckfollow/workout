@@ -96,7 +96,11 @@ const Profile = ({ userId, nameUser, imageUser }) => {
                                     }
                                 } />
                                 <Stack direction='row' spacing={2}>
-                                    <Button fullWidth size='large' variant="outlined" color="primary">
+                                    <Button fullWidth size='large' variant="outlined" color="primary" onClick={
+                                        () => {
+                                            router.replace('/');
+                                        }
+                                    }>
                                         ยกเลิก
                                     </Button>
                                     <Button fullWidth size='large' variant="contained" color="primary" onClick={handleSubmit} >
