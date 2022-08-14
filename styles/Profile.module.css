@@ -1267,13 +1267,16 @@ Order Product
   background-color: rgba(58, 56, 56, 0.055);
   /* Black w/ opacity */
   justify-content: center;
+  
 }
 
 .view_share[show="true"] {
+  /* visibility: initial; */
   display: flex;
 }
 
 .view_share[show="false"] {
+  /* visibility: hidden; */
   display: none;
 }
 

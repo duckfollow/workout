@@ -25,13 +25,14 @@ import { io } from 'socket.io-client';
 import { IconButton } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
 const { AppBar } = require('../../components')
+import NoSsr from '@mui/material/NoSsr';
 
 function Booking({ data, userId }) {
     const router = useRouter();
     const [dataTable, setDataTable] = useState(data)
     const [open, setOpen] = useState(false);
     const [idDelete, setIdDelete] = useState();
-    // const cookies = parseCookies()
+    const cookies = parseCookies()
     const [_userId, setUserId] = useState(userId);
     const [loginId, setLoginId] = useState();
     const [animateLogin, setAnimateLogin] = useState(false);
@@ -162,12 +163,26 @@ function Booking({ data, userId }) {
             <AppBar />
 
             <main className={styles.main}>
-                <h1 className={styles.title}>
-                    Welcome <a>Demo Booking</a>
-                </h1>
-                <div>
-                    <Image src='/booking.png' alt="" width={150} height={150} className={styles.img_profile} />
-                </div>
+                <NoSsr>
+                    {
+                        cookies.isfirstLogin === 'true' || cookies.isfirstLogin === undefined ? <div style={
+                            {
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }
+                        }>
+                            <h1 className={styles.title}>
+                                Welcome <a>Demo Booking</a>
+                            </h1>
+                            <div>
+                                <Image src='/booking.png' alt="" width={150} height={150} className={styles.img_profile} />
+                            </div>
+                        </div>
+                            : null
+                    }
+                </NoSsr>
 
                 {
                     _userId == process.env.NEXT_PUBLIC_USER ? <div style={
@@ -195,6 +210,7 @@ function Booking({ data, userId }) {
                             style={
                                 {
                                     margin: '10px',
+                                    display: cookies.isfirstLogin === 'false' ? 'none' : 'block',
                                 }
                             }>
                             รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong> <Button variant="outlined" startIcon={<LogoutIcon />} size="small" color="primary" onClick={clickLogout}>ออก</Button>

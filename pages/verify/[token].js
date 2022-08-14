@@ -36,14 +36,15 @@ function Pincode() {
                         pincode: pincode,
                         pincodeConfirmed: _pincode
                     }
-
-                    console.log(data);
                     axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/user/update`, data, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
                     }).then(res => {
                         setCookie(null, 'userId', res.data.userId, { path: '/' })
+                        setCookie(null, 'name', res.data.name, { path: '/' })
+                        setCookie(null, 'image', res.data.image, { path: '/' })
+                        setCookie(null, 'isfirstLogin', res.data.isfirstLogin, { path: '/' })
                         router.replace('/');
                     }).catch(err => {
                         console.log(err);

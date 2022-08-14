@@ -23,13 +23,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { io } from 'socket.io-client';
 const { AppBar } = require('../components')
+import { NoSsr } from '@mui/material';
 
 function Profile({ data, userId }) {
   const router = useRouter();
   const [dataTable, setDataTable] = useState(data)
   const [open, setOpen] = useState(false);
   const [idDelete, setIdDelete] = useState();
-  // const cookies = parseCookies()
+  const cookies = parseCookies()
   const [_userId, setUserId] = useState(userId);
   const [loginId, setLoginId] = useState();
   const [animateLogin, setAnimateLogin] = useState(false);
@@ -109,6 +110,7 @@ function Profile({ data, userId }) {
     }).then(res => {
       setUserId(userId)
       setCookie(null, 'userId', userId, { path: '/' })
+      setCookie(null, 'isfirstLogin', res.data.data.isfirstLogin, { path: '/' })
       router.reload()
     })
   }
@@ -169,12 +171,25 @@ function Profile({ data, userId }) {
       <AppBar />
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome <a>Demo Food</a>
-        </h1>
-        <div>
-          <Image src='/chef.png' alt="" width={150} height={150} className={styles.img_profile} />
-        </div>
+        <NoSsr>
+          {
+            cookies.isfirstLogin === 'true' || cookies.isfirstLogin === undefined ? <div style={
+              {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }
+            }>
+              <h1 className={styles.title}>
+                Welcome <a>Demo Food</a>
+              </h1>
+              <div>
+                <Image src='/chef.png' alt="" width={150} height={150} className={styles.img_profile} />
+              </div>
+            </div> : null
+          }
+        </NoSsr>
 
         {
           _userId == process.env.NEXT_PUBLIC_USER ? <div style={
@@ -184,7 +199,6 @@ function Profile({ data, userId }) {
               alignItems: 'center',
               flexDirection: 'column',
               marginTop: '20px'
-
             }
           }>
             <Button variant="outlined" startIcon={<ScienceOutlinedIcon />} size="small" color="primary" onClick={clickTry}> ทดลองใช้งานฟรี</Button>
@@ -202,6 +216,7 @@ function Profile({ data, userId }) {
               style={
                 {
                   margin: '10px',
+                  display: cookies.isfirstLogin === 'false' ? 'none' : 'block',
                 }
               }>
               รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong> <Button variant="outlined" startIcon={<LogoutIcon />} size="small" color="primary" onClick={clickLogout}>ออก</Button>

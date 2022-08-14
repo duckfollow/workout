@@ -29,6 +29,9 @@ function Pincode() {
                     }
                 }).then(res => {
                     setCookie(null, 'userId', res.data.data.id, { path: '/' })
+                    setCookie(null, 'name', res.data.data.name, { path: '/' })
+                    setCookie(null, 'image', res.data.data.image, { path: '/' })
+                    setCookie(null, 'isfirstLogin', res.data.data.isfirstLogin, { path: '/' })
                     router.replace('/');
                 }).catch(err => {
                     console.log(err);

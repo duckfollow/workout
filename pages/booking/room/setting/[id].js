@@ -17,6 +17,15 @@ import styles from '../../../../styles/Profile.module.css'
 import success from "../../../../public/96237-success.json";
 import error from "../../../../public/90569-error.json";
 import Lottie from "lottie-react";
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import ListSubheader from '@mui/material/ListSubheader';
+import InfoIcon from '@mui/icons-material/Info';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const Setting = ({ data }) => {
     const [roomData, setRoomData] = useState(data);
@@ -27,6 +36,8 @@ const Setting = ({ data }) => {
     const [roomDescription, setRoomDescription] = useState(roomData.data.description);
     const [loading, setLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [idDelete, setIdDelete] = useState(null);
     const router = useRouter();
     const { id } = router.query;
     const upload = (event) => {
@@ -87,6 +98,23 @@ const Setting = ({ data }) => {
             setLoading(true)
             setIsSuccess(false)
         })
+    }
+
+    //delete room image by id
+    const deleteRoomImage = () => {
+        setOpen(false)
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/image/delete`, {
+            "id": idDelete
+        }).then(response => {
+            console.log(response)
+            readRoom()
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    const handleClose = () => {
+        setOpen(false);
     }
 
     return (
@@ -162,6 +190,17 @@ const Setting = ({ data }) => {
                                     return (
                                         <ImageListItem key={image.id}>
                                             <img src={image.imageURL} loading="lazy" />
+                                            <ImageListItemBar
+                                                actionIcon={
+                                                    <IconButton
+                                                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                                        aria-label={`info about ${image.id}`}
+                                                        onClick={() => { setOpen(true); setIdDelete(image.id) }}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                }
+                                            />
                                         </ImageListItem>
                                     )
                                 })
@@ -170,6 +209,23 @@ const Setting = ({ data }) => {
                     </Grid>
                 </Grid>
             </Box>
+            <Dialog
+                open={open}
+                keepMounted
+                onClose={handleClose}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle>{`คุณต้องการลบรายการนี้ใช่หรือไม่?`}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        คุณจะไม่สามารถกู้คืนรายการนี้ได้ id:{idDelete} หากคุณลบรายการนี้
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>ยกเลิก</Button>
+                    <Button onClick={deleteRoomImage}>ลบ</Button>
+                </DialogActions>
+            </Dialog>
             {loading ?
                 <div className={styles.loading} onClick={
                     () => {
@@ -200,7 +256,6 @@ export async function getServerSideProps(context) {
     const id = context.query.id
     const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/${id}`)
     const data = await res.data
-    console.log(data)
     return {
         props: {
             data

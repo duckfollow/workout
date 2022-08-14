@@ -118,7 +118,7 @@ function Order({ data, data_order,userId }) {
             >
                 {value === index && (
                     <Box sx={{ p: 3 }}>
-                        <Typography>{children}</Typography>
+                        {children}
                     </Box>
                 )}
             </div>
@@ -256,7 +256,7 @@ function Order({ data, data_order,userId }) {
                         <div className={styles.body_receipt}>
                             <div className={styles.info}>
                                 <div className={styles.welcome}>Receipt, <span className={styles.username}>Demo Food ({userId})</span></div>
-                                <p>จำนวน ({dataOrder.length}) รายการ</p>
+                                <span>จำนวน ({dataOrder.length}) รายการ</span>
                             </div>
                             <div className={styles.cart_receipt}>
                                 <div className={styles.title_receipt}>รายการที่สั่ง</div>
@@ -332,7 +332,7 @@ function Order({ data, data_order,userId }) {
                                 <NoSsr>
                                     <QRCode value={switchQR ? `https://workout.duckfollow.co/receipt/${userId}/${order}/${id}` : `https://workout.duckfollow.co/member/${userId}/${order}/${id}`} />
                                 </NoSsr>
-                                <p align="center"
+                                <span align="center"
                                     style={
                                         {
                                             fontSize: '12px',
@@ -345,7 +345,7 @@ function Order({ data, data_order,userId }) {
                                     {
                                         switchQR ? 'สามารถสแกน QR code เพื่อดูใบเสร็จได้' : 'สามารถสแกน QR code เพื่อรับออเดอร์ได้'
                                     }
-                                </p>
+                                </span>
                                 <Stack direction="row" spacing={2} style={
                                     {
                                         display: 'flex',
