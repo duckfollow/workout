@@ -112,7 +112,7 @@ export default function View({ data, userId, current_date, id }) {
     }
 
     const handleCheckIn = (value) => {
-        let checkInDate = moment(value).format('YYYY-MM-DD HH:mm:ss')
+        let checkInDate = /*moment(value).format('YYYY-MM-DD HH:mm:ss')*/new Date(value)
         setCheckIn(checkInDate);
         // setCheckOut(checkInDate);
         setCurrentDate(checkInDate);
