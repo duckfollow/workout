@@ -165,8 +165,21 @@ function Profile({ data, userId }) {
     <div className={styles.container}>
       <Head>
         <title>Demo Food</title>
-        <meta name="description" content="" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo-2.png" />
+        <meta property="og:url" content="https://workout.duckfollow.co/" />
+        <meta property="og:type" content="article" />
+        <meta property="og:image:width" content="500" />
+        <meta property="og:image:height" content="500" />
+        <meta property="og:title" content="POS ออนไลน์" />
+        <meta property="og:description" content="POS ออนไลน์" />
+        <meta property="og:image" content="/thumbnail.png" />
+
+        <meta name="twitter:title" content="POS ออนไลน์" />
+        <meta name="twitter:description" content="POS ออนไลน์" />
+        <meta name="twitter:image" content="/thumbnail.png" />
+        <meta name="twitter:card" content="summary_large_image"></meta>
+
+        <meta name="description" content="POS ออนไลน์" />
       </Head>
       <AppBar />
 
