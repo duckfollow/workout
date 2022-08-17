@@ -297,7 +297,7 @@ function Order({ data, data_order }) {
                                                             }}>ยกเลิก</Button>
                                                             <IconButton style={
                                                                 {
-                                                                    display: item.status == 3 ? 'none' : 'block',
+                                                                    display: item.status == 3 ? 'none' : '',
                                                                 }
                                                             } color="error" component="label" disabled={item.status == 3 ? true : false} onClick={() => {
                                                                 updateStatus(item.orderId, 0)
