@@ -14,6 +14,7 @@ import Stack from '@mui/material/Stack';
 import html2canvas from 'html2canvas';
 import DownloadIcon from '@mui/icons-material/Download';
 import { io } from 'socket.io-client';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 function Order({ data_order }) {
     const router = useRouter();
@@ -140,7 +141,11 @@ function Order({ data_order }) {
                                                         }
                                                     }>
                                                         <span className={styles.index}>{index + 1}</span>
-                                                        <span className={styles.name}>{item.name} {item.status == 3 ? '✔️' : ''}</span>
+                                                        <span className={styles.name}>{item.name} {item.status == 3 ? '✔️' : item.status == 1?<HourglassBottomIcon size="small" className={styles.hourglass} style={{
+                                                            width: 'auto',
+                                                            height: '13px',
+                                                            color: '#f0ad4e'
+                                                        }} />:''}</span>
                                                         <span className={styles.price}>{item.price.toLocaleString('th-TH', { style: 'currency', currency: 'THB' })}</span>
                                                     </li>
                                                 )
