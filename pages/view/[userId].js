@@ -4,7 +4,11 @@ import Image from "next/image";
 import styles from '../../styles/Profile.module.css'
 const View = ({ data, userId }) => {
     return (
-        <div>
+        <div style={
+            {
+                padding: '20px',
+            }
+        }>
             <Head>
                 <title>View</title>
             </Head>
@@ -46,7 +50,7 @@ const View = ({ data, userId }) => {
                                                         width: '50%',
                                                     }
                                                 }>
-                                                    <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
+                                                    <Image src={item.image} alt={''} width={150} height={150} objectFit='contain' />
                                                 </div>
                                             </div>
                                         </div>
@@ -90,7 +94,7 @@ const View = ({ data, userId }) => {
                                             width: '50%',
                                         }
                                     }>
-                                        <Image src={item.image} alt={''} width={100} height={100} objectFit='contain' />
+                                        <Image src={item.image} alt={''} width={150} height={150} objectFit='contain' />
                                     </div>
                                 </div>
                             </div>
