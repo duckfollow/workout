@@ -24,6 +24,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import IcecreamIcon from '@mui/icons-material/Icecream';
 import SportsBarIcon from '@mui/icons-material/SportsBar';
+import GridViewIcon from '@mui/icons-material/GridView';
 
 function View({ data, userId }) {
     const router = useRouter();
@@ -110,6 +111,10 @@ function View({ data, userId }) {
         setValue(0)
     }
 
+    const clickView = () => {
+        router.push(`/view/${userId}`)
+    }
+
     return (
         <div>
             <Head>
@@ -138,6 +143,7 @@ function View({ data, userId }) {
                             <Tab icon={<IcecreamIcon />} iconPosition="start" label="ของหวาน" {...a11yProps(1)} />
                             <Tab icon={<SportsBarIcon />} iconPosition="start" label="เครื่องดื่ม" {...a11yProps(2)} />
                             <Tab icon={<AddIcon />} iconPosition="start" label="เพิ่มสินค้าของคุณ" onClick={clickAdd} />
+                            <Tab icon={<GridViewIcon />} iconPosition="start" label="เมนูแนะนำ" onClick={clickView} />
                         </Tabs>
                     </Box>
                     {/* <Link href={`/products/add`} passHref>
