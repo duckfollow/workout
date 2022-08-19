@@ -148,15 +148,19 @@ export default function AppBar() {
       >
         <MenuItem onClick={(e) => {
           handleMenuItemClick(e, '/')
-        }} disableRipple>
+        }}>
           {/* <EditIcon /> */}
           ระบบรับออเดอร์
         </MenuItem>
         <MenuItem onClick={(e) => {
           handleMenuItemClick(e, '/booking')
-        }} disableRipple>
+        }}>
           {/* <FileCopyIcon /> */}
           ระบบจองที่พัก (dev version)
+        </MenuItem>
+        <MenuItem>
+          {/* <FileCopyIcon /> */}
+          ระบบสต็อกสินค้า (dev version)
         </MenuItem>
         {/* <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={handleClose} disableRipple>
