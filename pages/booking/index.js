@@ -37,7 +37,6 @@ function Booking({ data, userId }) {
     const [loginId, setLoginId] = useState();
     const [animateLogin, setAnimateLogin] = useState(false);
     const socket = io(process.env.NEXT_PUBLIC_URL_WEBSOCKET, { transports: ['websocket'] });
-    console.log(dataTable.data.length)
 
     useEffect(() => {
         socket.connect();
@@ -542,7 +541,6 @@ function Booking({ data, userId }) {
 export async function getServerSideProps(context) {
     const cookies = context.req ? context.req.cookies : '';
     const userId = cookies.userId !== undefined ? cookies.userId : process.env.NEXT_PUBLIC_USER;
-    console.log(userId)
     const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/booking/room/read`, {
         "store": userId
     })

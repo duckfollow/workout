@@ -67,8 +67,6 @@ export default function AppBar() {
   const [image, setImage] = useState(cookies.image !== 'null' && cookies.image !== "undefined" && cookies.image !== undefined ? cookies.image : '/tv-show.png')
   const [isfirstLogin, setIsfirstLogin] = useState(cookies.isfirstLogin !== 'null' && cookies.isfirstLogin !== "undefined" && cookies.isfirstLogin !== undefined ? cookies.isfirstLogin : true)
 
-  console.log(cookies.userId)
-
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -163,6 +161,12 @@ export default function AppBar() {
         }}>
           {/* <FileCopyIcon /> */}
           ระบบสต็อกสินค้า (dev version)
+        </MenuItem>
+        <MenuItem onClick={(e) => {
+          handleMenuItemClick(e, '/todo')
+        }}>
+          {/* <FileCopyIcon /> */}
+          Todo List (dev version)
         </MenuItem>
         {/* <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={handleClose} disableRipple>
