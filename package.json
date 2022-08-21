@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@devexpress/dx-react-core": "^3.0.4",
+    "@devexpress/dx-react-scheduler": "^3.0.4",
     "@devexpress/dx-react-scheduler-material-ui": "^3.0.4",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
