@@ -158,7 +158,9 @@ export default function AppBar() {
           {/* <FileCopyIcon /> */}
           ระบบจองที่พัก (dev version)
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={(e) => {
+          handleMenuItemClick(e, '/stock')
+        }}>
           {/* <FileCopyIcon /> */}
           ระบบสต็อกสินค้า (dev version)
         </MenuItem>

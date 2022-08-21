@@ -62,6 +62,8 @@ const View = ({ data, userId }) => {
                     </div> : null}
 
             <Grid container spacing={2}>
+                {/* <Grid item xs={12} md={3}>
+                </Grid> */}
                 <Grid item xs={12} md={4} style={{
                     display: data.data.product.foods.length > 0 ? 'block' : 'none'
                 }}>
