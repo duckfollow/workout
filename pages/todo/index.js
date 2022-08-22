@@ -10,7 +10,9 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import Collapse from '@mui/material/Collapse';
 import AddIcon from '@mui/icons-material/Add';
-
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Todo = ({ data, userId }) => {
     // fake data generator
@@ -132,52 +134,45 @@ const Todo = ({ data, userId }) => {
     };
 
     const onDragEndTest = result => {
-        const { source, destination } = result;
+        try {
+            const { source, destination } = result;
 
-        let groupId1 = source.droppableId.split("-")[1];
-        let groupId2 = destination.droppableId.split("-")[1];
-        let todoId = groupList.data.find((item) => item.id == groupId1).todo_lists[source.index].id;
-        var new_index = 0;
-        if (!destination) {
-            return;
+            let groupId1 = source.droppableId.split("-")[1];
+            let groupId2 = destination.droppableId.split("-")[1];
+            if (!destination) {
+                return;
+            }
+
+            if (source.droppableId === destination.droppableId) {
+                let data = groupList
+                let index = data.data.findIndex((item) => item.id == groupId1);
+
+                const _items = reorder(
+                    data.data[index].todo_lists,
+                    source.index,
+                    destination.index
+                );
+
+                data.data[index].todo_lists = _items;
+                setGroupList(groupList => ({ ...groupList, ...data }));
+            } else {
+                let data = groupList
+                let index = data.data.findIndex((item) => item.id == groupId1);
+                let index2 = data.data.findIndex((item) => item.id == groupId2);
+
+                const result = move(
+                    data.data[index].todo_lists,
+                    data.data[index2].todo_lists,
+                    source,
+                    destination
+                );
+                data.data[index].todo_lists = result[`droppable-${groupId1}`];
+                data.data[index2].todo_lists = result[`droppable-${groupId2}`];
+                setGroupList(groupList => ({ ...groupList, ...data }));
+            }
+            updateTodoAll(groupList.data)
+        } catch (error) {
         }
-
-        if (source.droppableId === destination.droppableId) {
-            let data = groupList
-            let index = data.data.findIndex((item) => item.id == groupId1);
-
-            const _items = reorder(
-                data.data[index].todo_lists,
-                source.index,
-                destination.index
-            );
-
-            new_index = _items.findIndex((item) => item.id == todoId);
-
-            data.data[index].todo_lists = _items;
-            setGroupList(groupList => ({ ...groupList, ...data }));
-        } else {
-            let data = groupList
-            let index = data.data.findIndex((item) => item.id == groupId1);
-            let index2 = data.data.findIndex((item) => item.id == groupId2);
-
-            const result = move(
-                data.data[index].todo_lists,
-                data.data[index2].todo_lists,
-                source,
-                destination
-            );
-
-            new_index = result[`droppable-${groupId2}`].findIndex((item) => item.id == todoId);
-
-            data.data[index].todo_lists = result[`droppable-${groupId1}`];
-            data.data[index2].todo_lists = result[`droppable-${groupId2}`];
-            setGroupList(groupList => ({ ...groupList, ...data }));
-        }
-        // console.log(groupId1, todoId);
-        console.log(groupList.data);
-        updateTodoAll(groupList.data)
-        // updateTodo(todoId, groupId2, new_index);
     }
 
     const createGroup = () => {
@@ -249,6 +244,22 @@ const Todo = ({ data, userId }) => {
         }));
     }
 
+    const deleteTodo = (id) => {
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/list/delete`, {
+            id: id,
+        }).then((response) => {
+            readData();
+        })
+    }
+
+    const deleteGroup = (id) => {
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/group/delete`, {
+            id: id,
+        }).then((response) => {
+            readData();
+        })
+    }
+
     return (
         <div>
             <Head>
@@ -286,7 +297,14 @@ const Todo = ({ data, userId }) => {
                                 return (
                                     <div key={group.id}>
                                         <div className={styles.header_list}>
-                                            <span>{group.name}</span>
+                                            <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems={'center'}>
+                                                <span style={{
+                                                    width: '100%',
+                                                }}>{group.name}</span>
+                                                <IconButton aria-label="delete" onClick={() => deleteGroup(group.id)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Stack>
                                         </div>
                                         <Droppable droppableId={`droppable-${group.id}`} key={index}>
                                             {(provided, snapshot) => (
@@ -307,7 +325,17 @@ const Todo = ({ data, userId }) => {
                                                                         provided.draggableProps.style
                                                                     )}
                                                                 >
-                                                                    {item.name}
+                                                                    <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems={'center'}>
+                                                                        <span style={{
+                                                                            width: '100%',
+                                                                        }}>{item.name}</span>
+                                                                        <IconButton aria-label="edit" size="small">
+                                                                            <EditIcon />
+                                                                        </IconButton>
+                                                                        <IconButton aria-label="delete" onClick={() => deleteTodo(item.id)} size="small">
+                                                                            <DeleteIcon />
+                                                                        </IconButton>
+                                                                    </Stack>
                                                                 </div>
                                                             )}
                                                         </Draggable>
@@ -322,7 +350,6 @@ const Todo = ({ data, userId }) => {
                                                     let _expanded = expanded;
                                                     _expanded[`key${index}`] = expanded[`key${index}`] ? !expanded[`key${index}`] : true;
                                                     for (const [key, value] of Object.entries(_expanded)) {
-                                                        console.log(`${key}: ${value}`);
                                                         if (key != `key${index}`) {
                                                             _expanded[key] = false;
                                                         }
@@ -360,7 +387,7 @@ const Todo = ({ data, userId }) => {
                                             setGroupName(e.target.value);
                                         }
                                     } />
-                                    <Button variant="outlined" color="primary" onClick={createGroup} >เพิ่ม Todo</Button>
+                                    <Button variant="outlined" startIcon={<AddIcon />} color="primary" onClick={createGroup} >เพิ่ม Todo list</Button>
                                 </Stack>
                             </div>
                         </Stack>
