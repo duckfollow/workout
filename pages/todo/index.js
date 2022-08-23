@@ -13,6 +13,9 @@ import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+const { AppBar } = require('../../components')
+import CheckIcon from '@mui/icons-material/Check';
+import { height, width } from "@mui/system";
 
 const Todo = ({ data, userId }) => {
     // fake data generator
@@ -27,8 +30,12 @@ const Todo = ({ data, userId }) => {
     const [groupName, setGroupName] = useState("");
     const [groupList, setGroupList] = useState(data);
     const [expanded, setExpanded] = useState({});
+    const [editstate, setEditState] = useState({})
+    const [editstateGroup, setEditStateGroup] = useState({})
     const [groupId, setGroupId] = useState(0);
-    const [todo, setTodo] = useState("");
+    const [todo, setTodo] = useState('');
+    const [name, setName] = useState('')
+    const [groupText, setGroupText] = useState('')
 
     const id2List = {
         droppable: 'items',
@@ -66,7 +73,7 @@ const Todo = ({ data, userId }) => {
     const getItemStyle = (isDragging, draggableStyle) => ({
         // some basic styles to make the items look a bit nicer
         userSelect: "none",
-        padding: grid * 2,
+        padding: grid,
         margin: `0 0 ${grid}px 0`,
 
         // change background colour if dragging
@@ -211,14 +218,23 @@ const Todo = ({ data, userId }) => {
         });
     }
 
-    const updateTodo = (id, groupId, index) => {
+    const updateTodo = (id) => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/list/update`, {
             id: id,
-            group: groupId,
-            store: userId,
-            index: index,
+            name: name,
         }).then((response) => {
-            // readData();
+            readData();
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
+    const updateGroup = (id) => {
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/group/update`, {
+            id: id,
+            name: groupText,
+        }).then((response) => {
+            readData();
         }, (error) => {
             console.log(error);
         });
@@ -280,6 +296,7 @@ const Todo = ({ data, userId }) => {
 
                 <meta name="description" content="POS ออนไลน์" />
             </Head>
+            <AppBar />
             <div style={
                 {
                     minWidth: '100vw',
@@ -300,9 +317,65 @@ const Todo = ({ data, userId }) => {
                                             <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems={'center'}>
                                                 <span style={{
                                                     width: '100%',
+                                                    display: !Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none'
                                                 }}>{group.name}</span>
-                                                <IconButton aria-label="delete" onClick={() => deleteGroup(group.id)}>
-                                                    <DeleteIcon />
+                                                <TextField value={groupText} multiline style={
+                                                    {
+                                                        display: Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none'
+                                                    }
+                                                } onChange={
+                                                    (e) => {
+                                                        setGroupText(e.target.value)
+                                                    }
+                                                } />
+                                                <IconButton aria-label="edit" size="small" onClick={
+                                                    () => {
+                                                        let _editstateGroup = editstateGroup;
+                                                        _editstateGroup[`key${group.id}`] = editstateGroup[`key${group.id}`] ? !editstateGroup[`key${group.id}`] : true;
+                                                        for (const [key, value] of Object.entries(_editstateGroup)) {
+                                                            if (key != `key${group.id}`) {
+                                                                _editstateGroup[key] = false;
+                                                            }
+                                                        }
+                                                        setEditStateGroup(editstateGroup => ({
+                                                            ...editstateGroup,
+                                                            ..._editstateGroup
+                                                        }));
+                                                        setGroupText(group.name)
+                                                    }
+                                                } style={
+                                                    {
+                                                        display: !Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none',
+                                                        width: '28px',
+                                                        height: '28px'
+                                                    }
+                                                }>
+                                                    <EditIcon fontSize="inherit" />
+                                                </IconButton>
+                                                <IconButton aria-label="edit" size="small" onClick={
+                                                    () => {
+                                                        let _editstateGroup = editstateGroup;
+                                                        for (const [key, value] of Object.entries(_editstateGroup)) {
+                                                            _editstateGroup[key] = false;
+                                                        }
+                                                        setEditState(editstateGroup => ({
+                                                            ...editstateGroup,
+                                                            ..._editstateGroup
+                                                        }));
+                                                        updateGroup(group.id)
+                                                        setGroupText('')
+                                                    }
+                                                } style={
+                                                    {
+                                                        display: Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none',
+                                                        width: '28px',
+                                                        height: '28px'
+                                                    }
+                                                }>
+                                                    <CheckIcon fontSize="inherit" />
+                                                </IconButton>
+                                                <IconButton aria-label="delete" size="small" onClick={() => deleteGroup(group.id)}>
+                                                    <DeleteIcon fontSize="inherit" />
                                                 </IconButton>
                                             </Stack>
                                         </div>
@@ -328,12 +401,65 @@ const Todo = ({ data, userId }) => {
                                                                     <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems={'center'}>
                                                                         <span style={{
                                                                             width: '100%',
+                                                                            display: !Boolean(editstate[`key${item.id}`]) ? 'block' : 'none'
                                                                         }}>{item.name}</span>
-                                                                        <IconButton aria-label="edit" size="small">
-                                                                            <EditIcon />
+                                                                        <TextField value={name} multiline style={
+                                                                            {
+                                                                                display: Boolean(editstate[`key${item.id}`]) ? 'block' : 'none'
+                                                                            }
+                                                                        } onChange={
+                                                                            (e) => {
+                                                                                setName(e.target.value)
+                                                                            }
+                                                                        } />
+                                                                        <IconButton aria-label="edit" size="small" onClick={
+                                                                            () => {
+                                                                                let _editstate = editstate;
+                                                                                _editstate[`key${item.id}`] = expanded[`key${item.id}`] ? !expanded[`key${item.id}`] : true;
+                                                                                for (const [key, value] of Object.entries(_editstate)) {
+                                                                                    if (key != `key${item.id}`) {
+                                                                                        _editstate[key] = false;
+                                                                                    }
+                                                                                }
+                                                                                setEditState(editstate => ({
+                                                                                    ...editstate,
+                                                                                    ..._editstate
+                                                                                }));
+                                                                                setName(item.name)
+                                                                            }
+                                                                        } style={
+                                                                            {
+                                                                                display: !Boolean(editstate[`key${item.id}`]) ? 'block' : 'none',
+                                                                                width: '28px',
+                                                                                height: '28px'
+                                                                            }
+                                                                        }>
+                                                                            <EditIcon fontSize="inherit" />
+                                                                        </IconButton>
+                                                                        <IconButton aria-label="edit" size="small" onClick={
+                                                                            () => {
+                                                                                let _editstate = editstate;
+                                                                                for (const [key, value] of Object.entries(_editstate)) {
+                                                                                    _editstate[key] = false;
+                                                                                }
+                                                                                setEditState(editstate => ({
+                                                                                    ...editstate,
+                                                                                    ..._editstate
+                                                                                }));
+                                                                                updateTodo(item.id)
+                                                                                setName('')
+                                                                            }
+                                                                        } style={
+                                                                            {
+                                                                                display: Boolean(editstate[`key${item.id}`]) ? 'block' : 'none',
+                                                                                width: '28px',
+                                                                                height: '28px'
+                                                                            }
+                                                                        }>
+                                                                            <CheckIcon fontSize="inherit" />
                                                                         </IconButton>
                                                                         <IconButton aria-label="delete" onClick={() => deleteTodo(item.id)} size="small">
-                                                                            <DeleteIcon />
+                                                                            <DeleteIcon fontSize="inherit" />
                                                                         </IconButton>
                                                                     </Stack>
                                                                 </div>
@@ -379,6 +505,7 @@ const Todo = ({ data, userId }) => {
                             <div style={
                                 {
                                     minWidth: '250px',
+                                    paddingRight: '20px'
                                 }
                             }>
                                 <Stack direction="column" spacing={1}>
