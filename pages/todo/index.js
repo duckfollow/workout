@@ -15,7 +15,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 const { AppBar } = require('../../components')
 import CheckIcon from '@mui/icons-material/Check';
-import { height, width } from "@mui/system";
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
+import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useRouter } from 'next/router';
 
 const Todo = ({ data, userId }) => {
     // fake data generator
@@ -24,6 +27,7 @@ const Todo = ({ data, userId }) => {
             id: `item-${k + offset}`,
             content: `item ${k + offset}`
         }));
+    const router = useRouter();
 
     const [items, setItems] = useState(getItems(10));
     const [selected, setSelected] = useState(getItems(5, 10));
@@ -36,6 +40,8 @@ const Todo = ({ data, userId }) => {
     const [todo, setTodo] = useState('');
     const [name, setName] = useState('')
     const [groupText, setGroupText] = useState('')
+    const [_userId, setUserId] = useState(userId);
+    const cookies = parseCookies()
 
     const id2List = {
         droppable: 'items',
@@ -276,6 +282,27 @@ const Todo = ({ data, userId }) => {
         })
     }
 
+    const clickTry = () => {
+        let userId = randomString()
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/food/user/create`, {
+            id: userId,
+        }).then(res => {
+            setUserId(userId)
+            setCookie(null, 'userId', userId, { path: '/' })
+            setCookie(null, 'isfirstLogin', res.data.data.isfirstLogin, { path: '/' })
+            router.reload()
+        })
+    }
+
+    const randomString = () => {
+        return (Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 4)).toUpperCase();
+    }
+
+    const clickLogout = () => {
+        destroyCookie(null, 'userId', { path: '/' })
+        router.reload()
+    }
+
     return (
         <div>
             <Head>
@@ -305,7 +332,39 @@ const Todo = ({ data, userId }) => {
                     padding: 20,
                 }
             }>
-                <h1>Todo</h1>
+                {
+                    _userId == process.env.NEXT_PUBLIC_USER ? <div style={
+                        {
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            marginTop: '20px'
+                        }
+                    }>
+                        <h1>Todo</h1>
+                        <Button variant="outlined" startIcon={<ScienceOutlinedIcon />} size="small" color="primary" onClick={clickTry}> ทดลองใช้งานฟรี</Button>
+                        <p align="center"
+                            style={{
+                                fontSize: '14px',
+                                paddingLeft: '20px',
+                                paddingRight: '20px',
+                            }}>
+                            คลิกที่ปุ่มด้านบนเพื่อทดลองใช้งานฟรี ระบบจะสร้างรหัสผู้ใช้งานใหม่ หรือจะใช้งานในโหมด demo ได้เลย
+                        </p>
+                    </div>
+                        : <NoSsr>
+                            <span
+                                style={
+                                    {
+                                        margin: '10px',
+                                        display: cookies.isfirstLogin === 'false' ? 'none' : 'block',
+                                    }
+                                }>
+                                รหัสผู้ใช้ทดสอบ: <strong>{userId}</strong> <Button variant="outlined" startIcon={<LogoutIcon />} size="small" color="primary" onClick={clickLogout}>ออก</Button>
+                            </span>
+                        </NoSsr>
+                }
                 <NoSsr>
                     <DragDropContext onDragEnd={onDragEndTest}>
                         <Stack direction="row" spacing={2}>
