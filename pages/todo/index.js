@@ -19,6 +19,8 @@ import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/router';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const Todo = ({ data, userId }) => {
     // fake data generator
@@ -235,6 +237,16 @@ const Todo = ({ data, userId }) => {
         });
     }
 
+    const updateTodoStatus = (id) => {
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/list/update/status`, {
+            id: id
+        }).then((response) => {
+            readData();
+        }, (error) => {
+            console.log(error);
+        });
+    }
+
     const updateGroup = (id) => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/group/update`, {
             id: id,
@@ -301,6 +313,15 @@ const Todo = ({ data, userId }) => {
     const clickLogout = () => {
         destroyCookie(null, 'userId', { path: '/' })
         router.reload()
+    }
+
+    const orderGroups = (id) => {
+        axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/group/update/all`, {
+            id: id,
+            store: userId
+        }).then((response) => {
+            readData();
+        })
     }
 
     return (
@@ -374,6 +395,9 @@ const Todo = ({ data, userId }) => {
                                     <div key={group.id}>
                                         <div className={styles.header_list}>
                                             <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems={'center'}>
+                                                <IconButton aria-label="delete" size="small" onClick={() => { orderGroups(group.id) }}>
+                                                    <SwapHorizIcon fontSize="inherit" />
+                                                </IconButton>
                                                 <span style={{
                                                     width: '100%',
                                                     display: !Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none'
@@ -458,6 +482,9 @@ const Todo = ({ data, userId }) => {
                                                                     )}
                                                                 >
                                                                     <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems={'center'}>
+                                                                        <IconButton aria-label="delete" onClick={() => { updateTodoStatus(item.id) }} size="small">
+                                                                            <CheckCircleIcon fontSize="inherit" color={item.status? 'success': ''} />
+                                                                        </IconButton>
                                                                         <span style={{
                                                                             width: '100%',
                                                                             display: !Boolean(editstate[`key${item.id}`]) ? 'block' : 'none'
