@@ -154,19 +154,19 @@ export default function AppBar() {
           handleMenuItemClick(e, '/booking')
         }}>
           {/* <FileCopyIcon /> */}
-          ระบบจองที่พัก (dev version)
+          ระบบจองที่พัก (pre-alpha)
         </MenuItem>
         <MenuItem onClick={(e) => {
           handleMenuItemClick(e, '/stock')
         }}>
           {/* <FileCopyIcon /> */}
-          ระบบสต็อกสินค้า (dev version)
+          ระบบสต็อกสินค้า (pre-alpha)
         </MenuItem>
         <MenuItem onClick={(e) => {
           handleMenuItemClick(e, '/todo')
         }}>
           {/* <FileCopyIcon /> */}
-          Todo List (dev version)
+          Todo List (beta)
         </MenuItem>
         {/* <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={handleClose} disableRipple>
