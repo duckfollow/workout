@@ -74,6 +74,7 @@ export default function AppBar() {
   };
   const handleClose = () => {
     setAnchorEl(null);
+    setOpen(true)
   };
 
   const handleMenuItemClick = (event, path) => {
