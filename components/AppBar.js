@@ -67,7 +67,7 @@ export default function AppBar() {
   const [image, setImage] = useState(cookies.image !== 'null' && cookies.image !== "undefined" && cookies.image !== undefined ? cookies.image : '/tv-show.png')
   const [isfirstLogin, setIsfirstLogin] = useState(cookies.isfirstLogin !== 'null' && cookies.isfirstLogin !== "undefined" && cookies.isfirstLogin !== undefined ? cookies.isfirstLogin : true)
 
-  const [open, setOpen] = useState(Boolean(anchorEl))
+  const [open, setOpen] = useState(false)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setOpen(true)
