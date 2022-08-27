@@ -67,9 +67,10 @@ export default function AppBar() {
   const [image, setImage] = useState(cookies.image !== 'null' && cookies.image !== "undefined" && cookies.image !== undefined ? cookies.image : '/tv-show.png')
   const [isfirstLogin, setIsfirstLogin] = useState(cookies.isfirstLogin !== 'null' && cookies.isfirstLogin !== "undefined" && cookies.isfirstLogin !== undefined ? cookies.isfirstLogin : true)
 
-  const open = Boolean(anchorEl);
+  const [open, setOpen] = useState(Boolean(anchorEl))
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    setOpen(true)
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -77,6 +78,7 @@ export default function AppBar() {
 
   const handleMenuItemClick = (event, path) => {
     handleClose();
+    setOpen(false)
     router.push(path);
   }
 
