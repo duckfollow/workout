@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../../styles/todo.module.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { NoSsr } from "@mui/material";
 import Stack from "@mui/material/Stack";
@@ -21,6 +21,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/router';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { io } from 'socket.io-client';
 
 const Todo = ({ data, userId }) => {
     // fake data generator
@@ -44,10 +45,31 @@ const Todo = ({ data, userId }) => {
     const [groupText, setGroupText] = useState('')
     const [_userId, setUserId] = useState(userId);
     const cookies = parseCookies()
+    const socket = io(process.env.NEXT_PUBLIC_URL_WEBSOCKET, { transports: ['websocket'] });
 
     const id2List = {
         droppable: 'items',
         droppable2: 'selected'
+    };
+
+    useEffect(() => {
+        socket.connect();
+        socket.on("message", data => {
+            if (data.userId === _userId) {
+                readData();
+            }
+        });
+
+        return () => {
+            socket.disconnect();
+        }
+    }, [])
+
+    const handlepost = () => {
+        setTimeout(() => {
+            socket.connect();
+            socket.emit("message", { userId });
+        }, 300);
     };
 
     const getList = id => {
@@ -197,7 +219,8 @@ const Todo = ({ data, userId }) => {
         }).then((response) => {
             console.log(response);
             setGroupName("");
-            readData();
+            // readData();
+            handlepost()
         }, (error) => {
             console.log(error);
         });
@@ -219,7 +242,8 @@ const Todo = ({ data, userId }) => {
             name: todo,
         }).then((response) => {
             setTodo("");
-            readData();
+            // readData();
+            handlepost()
             resetAddTodo();
         }, (error) => {
             console.log(error);
@@ -231,7 +255,8 @@ const Todo = ({ data, userId }) => {
             id: id,
             name: name,
         }).then((response) => {
-            readData();
+            // readData();
+            handlepost()
         }, (error) => {
             console.log(error);
         });
@@ -241,7 +266,8 @@ const Todo = ({ data, userId }) => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/list/update/status`, {
             id: id
         }).then((response) => {
-            readData();
+            // readData();
+            handlepost()
         }, (error) => {
             console.log(error);
         });
@@ -252,7 +278,8 @@ const Todo = ({ data, userId }) => {
             id: id,
             name: groupText,
         }).then((response) => {
-            readData();
+            // readData();
+            handlepost()
         }, (error) => {
             console.log(error);
         });
@@ -261,6 +288,7 @@ const Todo = ({ data, userId }) => {
     const updateTodoAll = (data) => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/list/update/all`, data).then((response) => {
             // readData();
+            handlepost()
             resetAddTodo();
         }, (error) => {
             console.log(error);
@@ -282,7 +310,8 @@ const Todo = ({ data, userId }) => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/list/delete`, {
             id: id,
         }).then((response) => {
-            readData();
+            // readData();
+            handlepost()
         })
     }
 
@@ -290,7 +319,8 @@ const Todo = ({ data, userId }) => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/group/delete`, {
             id: id,
         }).then((response) => {
-            readData();
+            // readData();
+            handlepost()
         })
     }
 
@@ -320,7 +350,8 @@ const Todo = ({ data, userId }) => {
             id: id,
             store: userId
         }).then((response) => {
-            readData();
+            // readData();
+            handlepost()
         })
     }
 
@@ -483,7 +514,7 @@ const Todo = ({ data, userId }) => {
                                                                 >
                                                                     <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems={'center'}>
                                                                         <IconButton aria-label="delete" onClick={() => { updateTodoStatus(item.id) }} size="small">
-                                                                            <CheckCircleIcon fontSize="inherit" color={item.status? 'success': ''} />
+                                                                            <CheckCircleIcon fontSize="inherit" color={item.status ? 'success' : ''} />
                                                                         </IconButton>
                                                                         <span style={{
                                                                             width: '100%',
