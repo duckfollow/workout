@@ -435,6 +435,8 @@ const Todo = ({ data, userId }) => {
                                                 }} style={
                                                     {
                                                         display: !Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none',
+                                                        width: '28px',
+                                                        height: '28px'
                                                     }
                                                 }>
                                                     <SwapHorizIcon fontSize="inherit" />
@@ -449,7 +451,7 @@ const Todo = ({ data, userId }) => {
                                                         display: Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none'
                                                     }
                                                 }>
-                                                    <TextField value={groupText} multiline sx={{
+                                                    <TextField value={groupText} multiline fullWidth sx={{
                                                         "& .MuiInputBase-root": {
                                                             color: `${color}`
                                                         }
