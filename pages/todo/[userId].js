@@ -22,6 +22,8 @@ import { useRouter } from 'next/router';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { io } from 'socket.io-client';
+import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
+import { HexColorPicker } from "react-colorful";
 
 const Todo = ({ data, userId }) => {
     // fake data generator
@@ -46,6 +48,7 @@ const Todo = ({ data, userId }) => {
     const [_userId, setUserId] = useState(userId);
     const cookies = parseCookies()
     const socket = io(process.env.NEXT_PUBLIC_URL_WEBSOCKET, { transports: ['websocket'] });
+    const [color, setColor] = useState("#aabbcc");
 
     const id2List = {
         droppable: 'items',
@@ -118,7 +121,7 @@ const Todo = ({ data, userId }) => {
         background: isDraggingOver ? "lightblue" : "lightgrey",
         minHeight: 80,
         padding: grid,
-        width: 280
+        width: 290
     });
 
 
@@ -277,6 +280,7 @@ const Todo = ({ data, userId }) => {
         axios.post(`${process.env.NEXT_PUBLIC_URL}api/v1/todo/group/update`, {
             id: id,
             name: groupText,
+            color: color
         }).then((response) => {
             // readData();
             handlepost()
@@ -392,23 +396,64 @@ const Todo = ({ data, userId }) => {
                                 return (
                                     <div key={group.id}>
                                         <div className={styles.header_list}>
-                                            <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems={'center'}>
-                                                <IconButton aria-label="delete" size="small" onClick={() => { orderGroups(group.id) }}>
+                                            <Stack direction="row" spacing={1} justifyContent={Boolean(editstateGroup[`key${group.id}`]) ? 'center' : 'flex-end'} alignItems={'center'}>
+                                                <IconButton aria-label="swap" size="small" onClick={() => {
+                                                    orderGroups(group.id)
+                                                }} style={
+                                                    {
+                                                        display: !Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none',
+                                                    }
+                                                }>
                                                     <SwapHorizIcon fontSize="inherit" />
                                                 </IconButton>
                                                 <span style={{
                                                     width: '100%',
-                                                    display: !Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none'
+                                                    display: !Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none',
+                                                    color: `${group.color}`
                                                 }}>{group.name}</span>
-                                                <TextField value={groupText} multiline style={
+                                                <Stack direction='column' spacing={1} justifyContent="center" alignItems={'center'} style={
                                                     {
                                                         display: Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none'
                                                     }
-                                                } onChange={
-                                                    (e) => {
-                                                        setGroupText(e.target.value)
-                                                    }
-                                                } />
+                                                }>
+                                                    <TextField value={groupText} multiline sx={{
+                                                        "& .MuiInputBase-root": {
+                                                            color: `${color}`
+                                                        }
+                                                    }} onChange={
+                                                        (e) => {
+                                                            setGroupText(e.target.value)
+                                                        }
+                                                    } />
+                                                    <HexColorPicker color={color} onChange={setColor} />
+                                                    <Stack direction="row" spacing={1} alignItems={'center'}>
+                                                        <IconButton aria-label="edit" size="small" onClick={
+                                                            () => {
+                                                                let _editstateGroup = editstateGroup;
+                                                                for (const [key, value] of Object.entries(_editstateGroup)) {
+                                                                    _editstateGroup[key] = false;
+                                                                }
+                                                                setEditState(editstateGroup => ({
+                                                                    ...editstateGroup,
+                                                                    ..._editstateGroup
+                                                                }));
+                                                                updateGroup(group.id)
+                                                                setGroupText('')
+                                                            }
+                                                        } style={
+                                                            {
+                                                                display: Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none',
+                                                                width: '28px',
+                                                                height: '28px'
+                                                            }
+                                                        }>
+                                                            <CheckIcon fontSize="inherit" />
+                                                        </IconButton>
+                                                        <IconButton aria-label="delete" size="small" onClick={() => deleteGroup(group.id)}>
+                                                            <DeleteIcon fontSize="inherit" />
+                                                        </IconButton>
+                                                    </Stack>
+                                                </Stack>
                                                 <IconButton aria-label="edit" size="small" onClick={
                                                     () => {
                                                         let _editstateGroup = editstateGroup;
@@ -423,6 +468,7 @@ const Todo = ({ data, userId }) => {
                                                             ..._editstateGroup
                                                         }));
                                                         setGroupText(group.name)
+                                                        setColor(group.color)
                                                     }
                                                 } style={
                                                     {
@@ -431,32 +477,7 @@ const Todo = ({ data, userId }) => {
                                                         height: '28px'
                                                     }
                                                 }>
-                                                    <EditIcon fontSize="inherit" />
-                                                </IconButton>
-                                                <IconButton aria-label="edit" size="small" onClick={
-                                                    () => {
-                                                        let _editstateGroup = editstateGroup;
-                                                        for (const [key, value] of Object.entries(_editstateGroup)) {
-                                                            _editstateGroup[key] = false;
-                                                        }
-                                                        setEditState(editstateGroup => ({
-                                                            ...editstateGroup,
-                                                            ..._editstateGroup
-                                                        }));
-                                                        updateGroup(group.id)
-                                                        setGroupText('')
-                                                    }
-                                                } style={
-                                                    {
-                                                        display: Boolean(editstateGroup[`key${group.id}`]) ? 'block' : 'none',
-                                                        width: '28px',
-                                                        height: '28px'
-                                                    }
-                                                }>
-                                                    <CheckIcon fontSize="inherit" />
-                                                </IconButton>
-                                                <IconButton aria-label="delete" size="small" onClick={() => deleteGroup(group.id)}>
-                                                    <DeleteIcon fontSize="inherit" />
+                                                    <DisplaySettingsIcon fontSize="inherit" />
                                                 </IconButton>
                                             </Stack>
                                         </div>
